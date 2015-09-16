@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <style type='text/css'>
+      a            { color:#a0a0e0 }
+      div.title    { 
+          color:#C0F0C0; 
+          font-size:1.2em; 
+          font-weight:bold; 
+          margin-top:1em; 
+          margin-bottom:0.5em; 
+          text-align:center }
+      div.subtitle { 
+          color:#C0F0C0; 
+          font-size:0.8em; 
+          margin-bottom:1em; 
+          text-align:center }
+      div.freetext { 
+          color:#F0F0F0;
+          text-align:center }
+      div.list     { color:#C0C0F0 }
+    </style>
+  </head>
+  <body>
+$ 4.3:
+  % Version 4.3.2:
+    * Thêm sign, mặc định sẽ tắt, vào setting để bật lại.
+    * Fix một vài bug.
+$ 4.2
+  % Tính Năng:
+    * Lướt diễn đàn vozForums
+    * Gửi, reply, sửa bài viết, delete bài viết
+    * Quote/Multi-quote
+    * Subscribe/Unsubscribe thread
+    * Bookmark. Đè vào thread cần bookmark ở forum sẽ hiển thị ra dialog để chọn bookmark
+    * Xem những ai đã Quote bài mình,Search,Pm
+    * Chỉnh font chữ
+    * Kéo xuống để refresh, kéo lên để sang trang
+    * Long Click vào link trong forums để đi đến bài viết mới chưa được
+    * Thông báo bài viết mới trong các topic subscribed, PM mới, hay có người quote bài
+    * Share link qua facebook
+    * Hỗ trợ captcha
+    * Thêm tính năng quickmenu giúp truy cập nhanh vào menu yêu thích, đè vào để set một forums ưa thích, khi cuộn lên sẽ hiện menu này. Chú ý: “f=0” là trang home
+    * Thêm nút exit ( cần quyền root)
+    * Thêm tùy chọn tắt notification
+$ END_OF_CHANGE_LOG
+  </body>
+</html>

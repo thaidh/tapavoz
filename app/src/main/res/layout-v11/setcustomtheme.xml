@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="@dimen/textSizeMenuTitle" android:textStyle="bold" android:id="@id/alert_title" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Tùy chỉnh Theme" />
+    <RadioGroup android:id="@id/typeTheme" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/black" android:id="@id/typeBg" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Hình Nền" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/black" android:id="@id/typeBgFocus" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Hình Nền khi focus" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/black" android:id="@id/typeBgTitle" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Hình nền title" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/black" android:id="@id/typeTextTitle" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Màu chữ title" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/black" android:id="@id/typeText1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Màu chữ 1" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/black" android:id="@id/typeText2" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Màu chữ 2" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/black" android:id="@id/typeQuicklink" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="Nền Quicklink" />
+    </RadioGroup>
+</LinearLayout>

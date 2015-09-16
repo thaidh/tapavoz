@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ListView android:scrollbarStyle="outsideOverlay" android:id="@id/activity_googlecards_listview" android:background="#ffe2e2e2" android:padding="16.0dip" android:fadingEdge="none" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="fill_parent" android:divider="@null" android:dividerHeight="16.0dip"
+  xmlns:android="http://schemas.android.com/apk/res/android" />

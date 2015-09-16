@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <style type='text/css'>
+      a            { color:#a0a0e0 }
+      div.title    { 
+          color:#C0F0C0; 
+          font-size:1.2em; 
+          font-weight:bold; 
+          margin-top:1em; 
+          margin-bottom:0.5em; 
+          text-align:center }
+      div.subtitle { 
+          color:#C0F0C0; 
+          font-size:0.8em; 
+          margin-bottom:1em; 
+          text-align:center }
+      div.freetext { 
+          color:#F0F0F0;
+          text-align:center }
+      div.list     { color:#C0C0F0 }
+    </style>
+  </head>
+  <body>
+$ Hướng dẫn sử dụng:
+%1. Custom Theme:
+    * Setting -> Theme -> Custom -> Click vào Button "Edit Custom"
+    * Chọn mục cần chỉnh lại vào -> hiển thị dialog để chọn màu.
+    * Sau khi chọn màu xong thì bấm OK để save lại.
+%2. Reply:
+    * Click vào một post bất kì sẽ hiển thị ra dialog để reply
+%3. Up ảnh từ điện thoại:
+    * Trong khung edit post chọn biểu tượng camera.
+    * Chọn Gallery hoặc Camera
+%4. Thông báo có người quote bài, có pm mới, có post mới trong topic subscribe:
+    * Vào settings, enable notification.
+%5. Xem người quote bài mình:
+    * Vuốt từ trái sang phải hoặc click vào logo voz.
+    * Chọn listQuote.
+%6. Xem recent Post, Thread:
+    * Vuốt từ trái sang phải hoặc click vào logo voz.
+    * Chọn Search -> Recent Post
+%7. Thay đổi forum dưới thanh Quiclink:
+    * Đè vào forum cần đổi để hiện ra dialog thay đổi
+%8. Bookmark:
+    * Đè vào link của một topic cần bookmark
+    * Sau khi hiển thị dialog, chọn bookmark
+    * Để tìm lại các topic đã bookmark, click vào logo voz, chọn bookmark.
+
+
+
+$ END_OF_CHANGE_LOG
+  </body>
+</html>

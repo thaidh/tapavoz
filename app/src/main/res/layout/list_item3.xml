@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/listLayout" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:id="@id/list3_baruser1" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:textSize="@dimen/xlargeTextSize3" android:textColor="@color/white" android:id="@id/list3_index" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="@dimen/xlargeMargin" android:layout_alignParentLeft="true" />
+        <TextView android:textSize="@dimen/xlargeTextSize3" android:textColor="@color/white" android:id="@id/list3_time" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="@dimen/xlargeMargin" android:text="2012" android:layout_alignParentRight="true" />
+    </RelativeLayout>
+    <RelativeLayout android:id="@id/list3_baruser" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:id="@id/list3_avatar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/menu_usercp2" android:layout_centerVertical="true" />
+        <LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:id="@id/layoutjd" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true">
+            <TextView android:textSize="@dimen/xlargeTextSize2" android:id="@id/list3_jd" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="@dimen/xlargeMargin" android:text="joindate" />
+            <TextView android:textSize="@dimen/xlargeTextSize2" android:id="@id/list3_post" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="@dimen/xlargeMargin" android:text="post:" />
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_toLeftOf="@id/layoutjd" android:layout_toRightOf="@id/list3_avatar" android:layout_centerVertical="true">
+            <TextView android:textSize="@dimen/xlargeTextSize2" android:id="@id/list3_user" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/xlargeMargin" android:text="userahskdhfjahskjfhaskhf" />
+            <TextView android:textSize="@dimen/xlargeTextSize2" android:id="@id/list3_usertitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/xlargeMargin" android:text="KIA" />
+        </LinearLayout>
+    </RelativeLayout>
+    <com.nna88.voz.ui.JellyBeanSpanFixTextView android:textSize="@dimen/xlargeTextSize2" android:id="@id/list3_contain" android:paddingLeft="5.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="text\ntext\n" />
+    <TextView android:id="@id/textDevider" android:layout_width="fill_parent" android:layout_height="5.0dip" />
+</LinearLayout>

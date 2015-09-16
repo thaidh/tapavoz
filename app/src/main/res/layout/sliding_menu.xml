@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:gravity="top" android:id="@id/panel_menu" android:background="@color/white" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentTop="true">
+        <ImageButton android:id="@id/menu_logo" android:background="@color/white" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="2.0dip" android:src="@drawable/menu_voz_click" android:scaleType="fitXY" android:layout_alignParentLeft="true" />
+        <ImageButton android:id="@id/menu_set" android:background="@color/white" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/menu_setting_clicked" android:scaleType="fitXY" android:layout_alignParentRight="true" />
+        <HorizontalScrollView android:scrollbars="horizontal" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_margin="2.0dip" android:fillViewport="true" android:layout_toLeftOf="@id/menu_set" android:layout_toRightOf="@id/menu_logo" android:layout_alignBottom="@id/menu_set" android:layout_alignParentTop="true">
+            <TextView android:textSize="@dimen/textSize2" android:textColor="@color/white" android:gravity="center" android:id="@id/menu_title" android:layout_width="wrap_content" android:layout_height="fill_parent" android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" android:maxLines="1" />
+        </HorizontalScrollView>
+    </RelativeLayout>
+    <RelativeLayout android:gravity="center_horizontal" android:layout_gravity="center_horizontal" android:id="@id/myAd" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_centerHorizontal="true" />
+</RelativeLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="@dimen/textSizeMenuTitle" android:textStyle="bold" android:textColor="@color/white" android:gravity="left" android:id="@id/alert_title" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip" android:text="@string/setSizeImage" />
+    <RadioGroup android:id="@id/typeSizeImage" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="40.0dip" android:layout_marginRight="40.0dip">
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeSizeImage_1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="1" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeSizeImage_2" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="1/2" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeSizeImage_4" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="1/4" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeSizeImage_8" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="1/8" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeSizeImage_none" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="None" />
+    </RadioGroup>
+</LinearLayout>

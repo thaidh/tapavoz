@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:gravity="center_horizontal" android:orientation="vertical" android:background="@drawable/bg_dialog" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:enabled="true" android:textSize="@dimen/textSizeMenuTitle" android:textStyle="bold" android:textColor="@color/white" android:gravity="left" android:id="@id/alert_title" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip" android:text="Tùy chỉnh Theme" />
+    <com.nna88.voz.colorpicker.ColorPicker android:id="@id/picker" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <com.nna88.voz.colorpicker.SVBar android:id="@id/svbar" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <com.nna88.voz.colorpicker.OpacityBar android:id="@id/opacitybar" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <LinearLayout android:gravity="center_horizontal" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <Button android:id="@id/butOK" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="OK" />
+        <EditText android:id="@id/editColor" android:background="@color/white" android:padding="3.0dip" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="Hex Color" />
+    </LinearLayout>
+</LinearLayout>

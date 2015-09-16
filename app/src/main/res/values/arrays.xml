@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="colorBackground">
+        <item>14474458</item>
+        <item>13421772</item>
+        <item>14474458</item>
+        <item>14474458</item>
+    </integer-array>
+    <string-array name="colorquiclink">
+        <item>4358125</item>
+        <item>11678756</item>
+        <item>14988288</item>
+        <item>4096047</item>
+    </string-array>
+    <string-array name="customtheme">
+        <item>Hình nền</item>
+        <item>Hình nền khi focus</item>
+        <item>Hình nền title</item>
+        <item>Màu chữ title</item>
+        <item>Màu chữ 1</item>
+        <item>Màu chữ 2</item>
+        <item>Nên quicklink</item>
+    </string-array>
+    <string-array name="openTopic">
+        <item>First post</item>
+        <item>First unread</item>
+        <item>Last post</item>
+        <item>Bookmark</item>
+        <item>Copy Link</item>
+        <item>Prefix</item>
+    </string-array>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:id="@id/listLayout" android:layout_width="wrap_content" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/list3_emoBitmap1" android:layout_width="@dimen/xlargeEmotionWidth" android:layout_height="@dimen/xlargeEmotionHeight" android:src="@drawable/fast_back" />
+    <TextView android:textSize="@dimen/xlargeTextSize1" android:gravity="center" android:id="@id/list3_emoText1" android:layout_width="@dimen/xlargeEmotionWidth" android:layout_height="@dimen/xlargeEmotionHeight" android:text="text" />
+</LinearLayout>

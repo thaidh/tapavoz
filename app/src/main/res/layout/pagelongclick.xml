@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:id="@id/firstpost" android:text="@string/firstpost" style="@style/textAlertLongClick" />
+    <TextView style="@style/textDevider" />
+    <TextView android:id="@id/firstnew" android:text="@string/firstnew" style="@style/textAlertLongClick" />
+    <TextView style="@style/textDevider" />
+    <TextView android:id="@id/lastpost" android:text="@string/lastpost" style="@style/textAlertLongClick" />
+    <TextView style="@style/textDevider" />
+    <TextView android:id="@id/bookmark" android:text="@string/Bookmark" style="@style/textAlertLongClick" />
+    <TextView style="@style/textDevider" />
+    <TextView android:id="@id/copylink" android:text="Copy Link" style="@style/textAlertLongClick" />
+    <TextView android:visibility="gone" style="@style/textDevider" />
+    <TextView android:id="@id/Prefix" android:visibility="gone" android:text="Prefix" style="@style/textAlertLongClick" />
+</LinearLayout>

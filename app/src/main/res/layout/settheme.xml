@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:textSize="@dimen/textSizeMenuTitle" android:textStyle="bold" android:textColor="@color/white" android:gravity="left" android:id="@id/alert_title" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_margin="5.0dip" android:text="@string/SetTheme" />
+    <RadioGroup android:id="@id/typeTheme" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="40.0dip" android:layout_marginRight="40.0dip">
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeVoz" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Voz" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeBlack" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Black" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeWood" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Wood" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeColor1" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Theme 1" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeColor2" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Theme 2" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeColor3" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Theme 3" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeColor4" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Theme 4" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeColor5" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Theme 5" />
+        <RadioButton android:textSize="@dimen/textSizeMenuItem" android:textColor="@color/white" android:id="@id/typeThemeCustom" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:checked="true" android:text="Custom" />
+    </RadioGroup>
+    <Button android:id="@id/butEditCustom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit Custom" />
+</LinearLayout>

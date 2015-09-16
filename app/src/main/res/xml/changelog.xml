@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog>
+    <release version="1.2" versioncode="3">
+        <change>Fixed: A bug fix</change>
+        <change>Button appearance changed</change>
+        <change>Small layout change in the view item screen</change>
+    </release>
+    <release version="1.1" versioncode="2">
+        <change>Lướt diễn đàn vozForums</change>
+        <change>Gửi, reply, sửa bài viết, delete bài viết</change>
+        <change>Quote/Multi-quote</change>
+        <change>Subscribe/Unsubscribe thread</change>
+        <change>Bookmark. Đè vào thread cần bookmark ở forum sẽ hiển thị ra dialog để chọn bookmark</change>
+        <change>Xem những ai đã Quote bài mình,Search,Pm</change>
+        <change>Chỉnh font chữ</change>
+        <change>Kéo xuống để refresh, kéo lên để sang trang</change>
+        <change>Long Click vào link trong forums để đi đến bài viết mới chưa được</change>
+        <change>Thông báo bài viết mới trong các topic subscribed, PM mới, hay có người quote bài</change>
+        <change>Share link qua facebook</change>
+        <change>Hỗ trợ captcha</change>
+        <change>Thêm tính năng quickmenu giúp truy cập nhanh vào menu yêu thích, đè vào để set một forums ưa thích, khi cuộn lên sẽ hiện menu này. Chú ý: “f=0” là trang home</change>
+        <change>Chỉnh font chữ</change>
+    </release>
+</changelog>
