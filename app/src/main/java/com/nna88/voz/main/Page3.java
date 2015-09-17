@@ -266,10 +266,10 @@ public class Page3 extends Page {
     }
 
     /* renamed from: com.nna88.voz.main.Page3.9 */
-    class AnonymousClass9 implements ImageLoadingListener {
+    class LoadEmojListener implements ImageLoadingListener {
         final /* synthetic */ int val$i;
 
-        AnonymousClass9(int i) {
+        LoadEmojListener(int i) {
             this.val$i = i;
         }
 
@@ -664,7 +664,7 @@ public class Page3 extends Page {
     private void loadEmo(int i) {
         try {
             if (i < this.lEmo.size()) {
-                this.mImageLoad.imageLoader.loadImage(getlinkBitmapAssert(((EmoClass2) this.lEmo.get(i)).url), this.mImageLoad.options, new AnonymousClass9(i));
+                this.mImageLoad.imageLoader.loadImage(getlinkBitmapAssert(((EmoClass2) this.lEmo.get(i)).url), this.mImageLoad.options, new LoadEmojListener(i));
             }
         } catch (Exception e) {
             loadEmo(i + 1);
@@ -842,7 +842,6 @@ public class Page3 extends Page {
             } else {
                 Post post;
                 int size;
-                int i2;
                 log("start parser");
                 this.ListContains.clear();
                 Element element = this.doc.select("div[align=center]").size() > 1 ? (Element) this.doc.select("div[align=center]").get(1) : this.doc;
@@ -954,7 +953,7 @@ public class Page3 extends Page {
                 while (it2.hasNext()) {
                     post = (Post) it2.next();
                     size = post.image.getSize();
-                    for (i2 = 0; i2 < size; i2++) {
+                    for (int i2 = 0; i2 < size; i2++) {
                         String str5 = post.image.getStr(i2);
                         if (str5.contains("http://") || str5.contains("https://")) {
                             this.lImage.add(str5);
@@ -966,10 +965,11 @@ public class Page3 extends Page {
                 size = this.ListContains.size();
                 this.lEmo = new ArrayList();
                 for (int i3 = 0; i3 < size; i3++) {
-                    int size2 = ((Post) this.ListContains.get(i3)).image.getSize();
-                    for (i2 = 0; i2 < size2; i2++) {
-                        if (((Post) this.ListContains.get(i3)).image.getStr(i2).contains("images/smilies")) {
-                            this.lEmo.add(new EmoClass2(((Post) this.ListContains.get(i3)).image.getStr(i2), i3, i2));
+                    Post curPost = this.ListContains.get(i3);
+                    int emoSize = curPost.image.getSize();
+                    for (int j = 0; j < emoSize; j++) {
+                        if (curPost.image.getStr(j).contains("images/smilies")) {
+                            this.lEmo.add(new EmoClass2(curPost.image.getStr(j), i3, j));
                         }
                     }
                 }

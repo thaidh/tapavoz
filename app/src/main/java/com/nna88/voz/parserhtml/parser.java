@@ -410,144 +410,44 @@ public class parser {
     }
 
     public Document login(UserInfo userInfo) {
-//        String str;
+        String capcha;
 //        Response execute;
-//        JSONException jSONException;
-//        JSONException jSONException2;
-//        Document document;
+        JSONException jSONException;
+        JSONException jSONException2;
+        Document document;
 //        String str2;
-//        JSONObject jSONObject;
-//        Map cookies;
-//        JSONException e;
-//        mUser = userInfo;
-//        String str3 = BuildConfig.FLAVOR;
-//        String str4 = BuildConfig.FLAVOR;
-//        Response execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", BuildConfig.FLAVOR).data("api_salt", BuildConfig.FLAVOR).method(Method.POST).execute();
-//        Document parse = execute2.parse();
-//        try {
-//            str = (String) new JSONObject(parse.text()).get("captcha");
-//            try {
-//                execute = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", str).data("api_salt", BuildConfig.FLAVOR).method(Method.POST).execute();
-//            } catch (JSONException e2) {
-//                jSONException = e2;
-//                execute = execute2;
-//                jSONException2 = jSONException;
-//                jSONException2.printStackTrace();
-//                execute2 = execute;
-//                document = parse;
-//                str2 = str;
-//                jSONObject = new JSONObject(document.text());
-//                str = (String) ((JSONObject) jSONObject.get("userinfo")).get("userid");
-//                execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", str2).data("api_salt", (String) jSONObject.get("salt")).method(Method.POST).execute();
-//                document = execute2.parse();
-//                if (document.select("div:contains(You have entered an invalid username or password)").first() == null) {
-//                    cookies = execute2.cookies();
-//                    cookies.put("vfuserid", r1);
-//                    userInfo.cookies(cookies);
-//                    userInfo.setLogin(true);
-//                    return getDoc();
-//                }
-//                this.sNotif = null;
-//                return null;
-//            }
-//            try {
-//                execute2 = execute;
-//                document = execute.parse();
-//                str2 = str;
-//            } catch (JSONException e3) {
-//                jSONException2 = e3;
-//                jSONException2.printStackTrace();
-//                execute2 = execute;
-//                document = parse;
-//                str2 = str;
-//                jSONObject = new JSONObject(document.text());
-//                str = (String) ((JSONObject) jSONObject.get("userinfo")).get("userid");
-//                execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", str2).data("api_salt", (String) jSONObject.get("salt")).method(Method.POST).execute();
-//                document = execute2.parse();
-//                if (document.select("div:contains(You have entered an invalid username or password)").first() == null) {
-//                    this.sNotif = null;
-//                    return null;
-//                }
-//                cookies = execute2.cookies();
-//                cookies.put("vfuserid", r1);
-//                userInfo.cookies(cookies);
-//                userInfo.setLogin(true);
-//                return getDoc();
-//            }
-//        } catch (JSONException e4) {
-//            jSONException = e4;
-//            str = str3;
-//            execute = execute2;
-//            jSONException2 = jSONException;
-//            jSONException2.printStackTrace();
-//            execute2 = execute;
-//            document = parse;
-//            str2 = str;
-//            jSONObject = new JSONObject(document.text());
-//            str = (String) ((JSONObject) jSONObject.get("userinfo")).get("userid");
-//            execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", str2).data("api_salt", (String) jSONObject.get("salt")).method(Method.POST).execute();
-//            document = execute2.parse();
-//            if (document.select("div:contains(You have entered an invalid username or password)").first() == null) {
-//                this.sNotif = null;
-//                return null;
-//            }
-//            cookies = execute2.cookies();
-//            cookies.put("vfuserid", r1);
-//            userInfo.cookies(cookies);
-//            userInfo.setLogin(true);
-//            return getDoc();
-//        }
-//        try {
-//            jSONObject = new JSONObject(document.text());
-//            str = (String) ((JSONObject) jSONObject.get("userinfo")).get("userid");
-//            try {
-//                execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", str2).data("api_salt", (String) jSONObject.get("salt")).method(Method.POST).execute();
-//                document = execute2.parse();
-//            } catch (JSONException e22) {
-//                jSONException = e22;
-//                str3 = str;
-//                e4 = jSONException;
-//                try {
-//                    e4.printStackTrace();
-//                    str = str3;
-//                    if (document.select("div:contains(You have entered an invalid username or password)").first() == null) {
-//                        cookies = execute2.cookies();
-//                        cookies.put("vfuserid", r1);
-//                        userInfo.cookies(cookies);
-//                        userInfo.setLogin(true);
-//                        return getDoc();
-//                    }
-//                    this.sNotif = null;
-//                    return null;
-//                } catch (Exception e5) {
-//                    this.sNotif = null;
-//                    e5.printStackTrace();
-//                    return null;
-//                }
-//            }
-//        } catch (JSONException e6) {
-//            e4 = e6;
-//            str3 = str4;
-//            e4.printStackTrace();
-//            str = str3;
-//            if (document.select("div:contains(You have entered an invalid username or password)").first() == null) {
-//                cookies = execute2.cookies();
-//                cookies.put("vfuserid", r1);
-//                userInfo.cookies(cookies);
-//                userInfo.setLogin(true);
-//                return getDoc();
-//            }
-//            this.sNotif = null;
-//            return null;
-//        }
-//        if (document.select("div:contains(You have entered an invalid username or password)").first() == null) {
-//            this.sNotif = null;
-//            return null;
-//        }
-//        cookies = execute2.cookies();
-//        cookies.put("vfuserid", r1);
-//        userInfo.cookies(cookies);
-//        userInfo.setLogin(true);
+        JSONObject jSONObject;
+        Map cookies;
+        JSONException e;
+        mUser = userInfo;
+        String str3 = BuildConfig.FLAVOR;
+        String str4 = BuildConfig.FLAVOR;
+        try {
+            Response execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", BuildConfig.FLAVOR).data("api_salt", BuildConfig.FLAVOR).method(Method.POST).execute();
+            Document parse = execute2.parse();
+            try {
+                capcha = (String) new JSONObject(parse.text()).get("captcha");
+
+                Response execute1 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", capcha).data("api_salt", BuildConfig.FLAVOR).method(Method.POST).execute();
+                document = execute1.parse();
+                jSONObject = new JSONObject(document.text());
+                JSONObject jsUserInfo = (JSONObject) jSONObject.get("userinfo");
+
+                String uid =  jsUserInfo.getString("userid");
+                if (document.select("div:contains(You have entered an invalid username or password)").first() == null) {
+                    cookies = execute2.cookies();
+                    cookies.put("vfuserid", uid);
+                    userInfo.cookies(cookies);
+                    userInfo.setLogin(true);
+                    return getDoc();
+                }
+                this.sNotif = null;
+                return null;
+            } catch (JSONException e4) {
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
         return getDoc();
     }
 

@@ -1,7 +1,6 @@
 package com.nna88.voz.main;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,7 +26,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -45,7 +43,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,7 +54,6 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -70,7 +66,6 @@ import com.nna88.voz.colorpicker.ColorPicker.OnColorChangedListener;
 import com.nna88.voz.colorpicker.OpacityBar;
 import com.nna88.voz.colorpicker.SVBar;
 import com.nna88.voz.listview.SettingAdapter;
-import com.nna88.voz.listview.SettingAdapter.OnActionItemClickListener;
 import com.nna88.voz.listview.WebkitCookieManagerProxy;
 import com.nna88.voz.listview.listViewCustom1;
 import com.nna88.voz.listview.listViewCustom2;
@@ -93,16 +88,13 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.http.conn.routing.HttpRouteDirector;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.CookieHandler;
 import java.net.CookiePolicy;
 import java.util.ArrayList;
@@ -779,12 +771,12 @@ public class Page extends NavigationDrawerActivity {
     }
 
     /* renamed from: com.nna88.voz.main.Page.55 */
-    class AnonymousClass55 implements View.OnClickListener {
+    class LoginClickListener implements View.OnClickListener {
         final /* synthetic */ EditText val$edit1;
         final /* synthetic */ EditText val$edit2;
         final /* synthetic */ Dialog val$mDialog;
 
-        AnonymousClass55(EditText editText, EditText editText2, Dialog dialog) {
+        LoginClickListener(EditText editText, EditText editText2, Dialog dialog) {
             this.val$edit1 = editText;
             this.val$edit2 = editText2;
             this.val$mDialog = dialog;
@@ -800,8 +792,8 @@ public class Page extends NavigationDrawerActivity {
                 Page.this.mPassword = this.val$edit2.getText().toString();
                 Page.this.mUser.add(Page.this.mUsername, Page.this.mPassword);
                 taskGetHtml = Page.this.mTask;
-                numArr = new Integer[Page.STATE_OFFSCREEN];
-                numArr[Page.STATE_ONSCREEN] = Integer.valueOf(Page.STATE_OFFSCREEN);
+                numArr = new Integer[1];
+                numArr[0] = Integer.valueOf(STATE_OFFSCREEN);
                 taskGetHtml.execute(numArr);
             } else if (Page.this.mRadioUser == null || Page.this.mRadioUser.equals(Page.this.mUser.User())) {
                 taskGetHtml = Page.this.mTask;
@@ -820,11 +812,11 @@ public class Page extends NavigationDrawerActivity {
     }
 
     /* renamed from: com.nna88.voz.main.Page.56 */
-    class AnonymousClass56 implements View.OnClickListener {
+    class LoginCancelListener implements View.OnClickListener {
         final /* synthetic */ Button val$buttonCancle;
         final /* synthetic */ Dialog val$mDialog;
 
-        AnonymousClass56(Button button, Dialog dialog) {
+        LoginCancelListener(Button button, Dialog dialog) {
             this.val$buttonCancle = button;
             this.val$mDialog = dialog;
         }
@@ -1487,7 +1479,7 @@ public class Page extends NavigationDrawerActivity {
                         } else {
                             Page.this.mState = Page.STATE_RETURNING;
                         }
-                        Page.this.mQuickReturnLayout.setVisibility(8);
+                        Page.this.mQuickReturnLayout.setVisibility(View.GONE);
                         break;
                     case Page.STATE_RETURNING /*2*/:
                         int i5 = (i4 - Page.this.mMinRawY) + Page.this.mQuickReturnHeight;
@@ -1508,7 +1500,7 @@ public class Page extends NavigationDrawerActivity {
                             i4 = i5;
                             break;
                         }
-                        Page.this.mQuickReturnLayout.setVisibility(8);
+                        Page.this.mQuickReturnLayout.setVisibility(View.GONE);
                         i4 = i5;
                         break;
                     default:
@@ -1707,8 +1699,8 @@ public class Page extends NavigationDrawerActivity {
         EditText editText2 = (EditText) inflate.findViewById(R.id.alert_edit2);
         TextView textView = (TextView) inflate.findViewById(R.id.alert_txt1);
         TextView textView2 = (TextView) inflate.findViewById(R.id.alert_txt2);
-        Button button = (Button) inflate.findViewById(R.id.alert_ok);
-        Button button2 = (Button) inflate.findViewById(R.id.alert_cancle);
+        Button btnOK = (Button) inflate.findViewById(R.id.alert_ok);
+        Button btnCancel = (Button) inflate.findViewById(R.id.alert_cancle);
         RadioGroup radioGroup = (RadioGroup) inflate.findViewById(R.id.rg_usered);
         builder.setTitle("Login").setView(inflate);
         Dialog create = builder.create();
@@ -1730,9 +1722,9 @@ public class Page extends NavigationDrawerActivity {
         }
         length = STATE_ONSCREEN;
         while (length < this.mArrayUsered.size()) {
-            View radioButton = new RadioButton(this);
-//            radioButton.setText(this.mArrayUsered.get(length).toString());
-            radioButton.setOnClickListener(new AnonymousClass53(editText, editText2, textView, textView2, button, button2));
+            RadioButton radioButton = new RadioButton(this);
+            radioButton.setText(this.mArrayUsered.get(length).toString());
+            radioButton.setOnClickListener(new AnonymousClass53(editText, editText2, textView, textView2, btnOK, btnCancel));
             radioGroup.addView(radioButton);
             if (this.mUser.User() != null && this.mUser.User().equals(this.mArrayUsered.get(length))) {
                 this.mRadioUser = this.mUser.User();
@@ -1741,23 +1733,24 @@ public class Page extends NavigationDrawerActivity {
                 editText2.setVisibility(View.GONE);
                 textView.setVisibility(View.GONE);
                 textView2.setVisibility(View.GONE);
-                button.setText("Log out");
-                button2.setText("Cancel");
+                btnOK.setText("Log out");
+                btnCancel.setText("Cancel");
             }
             length += STATE_OFFSCREEN;
         }
-        View radioButton2 = new RadioButton(this);
-//        radioButton2.setText("Add");
-        radioButton2.setOnClickListener(new AnonymousClass54(editText, editText2, textView2, textView, button, button2));
+        RadioButton radioButton2 = new RadioButton(this);
+        radioButton2.setText("Add");
+        radioButton2.setBackgroundColor(getResources().getColor(R.color.white));
+        radioButton2.setOnClickListener(new AnonymousClass54(editText, editText2, textView2, textView, btnOK, btnCancel));
         radioGroup.addView(radioButton2);
         if (this.mRadioUser == null) {
             this.mRadioUser = "Add";
             radioGroup.check(radioButton2.getId());
-            button.setText("Log in");
-            button2.setText("Cancel");
+            btnOK.setText("Log in");
+            btnCancel.setText("Cancel");
         }
-        button.setOnClickListener(new AnonymousClass55(editText, editText2, create));
-        button2.setOnClickListener(new AnonymousClass56(button2, create));
+        btnOK.setOnClickListener(new LoginClickListener(editText, editText2, create));
+        btnCancel.setOnClickListener(new LoginCancelListener(btnCancel, create));
     }
 
     protected void alertPickerColor(int i) {
@@ -1964,18 +1957,18 @@ public class Page extends NavigationDrawerActivity {
     }
 
     protected String getlinkBitmapAssert(String str) {
-        int i = STATE_ONSCREEN;
+        int i = 0;
         if (str.contains("smilies")) {
-            String str2 = str.substring(STATE_ONSCREEN, str.length() - 3) + "gif";
+            String str2 = str.substring(0, str.length() - 3) + "gif";
             try {
                 String[] list = this.mContext.getAssets().list("images/smilies/Off");
                 int length = list.length;
                 while (i < length) {
-                    if ((str.substring(STATE_ONSCREEN, str.length() - 3) + "png").contains(list[i])) {
-                        str = str.substring(STATE_ONSCREEN, str.length() - 3) + "png";
+                    if ((str.substring(0, str.length() - 3) + "png").contains(list[i])) {
+                        str = str.substring(0, str.length() - 3) + "png";
                         break;
                     }
-                    i += STATE_OFFSCREEN;
+                    i += 1;
                 }
                 str = str2;
             } catch (Exception e) {
