@@ -23,9 +23,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -141,6 +144,7 @@ public class Page extends NavigationDrawerActivity {
     protected int[] mItemtemp;
 //    protected RelativeLayout mLayoutAds;
     private LinearLayout mLayoutProgress;
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected ListView mList;
     protected ArrayList<Object> mListSideMenu1;
     protected ArrayList<Object> mListSideMenu2;
@@ -1043,13 +1047,13 @@ public class Page extends NavigationDrawerActivity {
 
     private void UpdateUI() {
         this.mList.requestLayout();
-        if (Global.bDevider) {
-            UtilLayout.setMargin(this.mContext, this.mList, 6, STATE_ONSCREEN, 6, STATE_ONSCREEN);
-            this.mList.setDividerHeight(Util.convertDpToPx(this.mContext, 6));
-        } else {
-            UtilLayout.setMargin(this.mContext, this.mList, STATE_OFFSCREEN, STATE_ONSCREEN, STATE_OFFSCREEN, STATE_ONSCREEN);
-            this.mList.setDividerHeight(Util.convertDpToPx(this.mContext, STATE_OFFSCREEN));
-        }
+//        if (Global.bDevider) {
+//            UtilLayout.setMargin(this.mContext, this.mList, 6, 0, 6, 0);
+//            this.mList.setDividerHeight(Util.convertDpToPx(this.mContext, 6));
+//        } else {
+//            UtilLayout.setMargin(this.mContext, this.mList, 1, 0, 1, 0);
+//            this.mList.setDividerHeight(Util.convertDpToPx(this.mContext, 1));
+//        }
         Global.setBackgoundMain(getmDrawerLayout());
 //        Global.setBackgroundItemThread(this.mLayoutAds);
         Global.setBackgroundItemThread(this.mQuickReturnLayout);
@@ -1988,6 +1992,14 @@ public class Page extends NavigationDrawerActivity {
         this.mDataBookmark = new CommentsDataSource(this.mContext);
         this.mDataBookmark.open();
         this.mImageLoad = new ImageLoad();
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshPage();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         this.mList = (ListView) findViewById(R.id.content_frame);
         if (this.iPage == STATE_RETURNING || this.iPage == 12 || this.iPage == 8 || this.iPage == 9 || this.iPage == 13 || this.iPage == 7) {
             this.mList.addFooterView(getFooterView(17));
@@ -2094,6 +2106,16 @@ public class Page extends NavigationDrawerActivity {
         super.onDestroy();
     }
 
+    private void refreshPage() {
+        TaskCancle();
+        this.mTask = new TaskGetHtml();
+        TaskGetHtml taskGetHtml = this.mTask;
+        Integer[] numArr = new Integer[STATE_OFFSCREEN];
+        numArr[STATE_ONSCREEN] = Integer.valueOf(STATE_ONSCREEN);
+        taskGetHtml.execute(numArr);
+    }
+
+
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         if (this.mDrawerToggle.onOptionsItemSelected(menuItem)) {
             return true;
@@ -2102,12 +2124,13 @@ public class Page extends NavigationDrawerActivity {
         TaskGetHtml taskGetHtml;
         Integer[] numArr;
         if (itemId == R.id.action_refresh) {
-            TaskCancle();
-            this.mTask = new TaskGetHtml();
-            taskGetHtml = this.mTask;
-            numArr = new Integer[STATE_OFFSCREEN];
-            numArr[STATE_ONSCREEN] = Integer.valueOf(STATE_ONSCREEN);
-            taskGetHtml.execute(numArr);
+//            TaskCancle();
+//            this.mTask = new TaskGetHtml();
+//            taskGetHtml = this.mTask;
+//            numArr = new Integer[STATE_OFFSCREEN];
+//            numArr[STATE_ONSCREEN] = Integer.valueOf(STATE_ONSCREEN);
+//            taskGetHtml.execute(numArr);
+            refreshPage();
             return true;
         } else if (itemId == R.id.action_refresh2) {
             TaskCancle();
