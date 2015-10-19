@@ -2,12 +2,15 @@ package com.whoami.voz.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.nna88.voz.main.Global;
 import com.nna88.voz.main.R;
 import com.whoami.voz.ui.adapter.MyFragmentAdapter;
+import com.whoami.voz.ui.fragment.Page3Fragment;
 
 public class BaseActivity extends FragmentActivity {
     ViewPager viewPager;
@@ -18,8 +21,21 @@ public class BaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         viewPager = (ViewPager) findViewById(R.id.pager);
-        myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(myFragmentAdapter);
+        String url = getIntent().getStringExtra("URL");
+        if (url.contains(Global.URL) || url.contains(Global.URL2)) {
+        } else {
+            url = Global.URL + url;
+        }
+        Page3Fragment fragment = Page3Fragment.newInstance(100, url);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.container, fragment,"AAAA");
+        ft.commit();
+
+//        if (!TextUtils.isEmpty(url)) {
+//            myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager(), url);
+//            viewPager.setAdapter(myFragmentAdapter);
+//
+//        }
     }
 
     @Override

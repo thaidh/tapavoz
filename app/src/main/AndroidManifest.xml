@@ -115,15 +115,16 @@
             android:name="com.startapp.android.publish.AppWallActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Translucent" />
-        <!--<activity-->
-            <!--android:name="com.whoami.voz.ui.activity.BaseActivity"-->
-            <!--android:label="@string/title_activity_base" >-->
+        <activity
+            android:name="com.whoami.voz.ui.activity.BaseActivity"
+            android:label="@string/title_activity_base"
+            android:screenOrientation="portrait">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
-        <!--</activity>-->
+        </activity>
     </application>
 
 </manifest>

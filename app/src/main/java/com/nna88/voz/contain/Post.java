@@ -1,8 +1,30 @@
 package com.nna88.voz.contain;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.internal.view.SupportMenu;
+import android.support.v4.view.ViewCompat;
+import android.text.Layout;
+import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
+import android.text.style.QuoteSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
+import android.widget.TextView;
+
+import com.nna88.voz.PhotoView.PhotoViewAttacher;
+import com.nna88.voz.listview.TextViewFixTouchConsume;
 import com.nna88.voz.main.BuildConfig;
 import com.nna88.voz.main.Global;
+import com.nna88.voz.main.R;
+import com.nna88.voz.main.UILApplication;
+import com.nna88.voz.quickaction.QuickAction;
+import com.nna88.voz.util.Util;
 import com.nna88.voz.util.spanable;
 import java.util.ArrayList;
 import org.jsoup.nodes.Element;
@@ -11,6 +33,9 @@ public class Post {
     public static final String urlAvatar = "http://pik.vn/2014277c7c6c-57e7-4a12-bb2a-c83315886870.png";
     public static final String urlOffline = "http://pik.vn/2014672b230d-420c-4855-adc8-bb370d696e37.png";
     public static final String urlOnline = "http://pik.vn/2014e76c1d82-9947-4362-991c-c29457164f29.png";
+    private static final int DP32 = Util.convertDpToPx(UILApplication.getAppContext(), 32);
+    private static final int TEXT_SIZE = 1;
+
     private ArrayList<Bitmap> bitmaps;
     public spanable border;
     public String css;
@@ -44,6 +69,7 @@ public class Post {
     public typeSpan type;
     public spanable typeU;
     public spanable web;
+    public SpannableString mContent;
 
     public class bitmapSpan extends spanable {
         ArrayList<Bitmap> bitmaps;
@@ -120,12 +146,12 @@ public class Post {
     }
 
     public Post() {
-        this.mJd = BuildConfig.FLAVOR;
+        this.mJd = "";
         this.mPosts = "0";
-        this.m_UserId = BuildConfig.FLAVOR;
+        this.m_UserId = "";
         this.isOnline = false;
-        this.mTime = BuildConfig.FLAVOR;
-        this.mIndex = BuildConfig.FLAVOR;
+        this.mTime = "";
+        this.mIndex = "";
         this.htmlDocType = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.1//EN\"\n    \"http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd\">";
         this.test = "<input type=\"button\" value=\"Say hello\" onClick=\"showAndroidToast('Hello Android!')\" />\n";
         this.htmlMenu = "<div>\n<table style=\"width:100%\">\n<tr>\n\t<td >\n                <!-- #post -->\n\t\t<div style=\"float:right\">menu_thang</div>\n                <!-- time -->\n\t\t<div class=\"normal\">menu_time</div>\n\t</td>\n</tr>\n\n<tr>\n\t<td>\n\t\t<!-- user info -->\n\t\t<table cellpadding=\"0\" cellspacing=\"6\" border=\"0\" width=\"100%\">\n\t\t<tr>\n\t\t\t<td><img src=\"menu_avatar/></td>\n\t\t\t<td nowrap=\"nowrap\">\n\t\t\t\t<div >\n                                        <!-- online -->\n\t\t\t\t\t<img src=\"menu_online/>\n                                       <!--ten user -->\n\t\t\t\t\tmenu_username\n\t\t\t\t</div>\n\t\t\t\t<div class=\"smallfont\">menu_title</div>\n\t\t\t</td>\n\t\t\t<td width=\"100%\">&nbsp;</td>\n\t\t\t<td valign=\"top\" nowrap=\"nowrap\">\n\t\t\t\t<div class=\"smallfont\">\n\t\t\t\t\t<div>J/d: menu_date</div>\n\t\t\t\t\t<div>\n\t\t\t\t\t\tmenu_posts\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</td>\n\t\t</tr>\n\t\t</table>\n\t\t<!-- / user info -->\n\t</td>\n</tr>\n\n<table>\n</div>";
@@ -140,6 +166,8 @@ public class Post {
         this.quote = new spanable();
         this.isMultiQuote = false;
     }
+
+
 
     public Bitmap Avatar() {
         return this.mAvatar;
@@ -169,7 +197,7 @@ public class Post {
         return this.mTime;
     }
 
-    public String UrlAvatar() {
+    public String getUrlAvatar() {
         return this.mUrlAvatar;
     }
 
@@ -284,5 +312,168 @@ public class Post {
 
     public String title() {
         return this.mTitle;
+    }
+
+    public SpannableString getContent() {
+        return mContent;
+    }
+
+    public void initContent() {
+        try {
+            mContent = new SpannableString(getText());
+            int curPos = 0;
+            int start;
+            int end;
+            while (curPos < font.getSize()) {
+                start = font.getStart(curPos).intValue();
+                end = font.getEnd(curPos).intValue();
+//                if (font.color(curPos).equals("Purple")) {
+//                    content.setSpan(new ForegroundColorSpan(-8388480), start, end, 18);
+//                } else if (font.color(curPos).equals("Indigo")) {
+//                    content.setSpan(new ForegroundColorSpan(-11861886), start, end, 18);
+//                } else if (font.color(curPos).equals("SlateGray")) {
+//                    content.setSpan(new ForegroundColorSpan(-9404272), start, end, 18);
+//                } else if (font.color(curPos).equals("DarkOrchid")) {
+//                    content.setSpan(new ForegroundColorSpan(-6737204), start, end, 18);
+//                } else if (font.color(curPos).equals("Plum")) {
+//                    content.setSpan(new ForegroundColorSpan(-2252579), start, end, 18);
+//                } else if (font.color(curPos).equals("Black")) {
+//                    content.setSpan(new ForegroundColorSpan(ViewCompat.MEASURED_STATE_MASK), start, end, 18);
+//                } else if (font.color(curPos).equals("DarkRed")) {
+//                    content.setSpan(new ForegroundColorSpan(-7667712), start, end, 18);
+//                } else if (font.color(curPos).equals("Red")) {
+//                    content.setSpan(new ForegroundColorSpan(SupportMenu.CATEGORY_MASK), start, end, 18);
+//                } else if (font.color(curPos).equals("Magenta")) {
+//                    content.setSpan(new ForegroundColorSpan(-65281), start, end, 18);
+//                } else if (font.color(curPos).equals("Pink")) {
+//                    content.setSpan(new ForegroundColorSpan(-16181), start, end, 18);
+//                } else if (font.color(curPos).equals("Sienna")) {
+//                    content.setSpan(new ForegroundColorSpan(-6270419), start, end, 18);
+//                } else if (font.color(curPos).equals("DarkOrange")) {
+//                    content.setSpan(new ForegroundColorSpan(-29696), start, end, 18);
+//                } else if (font.color(curPos).equals("SandyBrown")) {
+//                    content.setSpan(new ForegroundColorSpan(-744352), start, end, 18);
+//                } else if (font.color(curPos).equals("Orange")) {
+//                    content.setSpan(new ForegroundColorSpan(-23296), start, end, 18);
+//                } else if (font.color(curPos).equals("Wheat")) {
+//                    content.setSpan(new ForegroundColorSpan(-663885), start, end, 18);
+//                } else if (font.color(curPos).equals("DarkOliveGreen")) {
+//                    content.setSpan(new ForegroundColorSpan(-11179217), start, end, 18);
+//                } else if (font.color(curPos).equals("Olive")) {
+//                    content.setSpan(new ForegroundColorSpan(-8355840), start, end, 18);
+//                } else if (font.color(curPos).equals("YellowGreen")) {
+//                    content.setSpan(new ForegroundColorSpan(-6632142), start, end, 18);
+//                } else if (font.color(curPos).equals("Yellow")) {
+//                    content.setSpan(new ForegroundColorSpan(-256), start, end, 18);
+//                } else if (font.color(curPos).equals("LemonChiffon")) {
+//                    content.setSpan(new ForegroundColorSpan(-1331), start, end, 18);
+//                } else if (font.color(curPos).equals("DarkGreen")) {
+//                    content.setSpan(new ForegroundColorSpan(-16751616), start, end, 18);
+//                } else if (font.color(curPos).equals("Green")) {
+//                    content.setSpan(new ForegroundColorSpan(-16744448), start, end, 18);
+//                } else if (font.color(curPos).equals("SeaGreen")) {
+//                    content.setSpan(new ForegroundColorSpan(-13726889), start, end, 18);
+//                } else if (font.color(curPos).equals("Lime")) {
+//                    content.setSpan(new ForegroundColorSpan(-16711936), start, end, 18);
+//                } else if (font.color(curPos).equals("PaleGreen")) {
+//                    content.setSpan(new ForegroundColorSpan(-6751336), start, end, 18);
+//                } else if (font.color(curPos).equals("DarkSlateBlue")) {
+//                    content.setSpan(new ForegroundColorSpan(-12042869), start, end, 18);
+//                } else if (font.color(curPos).equals("Teal")) {
+//                    content.setSpan(new ForegroundColorSpan(-16744320), start, end, 18);
+//                } else if (font.color(curPos).equals("MediumTurquoise")) {
+//                    content.setSpan(new ForegroundColorSpan(-12004916), start, end, 18);
+//                } else if (font.color(curPos).equals("Cyan")) {
+//                    content.setSpan(new ForegroundColorSpan(-16711681), start, end, 18);
+//                } else if (font.color(curPos).equals("PaleTurquoise")) {
+//                    content.setSpan(new ForegroundColorSpan(-5247250), start, end, 18);
+//                } else if (font.color(curPos).equals("Navy")) {
+//                    content.setSpan(new ForegroundColorSpan(-16777088), start, end, 18);
+//                } else if (font.color(curPos).equals("Blue")) {
+//                    content.setSpan(new ForegroundColorSpan(-16776961), start, end, 18);
+//                } else if (font.color(curPos).equals("RoyalBlue")) {
+//                    content.setSpan(new ForegroundColorSpan(-12490271), start, end, 18);
+//                } else if (font.color(curPos).equals("DeepSkyBlue")) {
+//                    content.setSpan(new ForegroundColorSpan(-16728065), start, end, 18);
+//                } else if (font.color(curPos).equals("LightBlue")) {
+//                    content.setSpan(new ForegroundColorSpan(-5383962), start, end, 18);
+//                } else if (font.color(curPos).equals("DarkSlateGray")) {
+//                    content.setSpan(new ForegroundColorSpan(-13676721), start, end, 18);
+//                } else if (font.color(curPos).equals("DimGray")) {
+//                    content.setSpan(new ForegroundColorSpan(-9868951), start, end, 18);
+//                } else if (font.color(curPos).equals("Gray")) {
+//                    content.setSpan(new ForegroundColorSpan(-8355712), start, end, 18);
+//                } else if (font.color(curPos).equals("Silver")) {
+//                    content.setSpan(new ForegroundColorSpan(-4144960), start, end, 18);
+//                } else if (font.color(curPos).equals("White")) {
+//                    content.setSpan(new ForegroundColorSpan(-1), start, end, 18);
+//                }
+                mContent.setSpan(new RelativeSizeSpan((font.size(curPos) > 3 ? (float) (((double) (font.size(curPos) - 3)) / 10.0d)
+                        : (float) (((double) (-(font.size(curPos) - 3))) / 10.0d)) + PhotoViewAttacher.DEFAULT_MIN_SCALE), start, end, 18);
+                curPos++;
+            }
+            curPos = 0;
+            while (curPos < web.getSize()) {
+                start = web.getStart(curPos).intValue();
+                end = web.getEnd(curPos).intValue();
+                mContent.setSpan(new URLSpan(web.getStr(curPos)), start, end, 18);
+                curPos++;
+            }
+            curPos = 0;
+            while (curPos < quote.getSize()) {
+                start = quote.getStart(curPos).intValue();
+                end = quote.getEnd(curPos).intValue();
+                mContent.setSpan(new QuoteSpan(UILApplication.getAppContext().getResources().getColor(R.color.ics_blue_dark)), start, end, 18);
+                mContent.setSpan(new StyleSpan(2), start, end, 18);
+                mContent.setSpan(new ForegroundColorSpan(QuickAction.WOOD_TEXT_TITLE), start, end, 18);
+                curPos++;
+            }
+            curPos = 0;
+            while (curPos < type.getSize()) {
+                start = type.getStart(curPos).intValue();
+                end = type.getEnd(curPos).intValue();
+                mContent.setSpan(new StyleSpan(type.type()), start, end, 18);
+                curPos++;
+            }
+            curPos = 0;
+            while (curPos < typeU.getSize()) {
+                start = typeU.getStart(curPos).intValue();
+                end = typeU.getEnd(curPos).intValue();
+                mContent.setSpan(new UnderlineSpan(), start, end, 18);
+                curPos++;
+            }
+
+            curPos = 0;
+            while (curPos < image.getSize()) {
+                if (image.getStr(curPos).contains("http://") || image.getStr(curPos).contains("https://")) {
+                    if (curPos < image.getSize()
+                            && image.getStart(curPos).intValue() < mContent.length()
+                            && image.getEnd(curPos).intValue() < mContent.length()) {
+                        AlignmentSpan.Standard standard = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
+                        ImageSpan span = new ImageSpan(UILApplication.getAppContext(), image.getBitmap(curPos), 0);
+                        start = image.getStart(curPos).intValue();
+                        end = image.getEnd(curPos).intValue();
+//                        CustomClickableSpan customClickableSpan = new CustomClickableSpan(mContent.subSequence(start, end).toString());
+                        mContent.setSpan(span, start, end, 18);
+                        mContent.setSpan(standard, start + -2 >= 0 ? start - 2 : 0, end, 18);
+//                        mContent.setSpan(customClickableSpan, start, end, 33);
+                    }
+                } else {
+                    BitmapDrawable d = new BitmapDrawable(UILApplication.getAppContext().getResources(), image.getBitmap(curPos));
+                    if (image.getStr(curPos).contains("attachmentid")) {
+                        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+                    } else {
+                        d.setBounds(0, 0, (int) (((float) DP32) * TEXT_SIZE), (int) (((float) DP32) * TEXT_SIZE));
+                    }
+                    ImageSpan span = new ImageSpan(d, 0);
+                    start = image.getStart(curPos).intValue();
+                    end = image.getEnd(curPos).intValue();
+                    mContent.setSpan(span, start, end, 18);
+                }
+                curPos++;
+            }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

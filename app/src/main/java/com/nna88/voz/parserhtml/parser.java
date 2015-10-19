@@ -391,6 +391,59 @@ public class parser {
         }
     }
 
+    public Document getDocWithUrl(String url) {
+        try {
+            DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
+            HttpUriRequest httpGet = new HttpGet(url);
+            if (mUser.getCookiStore() != null) {
+                httpGet.addHeader(SM.COOKIE, mUser.getCookiStore());
+            }
+            HttpClientParams.setRedirecting(defaultHttpClient.getParams(), false);
+            HttpResponse execute = defaultHttpClient.execute(httpGet);
+            if (execute.getStatusLine().getStatusCode() != 200) {
+                Header[] headers = execute.getHeaders("Location");
+                if (!(headers == null || headers.length == 0)) {
+                    url = headers[headers.length - 1].getValue();
+                    return getDoc();
+                }
+            }
+            HttpEntity entity = execute.getEntity();
+            String entityUtils = entity != null ? EntityUtils.toString(entity) : null;
+            if (entity != null) {
+                entity.consumeContent();
+            }
+            List cookies = defaultHttpClient.getCookieStore().getCookies();
+            if (cookies.isEmpty()) {
+                mUser.setLogin(false);
+            } else {
+                for (int i = 0; i < cookies.size(); i++) {
+                    if (((Cookie) cookies.get(i)).getName().equals("vfsessionhash")) {
+                        mUser.setLogin(true);
+                        break;
+                    }
+                }
+            }
+            defaultHttpClient.getConnectionManager().shutdown();
+            return Jsoup.parse(entityUtils);
+        } catch (IOException e) {
+            try {
+                e.printStackTrace();
+                return null;
+            } catch (Exception e2) {
+                this.sNotif = "Cannot access vozForums\n";
+                if (e2 instanceof HttpStatusException) {
+                    this.sNotif += "\nStatus: " + ((HttpStatusException) e2).getStatusCode();
+                } else if (e2 instanceof SocketTimeoutException) {
+                    this.sNotif += "\nTimeout";
+                }
+                e2.printStackTrace();
+                return null;
+            }
+        }
+    }
+
+
+
     public Document getPM() {
         try {
             return Jsoup.connect("https://vozforums.com/private.php").timeout(TIMEOUT).cookies(mUser.cookies()).execute().parse();

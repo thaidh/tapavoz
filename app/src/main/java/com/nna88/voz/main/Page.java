@@ -23,8 +23,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Vibrator;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
@@ -72,7 +70,7 @@ import com.nna88.voz.listview.SettingAdapter;
 import com.nna88.voz.listview.WebkitCookieManagerProxy;
 import com.nna88.voz.listview.listViewCustom1;
 import com.nna88.voz.listview.listViewCustom2;
-import com.nna88.voz.listview.listViewCustom3;
+import com.nna88.voz.listview.Page3ListViewAdapter;
 import com.nna88.voz.listview.listViewCustom3Html;
 import com.nna88.voz.mysqlite.CommentsDataSource;
 import com.nna88.voz.parserhtml.parser;
@@ -81,7 +79,6 @@ import com.nna88.voz.ui.NavigationDrawerActivity;
 import com.nna88.voz.ui.SidebarAdapter;
 import com.nna88.voz.ui.SidebarAdapter.Category;
 import com.nna88.voz.ui.SidebarAdapter.Item;
-import com.nna88.voz.ui.UtilLayout;
 import com.nna88.voz.util.ChangeLog;
 import com.nna88.voz.util.Help;
 import com.nna88.voz.util.ImageLoad;
@@ -105,9 +102,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Page extends NavigationDrawerActivity {
-    protected static final int STATE_OFFSCREEN = 1;
-    protected static final int STATE_ONSCREEN = 0;
-    protected static final int STATE_RETURNING = 2;
+    public static final int STATE_ONSCREEN = 0;
+    public static final int STATE_OFFSCREEN = 1;
+    public static final int STATE_RETURNING = 2;
     protected TranslateAnimation anim;
     protected TextView butPageFooter;
     protected TextView butPageHeader;
@@ -1071,13 +1068,13 @@ public class Page extends NavigationDrawerActivity {
             } else if (this.iPage == 3) {
                 Global.setBackgroundItemThread(this.linearHeader);
                 Global.setBackgroundItemThread(this.linearFooter);
-                ((listViewCustom3) this.mObjectAdapter).notifyDataSetChanged();
+                ((Page3ListViewAdapter) this.mObjectAdapter).notifyDataSetChanged();
             } else if (this.iPage == 14) {
                 Global.setBackgroundItemThread(this.linearHeader);
                 Global.setBackgroundItemThread(this.linearFooter);
-                ((listViewCustom3) this.mObjectAdapter).notifyDataSetChanged();
+                ((Page3ListViewAdapter) this.mObjectAdapter).notifyDataSetChanged();
             } else if (this.iPage == 11) {
-                ((listViewCustom3) this.mObjectAdapter).notifyDataSetChanged();
+                ((Page3ListViewAdapter) this.mObjectAdapter).notifyDataSetChanged();
             } else {
                 ((listViewCustom2) this.mObjectAdapter).notifyDataSetChanged();
             }
@@ -1445,7 +1442,7 @@ public class Page extends NavigationDrawerActivity {
                     Page.this.mList.clearFocus();
                     Page.this.mList.post(new Runnable() {
                         public void run() {
-                            int count = Page.this.iPage == Page.STATE_OFFSCREEN ? ((listViewCustom1) Page.this.mObjectAdapter).getCount() : Page.this.iPage == Page.STATE_RETURNING ? ((listViewCustom2) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : Page.this.iPage == 3 ? ((listViewCustom3Html) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : Page.this.iPage == 11 ? ((listViewCustom3) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : ((listViewCustom2) Page.this.mObjectAdapter).getCount();
+                            int count = Page.this.iPage == Page.STATE_OFFSCREEN ? ((listViewCustom1) Page.this.mObjectAdapter).getCount() : Page.this.iPage == Page.STATE_RETURNING ? ((listViewCustom2) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : Page.this.iPage == 3 ? ((listViewCustom3Html) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : Page.this.iPage == 11 ? ((Page3ListViewAdapter) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : ((listViewCustom2) Page.this.mObjectAdapter).getCount();
                             Page.this.mList.setSelection(count);
                         }
                     });
@@ -2083,13 +2080,10 @@ public class Page extends NavigationDrawerActivity {
         }
         getRevolution();
         initUI();
-//        this.mLayoutAds = (RelativeLayout) findViewById(R.id.myAd);
-//        this.mLayoutAds.setVisibility(View.GONE);
         readSettings();
         this.mParser = new parser(Global.URL);
         this.mTask = new TaskGetHtml();
         this.textTitle = (TextView) findViewById(Resources.getSystem().getIdentifier("action_bar_title", "id", "android"));
-//        mAd = new Ad(this, this.mLayoutAds);
         CookieSyncManager.createInstance(this);
         CookieManager.getInstance().setAcceptCookie(true);
         CookieHandler.setDefault(new WebkitCookieManagerProxy(null, CookiePolicy.ACCEPT_ALL));

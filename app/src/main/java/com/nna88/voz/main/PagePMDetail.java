@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import com.nna88.voz.contain.Post;
-import com.nna88.voz.listview.listViewCustom3;
+import com.nna88.voz.listview.Page3ListViewAdapter;
 import com.nna88.voz.mysqlite.MySQLiteHelper;
 import com.nna88.voz.quickaction.ActionItem;
 import com.nna88.voz.quickaction.QuickAction;
@@ -24,13 +24,11 @@ import java.util.Iterator;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 public class PagePMDetail extends Page {
     private ArrayList<Post> ListContains;
-    private listViewCustom3 adapter;
+    private Page3ListViewAdapter adapter;
     private int iCallFromNotification;
     private int iCallFromNotificationQuote;
     private int iPostType;
@@ -61,7 +59,7 @@ public class PagePMDetail extends Page {
             if (((Post) PagePMDetail.this.ListContains.get(numArr[0].intValue())).Avatar() != null) {
                 return null;
             }
-            String UrlAvatar = ((Post) PagePMDetail.this.ListContains.get(numArr[0].intValue())).UrlAvatar();
+            String UrlAvatar = ((Post) PagePMDetail.this.ListContains.get(numArr[0].intValue())).getUrlAvatar();
             if (UrlAvatar == null) {
                 return null;
             }
@@ -130,7 +128,7 @@ public class PagePMDetail extends Page {
         }
 
         public void execute() {
-            PagePMDetail.this.mImageLoad.imageLoader.loadImage(((Post) PagePMDetail.this.ListContains.get(this.index)).UrlAvatar(), PagePMDetail.this.mImageLoad.options, new ImageLoadingListener() {
+            PagePMDetail.this.mImageLoad.imageLoader.loadImage(((Post) PagePMDetail.this.ListContains.get(this.index)).getUrlAvatar(), PagePMDetail.this.mImageLoad.options, new ImageLoadingListener() {
                 public void onLoadingCancelled(String str, View view) {
                 }
 
@@ -475,7 +473,7 @@ public class PagePMDetail extends Page {
         this.iPage = 11;
         super.onCreate(bundle);
         this.ListContains = new ArrayList();
-        this.adapter = new listViewCustom3(this.mContext, this.ListContains, ImageLoader.getInstance(), null, this.mTextSize);
+        this.adapter = new Page3ListViewAdapter(this.mContext, this.ListContains, ImageLoader.getInstance(), null, this.mTextSize);
         this.mObjectAdapter = this.adapter;
         this.adapter.setSize(this.mTextSize);
         this.mList.setAdapter(this.adapter);

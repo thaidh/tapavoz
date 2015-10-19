@@ -21,7 +21,7 @@
             android:layout_weight="2.0"
             android:background="@drawable/transparent_button"
             android:scaleType="centerInside"
-            android:src="@drawable/tapatalk_fast_back_common_dark" />
+            android:src="@drawable/navigation_fast_back" />
 
         <View
             android:layout_width="1.0dip"
@@ -37,7 +37,7 @@
             android:layout_weight="2.0"
             android:background="@drawable/transparent_button"
             android:scaleType="centerInside"
-            android:src="@drawable/tapatalk_back_common_dark" />
+            android:src="@drawable/navigation_common_back" />
 
         <View
             android:layout_width="1.0dip"
@@ -72,7 +72,7 @@
             android:layout_weight="2.0"
             android:background="@drawable/transparent_button"
             android:scaleType="centerInside"
-            android:src="@drawable/tapatalk_forward_common_dark" />
+            android:src="@drawable/navigation_common_forward" />
 
         <View
             android:layout_width="1.0dip"
@@ -88,7 +88,7 @@
             android:layout_weight="2.0"
             android:background="@drawable/transparent_button"
             android:scaleType="centerInside"
-            android:src="@drawable/tapatalk_fast_forward_common_dark" />
+            android:src="@drawable/navigation_fast_forward" />
     </LinearLayout>
 
     <ImageView

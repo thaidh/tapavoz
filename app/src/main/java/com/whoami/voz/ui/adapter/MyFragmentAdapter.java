@@ -13,13 +13,16 @@ import java.util.Random;
  */
 public class MyFragmentAdapter extends FragmentStatePagerAdapter{
 
-    public MyFragmentAdapter(FragmentManager fm) {
+    String mUrl;
+
+    public MyFragmentAdapter(FragmentManager fm, String url) {
         super(fm);
+        this.mUrl = url;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return Page3Fragment.newInstance((new Random()).nextInt(), "");
+        return Page3Fragment.newInstance((new Random()).nextInt(), mUrl);
     }
 
     @Override

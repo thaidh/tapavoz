@@ -45,7 +45,9 @@ public class SettingAdapter extends BaseAdapter {
             } else if (!this.val$item.mName.equals("Pull to next") && !this.val$item.mName.equals("Pull to refresh")) {
                 if (this.val$item.mName.equals("Vibrate")) {
                     Global.bVibrate = z;
-                    SettingAdapter.this.mItemClickListener.onItemClick(5, z, this.val$item);
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onItemClick(5, z, this.val$item);
+                    }
                 } else if (this.val$item.mName.equals("Divider")) {
                     Global.bDevider = z;
                     SettingAdapter.this.mItemClickListener.onItemClick(6, z, this.val$item);

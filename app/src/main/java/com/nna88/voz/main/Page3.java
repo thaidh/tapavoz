@@ -16,8 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import com.nna88.voz.contain.Post;
-import com.nna88.voz.listview.listViewCustom3;
-import com.nna88.voz.listview.listViewCustom3.OnImageClickListestener;
+import com.nna88.voz.listview.Page3ListViewAdapter;
+import com.nna88.voz.listview.Page3ListViewAdapter.OnImageClickListestener;
 import com.nna88.voz.main.MyNetwork.OnResult;
 import com.nna88.voz.mysqlite.MySQLiteHelper;
 import com.nna88.voz.quickaction.ActionItem;
@@ -42,7 +42,7 @@ import org.jsoup.select.Elements;
 
 public class Page3 extends Page {
     private ArrayList<Post> ListContains;
-    private listViewCustom3 adapter;
+    private Page3ListViewAdapter adapter;
     private Bitmap bmImageFailed;
     private Bitmap bmImageStart;
     private FullScreenImage fullScreen;
@@ -388,7 +388,7 @@ public class Page3 extends Page {
         }
 
         public void execute() {
-            this.imageLoader.loadImage(((Post) Page3.this.ListContains.get(this.index)).UrlAvatar(), Page3.this.mImageLoad.options, new ImageLoadingListener() {
+            this.imageLoader.loadImage(((Post) Page3.this.ListContains.get(this.index)).getUrlAvatar(), Page3.this.mImageLoad.options, new ImageLoadingListener() {
                 public void onLoadingCancelled(String str, View view) {
                 }
 
@@ -653,7 +653,7 @@ public class Page3 extends Page {
     private void loadAvatarUniversal(int i) {
         try {
             if (i < this.ListContains.size()) {
-                this.mImageLoad.imageLoader.loadImage(((Post) this.ListContains.get(i)).UrlAvatar(), this.mImageLoad.options, new AnonymousClass10(i));
+                this.mImageLoad.imageLoader.loadImage(((Post) this.ListContains.get(i)).getUrlAvatar(), this.mImageLoad.options, new AnonymousClass10(i));
             }
         } catch (Exception e) {
             loadAvatarUniversal(i + 1);
@@ -1073,7 +1073,7 @@ public class Page3 extends Page {
         this.mListTaskDownAvatart = new ArrayList();
         this.bmImageStart = BitmapFactory.decodeResource(getResources(), R.drawable.stub_image);
         this.bmImageFailed = BitmapFactory.decodeResource(getResources(), R.drawable.image_for_empty_url);
-        this.adapter = new listViewCustom3(this.mContext, this.ListContains, this.mImageLoad.imageLoader, this.bmImageStart, this.mTextSize);
+        this.adapter = new Page3ListViewAdapter(this.mContext, this.ListContains, this.mImageLoad.imageLoader, this.bmImageStart, this.mTextSize);
         this.mObjectAdapter = this.adapter;
         this.adapter.setSize(this.mTextSize);
         this.mList.setAdapter(this.adapter);

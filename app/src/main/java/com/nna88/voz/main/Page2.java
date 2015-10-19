@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.nna88.voz.contain.Thread;
 import com.nna88.voz.listview.listViewCustom2;
 import com.nna88.voz.mysqlite.Comment;
+import com.whoami.voz.ui.activity.BaseActivity;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -386,16 +388,18 @@ public class Page2 extends Page {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
                 Page2.this.vibrate();
                 try {
-                    Intent intent;
+                    Intent intent = new Intent(Page2.this.mContext, BaseActivity.class);
                     if (((Thread) Page2.this.ListContains.get(i)).isUrl() == 0) {
                         intent = new Intent(Page2.this.mContext, Page2.class);
+
                         if (((Thread) Page2.this.ListContains.get(i)).UrlThread() != null) {
                             intent.putExtra("URL", ((Thread) Page2.this.ListContains.get(i)).UrlThread());
                         } else {
                             return;
                         }
                     } else if (((Thread) Page2.this.ListContains.get(i)).isUrl() == 1) {
-                        intent = new Intent(Page2.this.mContext, Page3.class);
+//                        intent = new Intent(Page2.this.mContext, Page3.class);
+
                         if (((Thread) Page2.this.ListContains.get(i)).UrlLastPosst() != null) {
                             if (((Thread) Page2.this.ListContains.get(i)).UrlLastPosst() != null) {
                                 intent.putExtra("URL", ((Thread) Page2.this.ListContains.get(i)).UrlLastPosst());
