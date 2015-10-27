@@ -75,16 +75,19 @@ public class Page3PagerAdapter extends PagerAdapter {
 
         ArrayList<Post> curListPost = mMapPostPerPage.get(Integer.valueOf(loadPageIndex));
         if (curListPost == null) {
-            curListPost = new ArrayList<>();
+//            curListPost = new ArrayList<>();
             if (mPage3Listener != null) {
                 mPage3Listener.preloadPage(loadPageIndex);
             }
         } else {
+            view.findViewById(R.id.layout_progress).setVisibility(View.GONE);
             listView.addHeaderView(getNavigationView(Gravity.CENTER, loadPageIndex));
             listView.addFooterView(getNavigationView(Gravity.CENTER, loadPageIndex));
+            Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, curListPost, mImageLoader, mImageStart, mTextSize);
+            listView.setAdapter(adapter);
         }
-        Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, curListPost, mImageLoader, mImageStart, mTextSize);
-        listView.setAdapter(adapter);
+
+
 //        if (mMapPostPerPage.containsKey(Integer.valueOf(loadPageIndex))) {
 //            view = mContext.getLayoutInflater().inflate(R.layout.layout_page3_item, null);
 //            final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);

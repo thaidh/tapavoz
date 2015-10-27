@@ -151,6 +151,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
         TextView txtViewDevider;
         TextView user;
         TextView userTitle;
+        LinearLayout mGridImage;
 
         ViewHolder() {
         }
@@ -201,7 +202,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
     }
 
     private void initUniversal() {
-        options = new Builder().imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2).bitmapConfig(Config.RGB_565).build();
+        options = new Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE).bitmapConfig(Config.RGB_565).build();
         optionsEmo = new Builder().cacheInMemory(true).cacheOnDisc(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
                 .bitmapConfig(Config.ARGB_8888).delayBeforeLoading(0).build();
@@ -220,7 +221,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
 //        } else {
 //            mImageSize = new ImageSize(Global.width / 2, Global.height);
 //        }
-        mImageSize = new ImageSize(Global.width / 4, Global.height / 4);
+        mImageSize = new ImageSize(Global.width / 2, Global.height / 2);
     }
 
     public void addImage(TextView textView, Post post) {
@@ -422,8 +423,8 @@ public class Page3ListViewAdapter extends BaseAdapter {
         }
     }
 
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        Post post = mcontains.get(i);
+    public View getView(int position, View view, ViewGroup viewGroup) {
+        Post post = mcontains.get(position);
         if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.list_item3, null);
@@ -437,6 +438,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
             holder.posts = (TextView) view.findViewById(R.id.list3_post);
             holder.userTitle = (TextView) view.findViewById(R.id.list3_usertitle);
             holder.txtViewDevider = (TextView) view.findViewById(R.id.textDevider);
+            holder.mGridImage = (LinearLayout) view.findViewById(R.id.grid_image);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -486,16 +488,37 @@ public class Page3ListViewAdapter extends BaseAdapter {
         } else {
             holder.user.setCompoundDrawables(drawableOffline, null, null, null);
         }
-        loadImage(post, 0);
-        holder.contain.setText(post.getContent());
+//        loadImage(post, 0);
+
 //        addImage(holder.contain, post);
         if (post.isMultiQuote()) {
             Global.setBackgroundItemThreadMultiQuote(holder.layout);
         } else {
             Global.setBackgroundItemThread(holder.layout);
         }
+        holder.contain.setText(post.getContent());
+        holder.mGridImage.removeAllViews();
+        for (int i = 0; i < post.image.getSize(); i++) {
+            String imageUrl = post.image.getStr(i);
+            if (imageUrl.contains("http://") || imageUrl.contains("https://")) {
+                try {
+                    ImageView imageView = new ImageView(context);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());
+                    imageView.setLayoutParams(layoutParams);
+                    imageView.setImageBitmap(bmImageStart);
+                    imageLoader.displayImage(imageUrl, imageView, options);
+                    holder.mGridImage.addView(imageView);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
         return view;
     }
+
+
 
     private void loadImage(Post post, int i) {
         try {

@@ -918,17 +918,17 @@ public class Page3Fragment extends Fragment {
                         if (previousElementSibling.attr("id").split("_").length > 2) {
                             post.setId(previousElementSibling.attr("id").split("_")[2]);
                         }
-                        PaserPage3(previousElementSibling, post, false);
+                        parsePage3(previousElementSibling, post, false);
                     }
                     previousElementSibling = element2.select("fieldset[class=fieldset]").first();
                     if (previousElementSibling != null) {
                         post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                        PaserPage3(previousElementSibling, post, false);
+                        parsePage3(previousElementSibling, post, false);
                     }
                     post.Info(text, str2, str4, null, str3);
                     if (Global.bSign && element2.select("div:contains(_______)").first() != null) {
                         post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                        PaserPage3(element2.select("div:contains(_______)").first(), post, false);
+                        parsePage3(element2.select("div:contains(_______)").first(), post, false);
                     }
                     post.initContent();
                     mListPost.add(post);
@@ -995,14 +995,15 @@ public class Page3Fragment extends Fragment {
     }
 
     private void refreshCurrentPage(int curPage) {
-        int itemIndex = mViewPager.getCurrentItem();
-        if (itemIndex + 1 == mCurPage) {
-        }
+//        int itemIndex = mViewPager.getCurrentItem();
+//        if (itemIndex + 1 == mCurPage) {
+//        }
         Log.i("AAAAAAAAA", "Refresh page :  " + curPage);
         View page = mViewPager.findViewWithTag(curPage);
         if (page != null) {
             ListView listView = (ListView) page.findViewById(R.id.content_frame);
-            if (listView.getAdapter().getCount() == 0 && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+            (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
+            if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
                 final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(curPage)), mImageLoad.imageLoader, bmImageStart, mTextSize);
                 listView.addHeaderView(getNavigationView(curPage));
                 listView.addFooterView(getNavigationView(curPage));
@@ -1327,7 +1328,7 @@ public class Page3Fragment extends Fragment {
 //        }
 //    }
 
-    private void PaserPage3(Element element, Post post, boolean z) {
+    private void parsePage3(Element element, Post post, boolean z) {
         if (element != null) {
             for (Node node : element.childNodes()) {
                 if (node instanceof Element) {
@@ -1345,54 +1346,54 @@ public class Page3Fragment extends Fragment {
                             post.addText(first.select("strong").text());
                             length2 = post.getText().length();
                             post.web.add(Global.URL + first.select("a").attr("href"), length, length2);
-                            post.type.add(BuildConfig.FLAVOR, length, length2, 1);
+                            post.type.add("", length, length2, 1);
                             post.addText(IOUtils.LINE_SEPARATOR_UNIX);
                         } else {
-                            PaserPage3(first, post, z);
+                            parsePage3(first, post, z);
                             post.addText(IOUtils.LINE_SEPARATOR_UNIX);
                         }
                     } else if (((Element) node).tagName().equals("blockquote")) {
                         first = ((Element) node).select("blockquote").first();
                         post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                        PaserPage3(first, post, z);
+                        parsePage3(first, post, z);
                         post.addText(IOUtils.LINE_SEPARATOR_UNIX);
                     } else if (((Element) node).tagName().equals("fieldset")) {
                         first = ((Element) node).select("fieldset").first();
                         post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                        PaserPage3(first, post, z);
+                        parsePage3(first, post, z);
                         post.addText(IOUtils.LINE_SEPARATOR_UNIX);
                     } else if (((Element) node).tagName().equals("b")) {
                         first = ((Element) node).select("b").first();
                         length = post.getText().length();
-                        PaserPage3(first, post, z);
-                        post.type.add(BuildConfig.FLAVOR, length, post.getText().length(), 1);
+                        parsePage3(first, post, z);
+                        post.type.add("", length, post.getText().length(), 1);
                     } else if (((Element) node).tagName().equals("i")) {
                         first = ((Element) node).select("i").first();
                         length = post.getText().length();
-                        PaserPage3(first, post, z);
-                        post.type.add(BuildConfig.FLAVOR, length, post.getText().length(), 2);
+                        parsePage3(first, post, z);
+                        post.type.add("", length, post.getText().length(), 2);
                     } else if (((Element) node).tagName().equals("pre")) {
                         first = ((Element) node).select("pre").first();
                         length = post.getText().length();
-                        PaserPage3(first, post, z);
-                        post.quote.add(BuildConfig.FLAVOR, length, post.getText().length());
+                        parsePage3(first, post, z);
+                        post.quote.add("", length, post.getText().length());
                     } else if (((Element) node).tagName().equals("table")) {
                         first = ((Element) node).select("table").first();
                         length = post.getText().length();
-                        PaserPage3(first, post, z);
-                        post.quote.add(BuildConfig.FLAVOR, length, post.getText().length());
+                        parsePage3(first, post, z);
+                        post.quote.add("", length, post.getText().length());
                     } else if (((Element) node).tagName().equals("ol")) {
-                        PaserPage3(((Element) node).select("ol").first(), post, z);
+                        parsePage3(((Element) node).select("ol").first(), post, z);
                     } else if (((Element) node).tagName().equals("tbody")) {
-                        PaserPage3(((Element) node).select("tbody").first(), post, z);
+                        parsePage3(((Element) node).select("tbody").first(), post, z);
                     } else if (((Element) node).tagName().equals("li")) {
-                        PaserPage3(((Element) node).select("li").first(), post, z);
+                        parsePage3(((Element) node).select("li").first(), post, z);
                     } else if (((Element) node).tagName().equals("tr")) {
                         first = ((Element) node).select("tr").first();
                         post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                        PaserPage3(first, post, z);
+                        parsePage3(first, post, z);
                     } else if (((Element) node).tagName().equals("td")) {
-                        PaserPage3(((Element) node).select("td").first(), post, z);
+                        parsePage3(((Element) node).select("td").first(), post, z);
                     } else if (((Element) node).tagName().equals("img")) {
                         String r0;
                         r0 = ((Element) node).select("img[src]").attr("src");
@@ -1421,8 +1422,8 @@ public class Page3Fragment extends Fragment {
                     } else if (((Element) node).tagName().equals("u")) {
                         first = ((Element) node).select("u").first();
                         length = post.getText().length();
-                        PaserPage3(first, post, z);
-                        post.typeU.add(BuildConfig.FLAVOR, length, post.getText().length());
+                        parsePage3(first, post, z);
+                        post.typeU.add("", length, post.getText().length());
                     } else if (((Element) node).tagName().equals("font")) {
                         Element first2 = ((Element) node).select("font").first();
                         String str = "while";
@@ -1432,8 +1433,8 @@ public class Page3Fragment extends Fragment {
                         }
                         String attr = ((Element) node).select("font[size]").first() != null ? ((Element) node).select("font[size]").attr("size") : r1;
                         length2 = post.getText().length();
-                        PaserPage3(first2, post, z);
-                        post.font.add(BuildConfig.FLAVOR, length2, post.getText().length(), str, Integer.parseInt(attr));
+                        parsePage3(first2, post, z);
+                        post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
                     } else if (((Element) node).tagName().equals("a")) {
                         first = ((Element) node).select("a[href]").first();
                         if (first.select("img").first() == null) {
@@ -1453,7 +1454,7 @@ public class Page3Fragment extends Fragment {
                                 post.addText(r0);
                             }
                         } else {
-                            PaserPage3(first, post, true);
+                            parsePage3(first, post, true);
                         }
                     } else {
                         post.addText(((Element) node).text());
@@ -1467,9 +1468,8 @@ public class Page3Fragment extends Fragment {
                     }
                 }
             }
-            return;
         }
-        post.addText(element.text());
+//        post.addText(element.text());
     }
 
 

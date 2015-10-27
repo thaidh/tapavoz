@@ -103,6 +103,15 @@
         android:text="text\ntext\n"
         android:textSize="@dimen/xlargeTextSize2" />
 
+    <LinearLayout
+        android:id="@+id/grid_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
     <TextView
         android:id="@id/textDevider"
         android:layout_width="fill_parent"

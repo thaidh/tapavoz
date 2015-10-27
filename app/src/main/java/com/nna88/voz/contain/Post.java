@@ -3,8 +3,6 @@ package com.nna88.voz.contain;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.internal.view.SupportMenu;
-import android.support.v4.view.ViewCompat;
 import android.text.Layout;
 import android.text.SpannableString;
 import android.text.style.AlignmentSpan;
@@ -15,10 +13,8 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
-import android.widget.TextView;
 
 import com.nna88.voz.PhotoView.PhotoViewAttacher;
-import com.nna88.voz.listview.TextViewFixTouchConsume;
 import com.nna88.voz.main.BuildConfig;
 import com.nna88.voz.main.Global;
 import com.nna88.voz.main.R;
@@ -26,6 +22,9 @@ import com.nna88.voz.main.UILApplication;
 import com.nna88.voz.quickaction.QuickAction;
 import com.nna88.voz.util.Util;
 import com.nna88.voz.util.spanable;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.whoami.voz.ui.utils.EmoLoader;
+
 import java.util.ArrayList;
 import org.jsoup.nodes.Element;
 
@@ -33,8 +32,10 @@ public class Post {
     public static final String urlAvatar = "http://pik.vn/2014277c7c6c-57e7-4a12-bb2a-c83315886870.png";
     public static final String urlOffline = "http://pik.vn/2014672b230d-420c-4855-adc8-bb370d696e37.png";
     public static final String urlOnline = "http://pik.vn/2014e76c1d82-9947-4362-991c-c29457164f29.png";
-    private static final int DP32 = Util.convertDpToPx(UILApplication.getAppContext(), 32);
-    private static final int TEXT_SIZE = 1;
+    public static final String EMO_PREFIX = "images/smilies";
+    public static final int DP32 = Util.convertDpToPx(UILApplication.getAppContext(), 32);
+    public static final int TEXT_SIZE = 1;
+
 
     private ArrayList<Bitmap> bitmaps;
     public spanable border;
@@ -318,8 +319,21 @@ public class Post {
         return mContent;
     }
 
+    public void preloadEmo() {
+        for (int j = 0; j < image.getSize(); j++) {
+            String url = image.getStr(j);
+            if (url.contains("images/smilies")) {
+                EmoLoader.getInstance().initEmoBitmapCache(url);
+            }
+        }
+    }
+
+
+
     public void initContent() {
         try {
+            preloadEmo();
+
             mContent = new SpannableString(getText());
             int curPos = 0;
             int start;
@@ -329,84 +343,6 @@ public class Post {
                 end = font.getEnd(curPos).intValue();
 //                if (font.color(curPos).equals("Purple")) {
 //                    content.setSpan(new ForegroundColorSpan(-8388480), start, end, 18);
-//                } else if (font.color(curPos).equals("Indigo")) {
-//                    content.setSpan(new ForegroundColorSpan(-11861886), start, end, 18);
-//                } else if (font.color(curPos).equals("SlateGray")) {
-//                    content.setSpan(new ForegroundColorSpan(-9404272), start, end, 18);
-//                } else if (font.color(curPos).equals("DarkOrchid")) {
-//                    content.setSpan(new ForegroundColorSpan(-6737204), start, end, 18);
-//                } else if (font.color(curPos).equals("Plum")) {
-//                    content.setSpan(new ForegroundColorSpan(-2252579), start, end, 18);
-//                } else if (font.color(curPos).equals("Black")) {
-//                    content.setSpan(new ForegroundColorSpan(ViewCompat.MEASURED_STATE_MASK), start, end, 18);
-//                } else if (font.color(curPos).equals("DarkRed")) {
-//                    content.setSpan(new ForegroundColorSpan(-7667712), start, end, 18);
-//                } else if (font.color(curPos).equals("Red")) {
-//                    content.setSpan(new ForegroundColorSpan(SupportMenu.CATEGORY_MASK), start, end, 18);
-//                } else if (font.color(curPos).equals("Magenta")) {
-//                    content.setSpan(new ForegroundColorSpan(-65281), start, end, 18);
-//                } else if (font.color(curPos).equals("Pink")) {
-//                    content.setSpan(new ForegroundColorSpan(-16181), start, end, 18);
-//                } else if (font.color(curPos).equals("Sienna")) {
-//                    content.setSpan(new ForegroundColorSpan(-6270419), start, end, 18);
-//                } else if (font.color(curPos).equals("DarkOrange")) {
-//                    content.setSpan(new ForegroundColorSpan(-29696), start, end, 18);
-//                } else if (font.color(curPos).equals("SandyBrown")) {
-//                    content.setSpan(new ForegroundColorSpan(-744352), start, end, 18);
-//                } else if (font.color(curPos).equals("Orange")) {
-//                    content.setSpan(new ForegroundColorSpan(-23296), start, end, 18);
-//                } else if (font.color(curPos).equals("Wheat")) {
-//                    content.setSpan(new ForegroundColorSpan(-663885), start, end, 18);
-//                } else if (font.color(curPos).equals("DarkOliveGreen")) {
-//                    content.setSpan(new ForegroundColorSpan(-11179217), start, end, 18);
-//                } else if (font.color(curPos).equals("Olive")) {
-//                    content.setSpan(new ForegroundColorSpan(-8355840), start, end, 18);
-//                } else if (font.color(curPos).equals("YellowGreen")) {
-//                    content.setSpan(new ForegroundColorSpan(-6632142), start, end, 18);
-//                } else if (font.color(curPos).equals("Yellow")) {
-//                    content.setSpan(new ForegroundColorSpan(-256), start, end, 18);
-//                } else if (font.color(curPos).equals("LemonChiffon")) {
-//                    content.setSpan(new ForegroundColorSpan(-1331), start, end, 18);
-//                } else if (font.color(curPos).equals("DarkGreen")) {
-//                    content.setSpan(new ForegroundColorSpan(-16751616), start, end, 18);
-//                } else if (font.color(curPos).equals("Green")) {
-//                    content.setSpan(new ForegroundColorSpan(-16744448), start, end, 18);
-//                } else if (font.color(curPos).equals("SeaGreen")) {
-//                    content.setSpan(new ForegroundColorSpan(-13726889), start, end, 18);
-//                } else if (font.color(curPos).equals("Lime")) {
-//                    content.setSpan(new ForegroundColorSpan(-16711936), start, end, 18);
-//                } else if (font.color(curPos).equals("PaleGreen")) {
-//                    content.setSpan(new ForegroundColorSpan(-6751336), start, end, 18);
-//                } else if (font.color(curPos).equals("DarkSlateBlue")) {
-//                    content.setSpan(new ForegroundColorSpan(-12042869), start, end, 18);
-//                } else if (font.color(curPos).equals("Teal")) {
-//                    content.setSpan(new ForegroundColorSpan(-16744320), start, end, 18);
-//                } else if (font.color(curPos).equals("MediumTurquoise")) {
-//                    content.setSpan(new ForegroundColorSpan(-12004916), start, end, 18);
-//                } else if (font.color(curPos).equals("Cyan")) {
-//                    content.setSpan(new ForegroundColorSpan(-16711681), start, end, 18);
-//                } else if (font.color(curPos).equals("PaleTurquoise")) {
-//                    content.setSpan(new ForegroundColorSpan(-5247250), start, end, 18);
-//                } else if (font.color(curPos).equals("Navy")) {
-//                    content.setSpan(new ForegroundColorSpan(-16777088), start, end, 18);
-//                } else if (font.color(curPos).equals("Blue")) {
-//                    content.setSpan(new ForegroundColorSpan(-16776961), start, end, 18);
-//                } else if (font.color(curPos).equals("RoyalBlue")) {
-//                    content.setSpan(new ForegroundColorSpan(-12490271), start, end, 18);
-//                } else if (font.color(curPos).equals("DeepSkyBlue")) {
-//                    content.setSpan(new ForegroundColorSpan(-16728065), start, end, 18);
-//                } else if (font.color(curPos).equals("LightBlue")) {
-//                    content.setSpan(new ForegroundColorSpan(-5383962), start, end, 18);
-//                } else if (font.color(curPos).equals("DarkSlateGray")) {
-//                    content.setSpan(new ForegroundColorSpan(-13676721), start, end, 18);
-//                } else if (font.color(curPos).equals("DimGray")) {
-//                    content.setSpan(new ForegroundColorSpan(-9868951), start, end, 18);
-//                } else if (font.color(curPos).equals("Gray")) {
-//                    content.setSpan(new ForegroundColorSpan(-8355712), start, end, 18);
-//                } else if (font.color(curPos).equals("Silver")) {
-//                    content.setSpan(new ForegroundColorSpan(-4144960), start, end, 18);
-//                } else if (font.color(curPos).equals("White")) {
-//                    content.setSpan(new ForegroundColorSpan(-1), start, end, 18);
 //                }
                 mContent.setSpan(new RelativeSizeSpan((font.size(curPos) > 3 ? (float) (((double) (font.size(curPos) - 3)) / 10.0d)
                         : (float) (((double) (-(font.size(curPos) - 3))) / 10.0d)) + PhotoViewAttacher.DEFAULT_MIN_SCALE), start, end, 18);
@@ -445,31 +381,37 @@ public class Post {
 
             curPos = 0;
             while (curPos < image.getSize()) {
-                if (image.getStr(curPos).contains("http://") || image.getStr(curPos).contains("https://")) {
-                    if (curPos < image.getSize()
-                            && image.getStart(curPos).intValue() < mContent.length()
-                            && image.getEnd(curPos).intValue() < mContent.length()) {
-                        AlignmentSpan.Standard standard = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
-                        ImageSpan span = new ImageSpan(UILApplication.getAppContext(), image.getBitmap(curPos), 0);
-                        start = image.getStart(curPos).intValue();
-                        end = image.getEnd(curPos).intValue();
-//                        CustomClickableSpan customClickableSpan = new CustomClickableSpan(mContent.subSequence(start, end).toString());
-                        mContent.setSpan(span, start, end, 18);
-                        mContent.setSpan(standard, start + -2 >= 0 ? start - 2 : 0, end, 18);
-//                        mContent.setSpan(customClickableSpan, start, end, 33);
+//                if (image.getStr(curPos).contains("http://") || image.getStr(curPos).contains("https://")) {
+//                    if (curPos < image.getSize()
+//                            && image.getStart(curPos).intValue() < mContent.length()
+//                            && image.getEnd(curPos).intValue() < mContent.length()) {
+//                        AlignmentSpan.Standard standard = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
+//                        ImageSpan span = new ImageSpan(UILApplication.getAppContext(), image.getBitmap(curPos), 0);
+//                        start = image.getStart(curPos).intValue();
+//                        end = image.getEnd(curPos).intValue();
+////                        CustomClickableSpan customClickableSpan = new CustomClickableSpan(mContent.subSequence(start, end).toString());
+//                        mContent.setSpan(span, start, end, 18);
+//                        mContent.setSpan(standard, start + -2 >= 0 ? start - 2 : 0, end, 18);
+////                        mContent.setSpan(customClickableSpan, start, end, 33);
+//                    }
+//                } else {
+                    if (image.getStr(curPos).contains(EMO_PREFIX)) {
+//                        BitmapDrawable d = new BitmapDrawable(UILApplication.getAppContext().getResources(), EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos)));
+//                        d.setBounds(0, 0, (int) (((float) DP32) * TEXT_SIZE), (int) (((float) DP32) * TEXT_SIZE));
+//                    if (image.getStr(curPos).contains("attachmentid")) {
+//                        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+//                    } else {
+//                        d.setBounds(0, 0, (int) (((float) DP32) * TEXT_SIZE), (int) (((float) DP32) * TEXT_SIZE));
+//                    }
+                        BitmapDrawable bmp = EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos));
+                        if (bmp != null) {
+                            ImageSpan span = new ImageSpan(bmp, 0);
+                            start = image.getStart(curPos).intValue();
+                            end = image.getEnd(curPos).intValue();
+                            mContent.setSpan(span, start, end, 18);
+                        }
                     }
-                } else {
-                    BitmapDrawable d = new BitmapDrawable(UILApplication.getAppContext().getResources(), image.getBitmap(curPos));
-                    if (image.getStr(curPos).contains("attachmentid")) {
-                        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-                    } else {
-                        d.setBounds(0, 0, (int) (((float) DP32) * TEXT_SIZE), (int) (((float) DP32) * TEXT_SIZE));
-                    }
-                    ImageSpan span = new ImageSpan(d, 0);
-                    start = image.getStart(curPos).intValue();
-                    end = image.getEnd(curPos).intValue();
-                    mContent.setSpan(span, start, end, 18);
-                }
+//                }
                 curPos++;
             }
         } catch (Resources.NotFoundException e) {
