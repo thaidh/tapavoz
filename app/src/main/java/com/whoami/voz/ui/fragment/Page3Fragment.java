@@ -72,10 +72,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Page3Fragment extends Fragment {
+    private static final String TAG = Page3Fragment.class.getSimpleName();
+    
     public static final int GO_FIRST = 4;
     public static final int GO_LAST = 5;
     public static final int GO_PREVIOUS = 3;
     public static final int GO_NEXT = 2;
+
+    public static final int REFRESH_INDEX_PAGE = 999;
 
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -159,7 +163,7 @@ public class Page3Fragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ViewPager mViewPager;
     private Page3PagerAdapter mPage3PagerAdapter;
-    private int mTotalPage;
+    private int mTotalPage = 1;
     private int mCurPage = 1;
 
     /**
@@ -265,16 +269,17 @@ public class Page3Fragment extends Fragment {
                         if (position != mCurPage && !mMapPostPerPage.containsKey(Integer.valueOf(position))
                                 && Math.abs(position - mCurPage) == 1) {
                             if (position > mCurPage) {
-                                Log.i("AAAAAAAAA", "Go next " + position + "");
+                                Log.i(TAG, "Go next " + position + "");
                                 goPage(GO_NEXT, 0);
                             } else {
-                                Log.i("AAAAAAAAA", "Go prev " + position + "");
+                                Log.i(TAG, "Go prev " + position + "");
                                 goPage(GO_PREVIOUS, 0);
                             }
                         } else {
                             mCurPage = position;
                         }
-                        refreshCurrentPage(mCurPage);
+                        mCurPage = position;
+                        loadPage(position);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -284,7 +289,7 @@ public class Page3Fragment extends Fragment {
             }
         });
 
-        mPage3PagerAdapter = new Page3PagerAdapter(getActivity(), 1, mMapPostPerPage, mImageLoad.imageLoader, bmImageStart, mTextSize);
+        mPage3PagerAdapter = new Page3PagerAdapter(getActivity(), mTotalPage, mMapPostPerPage, mImageLoad.imageLoader, bmImageStart, mTextSize);
         mPage3PagerAdapter.setPage3Listener(new Page3PagerAdapter.Page3PagerListener() {
             @Override
             public void onSwipeTReresh(SwipeRefreshLayout swipeRefreshLayout) {
@@ -331,29 +336,15 @@ public class Page3Fragment extends Fragment {
 
                         }
                     }
-                    refreshCurrentPage(mCurPage);
+                    refreshCurrentPage(mCurPage, false);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
-            @Override
-            public void preloadPage(int page) {
-                Log.e("AAAAAA", "Preload page:" + page);
-                String url = getUrlWithPage(page);
-                if (url != null) {
-                    new TaskGetHtmlSilent().execute(new String[]{url});
-                }
-            }
         });
         mViewPager.setAdapter(mPage3PagerAdapter);
-//        this.mListTaskImageAttach = new ArrayList();
-
-
-//        this.mTask = new TaskGetHtml();
-//        this.mTask.execute(new Integer[]{Integer.valueOf(0)});
-
-
+        //init page 1
+        loadPage(mCurPage);
         return mRootView;
     }
 
@@ -437,9 +428,7 @@ public class Page3Fragment extends Fragment {
     private void refreshPage() {
         TaskCancle();
         this.mTask = new TaskGetHtml();
-        Integer[] numArr = new Integer[1];
-        numArr[0] = 0;
-        mTask.execute(numArr);
+        mTask.execute(new Integer[]{REFRESH_INDEX_PAGE});
     }
 
     void getRevolution() {
@@ -502,8 +491,14 @@ public class Page3Fragment extends Fragment {
                         e.printStackTrace();
                     }
                     break;
-                case 999:
-                    break;
+                case REFRESH_INDEX_PAGE:
+                    try {
+                        doc = mParser.getDocWithUrl(getUrlWithPage(mCurPage));
+                        parseData(0, doc, doc2, false);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return REFRESH_INDEX_PAGE;
 
                 case 1:
                     doc = mParser.login(mUser);
@@ -558,12 +553,6 @@ public class Page3Fragment extends Fragment {
                 case 8:
                     doc = mParser.UnSubscribe(sIdThread);
                     break;
-//                case MetaData.DEFAULT_MAX_ADS /*10*/:
-//                    if (!(Page.this.doc == null || Page.this.doc.select("input[name=securitytoken]").first() == null)) {
-//                        Page.this.mUser.setToken(Page.this.doc.select("input[name=securitytoken]").first().attr("value"));
-//                    }
-//                    Page.this.doc = Page.this.mParser.SearchQuote();
-//                    break;
                 case 11:
                     doc = mParser.myRecentPost();
                     break;
@@ -586,7 +575,12 @@ public class Page3Fragment extends Fragment {
         protected void onPostExecute(Integer num) {
             try {
                 setProgress(false);
-                parseData(num.intValue(), doc, doc2, true);
+                if (num == REFRESH_INDEX_PAGE) {
+                    mPage3PagerAdapter.setTotalPage(mTotalPage);
+                    refreshCurrentPage(mCurPage, true);
+                } else {
+                    parseData(num.intValue(), doc, doc2, true);
+                }
                 switch (num.intValue()) {
                     case 1:
                         if (doc != null) {
@@ -627,6 +621,7 @@ public class Page3Fragment extends Fragment {
     class TaskGetHtmlSilent extends AsyncTask<String, Void, Integer> {
         private Document doc;
         private Document doc2;
+
         TaskGetHtmlSilent() {
         }
 
@@ -638,7 +633,7 @@ public class Page3Fragment extends Fragment {
             String attr2;
             try {
                 doc = mParser.getDocWithUrl(url[0]);
-                parseData(0, doc, doc2, false);
+                parseData(0, doc, doc2, true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -646,6 +641,8 @@ public class Page3Fragment extends Fragment {
         }
 
         protected void onPostExecute(Integer num) {
+            mPage3PagerAdapter.setTotalPage(mTotalPage);
+            refreshCurrentPage(mCurPage, false);
             super.onPostExecute(num);
         }
 
@@ -667,7 +664,7 @@ public class Page3Fragment extends Fragment {
             }
 
             text = first.select("td[class=vbmenu_control]").text();
-            int curPage = Integer.parseInt(text.split(" ")[1]);
+            mCurPage = Integer.parseInt(text.split(" ")[1]);
             mTotalPage = Integer.parseInt(text.split(" ")[3]);
             if (this.mParser.getUrl().contains("showthread.php?p=")) {
                 int size = first.getElementsByAttribute("href").size();
@@ -680,13 +677,13 @@ public class Page3Fragment extends Fragment {
                             attr = attr.concat("&page=1");
                         }
                         attr = attr.substring(attr.indexOf("?t=") + 3, attr.indexOf("&page"));
-                        attr = "https://vozforums.com/showthread.php?t=" + attr + "&page=" + String.valueOf(curPage);
+                        attr = "https://vozforums.com/showthread.php?t=" + attr + "&page=" + String.valueOf(mCurPage);
                     } else {
                         i3 += 1;
                     }
                 }
                 attr = null;
-                attr = "https://vozforums.com/showthread.php?t=" + attr + "&page=" + String.valueOf(curPage);
+                attr = "https://vozforums.com/showthread.php?t=" + attr + "&page=" + String.valueOf(mCurPage);
             } else {
                 attr = this.mParser.getUrl();
                 if (!attr.contains("&page=")) {
@@ -828,15 +825,6 @@ public class Page3Fragment extends Fragment {
                 Element r0 = element.select("a[href=private.php]").first();
                 this.mPostId = getPostIdFromUrl(this.mParser.getUrl());
                 String strPageIndex = parsePage(0, 0, doc);
-                final int curPage;
-                int totalPage = 1;
-                if (strPageIndex != null) {
-                    String[] split = strPageIndex.split("/");
-                    curPage = Integer.parseInt(split[0]);
-                    totalPage = Integer.parseInt(split[1]);
-                } else {
-                    curPage = 1;
-                }
                 setPage(strPageIndex);
                 if (r0 != null) {
                     this.mUser.setUserId(((Element) element.select("td[class=alt2]").get(0)).select("a[href*=mem]").attr("href").split("=")[1]);
@@ -939,98 +927,81 @@ public class Page3Fragment extends Fragment {
                         str2 = text;
                     }
                 }
-//                this.lImage = new ArrayList();
-//                Iterator it2 = mListPost.iterator();
-//                while (it2.hasNext()) {
-//                    post = (Post) it2.next();
-//                    size = post.image.getSize();
-//                    for (int i2 = 0; i2 < size; i2++) {
-//                        String str5 = post.image.getStr(i2);
-//                        if (str5.contains("http://") || str5.contains("https://")) {
-//                            this.lImage.add(str5);
-//                        }
-//                    }
-//                }
-//                loadAvatarUniversal(0);
-//                downloadAttach();
-                //todo emo
-//                mListEmo = new ArrayList();
-//                for (int i3 = 0; i3 < mListPost.size(); i3++) {
-//                    Post curPost = mListPost.get(i3);
-//                    for (int j = 0; j < curPost.image.getSize(); j++) {
-//                        if (curPost.image.getStr(j).contains("images/smilies")) {
-//                            mListEmo.add(new EmoClass2(curPost.image.getStr(j), i3, j));
-//                        }
-//                    }
-//                }
-//                loadEmo(0);
                 mItemCount = 23;
                 if (mItemOffsetY == null) {
                     this.mItemOffsetY = new int[(this.mItemCount + 1)];
                     this.mItemtemp = new int[(this.mItemCount + 1)];
                 }
                 this.scrollIsComputed = true;
-                mMapPostPerPage.put(Integer.valueOf(curPage), new ArrayList<Post>(mListPost));
-                mPage3PagerAdapter.setTotalPage(totalPage);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshCurrentPage(curPage);
-                    }
-                });
-//                adapter.notifyDataSetChanged();
-
-//                if (this.iPositiion != 0) {
-//                    this.mList.clearFocus();
-//                    this.mList.requestFocusFromTouch();
-//                    this.mList.post(new Runnable() {
-//                        public void run() {
-//                            mList.setSelection(iPositiion);
-//                            mList.clearFocus();
-//                        }
-//                    });
-//                }
+                mMapPostPerPage.put(Integer.valueOf(mCurPage), new ArrayList<Post>(mListPost));
             }
         }
     }
 
-    private void refreshCurrentPage(int curPage) {
-//        int itemIndex = mViewPager.getCurrentItem();
-//        if (itemIndex + 1 == mCurPage) {
-//        }
-        Log.i("AAAAAAAAA", "Refresh page :  " + curPage);
+    private void loadPage(int curPage) {
+        //download page data
+        if (!mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+            String url = getUrlWithPage(curPage);
+            if (url != null) {
+                new TaskGetHtmlSilent().execute(new String[]{url});
+            }
+        } else {
+            refreshCurrentPage(curPage, false);
+        }
+    }
+
+    private void refreshCurrentPage(final int curPage, final boolean forceRefresh) {
+        Log.i(TAG, "Refresh page :  " + curPage);
         View page = mViewPager.findViewWithTag(curPage);
         if (page != null) {
             ListView listView = (ListView) page.findViewById(R.id.content_frame);
-            (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
-            if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(curPage)), mImageLoad.imageLoader, bmImageStart, mTextSize);
-                listView.addHeaderView(getNavigationView(curPage));
-                listView.addFooterView(getNavigationView(curPage));
-                listView.setAdapter(adapter);
-                listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+            if (forceRefresh) {
+                if (listView.getAdapter() != null && mMapPostPerPage.containsKey(Integer.valueOf(mCurPage))) {
+                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(mCurPage)), mImageLoad.imageLoader, bmImageStart, mTextSize);
+                    View header = listView.findViewWithTag("Header");
+                    listView.removeHeaderView(header);
+                    View footer = listView.findViewWithTag("Footer");
+                    listView.removeFooterView(footer);
+
+                    listView.addHeaderView(getNavigationView(mCurPage, "Header"));
+                    listView.addFooterView(getNavigationView(mCurPage, "Footer"));
+                    listView.setAdapter(adapter);
+
+                    mPage3PagerAdapter.notifyDataSetChanged();
+                }
+            } else {
+                (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
+                if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(curPage)), mImageLoad.imageLoader, bmImageStart, mTextSize);
+                    listView.addHeaderView(getNavigationView(curPage, "Header"));
+                    listView.addFooterView(getNavigationView(curPage, "Footer"));
+                    listView.setAdapter(adapter);
+                    listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(AbsListView view, int scrollState) {
 //                        if (scrollState == SCROLL_STATE_IDLE) {
 //                            adapter.setIsScrolling(false);
 //                            adapter.notifyDataSetChanged();
 //                        } else {
 //                            adapter.setIsScrolling(true);
 //                        }
-                    }
+                        }
 
-                    @Override
-                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                        @Override
+                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                    }
-                });
-                mPage3PagerAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    mPage3PagerAdapter.notifyDataSetChanged();
+                }
+
             }
         }
     }
 
-    private View getNavigationView(int page) {
+    private View getNavigationView(int page , String tag) {
         LinearLayout navigationView = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.threadfoot, null);
+        navigationView.setTag(tag);
         Global.setBackgroundItemThread(navigationView);
         ImageView mImg1Footer = (ImageView) navigationView.findViewById(R.id.fast_prev);
         ImageView mImg2Footer = (ImageView) navigationView.findViewById(R.id.prev);

@@ -27,6 +27,8 @@ import java.util.Map;
  * Created by thaidh on 10/3/15.
  */
 public class Page3PagerAdapter extends PagerAdapter {
+    private static final String TAG = Page3PagerAdapter.class.getSimpleName();
+
     private int mTotalPage;
     private ArrayList<Post> mListPosts;
     private Activity mContext;
@@ -58,7 +60,7 @@ public class Page3PagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         int loadPageIndex = position + 1;
-        Log.i("AAAA", "LoadPage : " + loadPageIndex);
+        Log.i(TAG, "LoadPage : " + loadPageIndex);
         View view = mContext.getLayoutInflater().inflate(R.layout.layout_page3_item, null);
         view.setTag(loadPageIndex);
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -71,46 +73,14 @@ public class Page3PagerAdapter extends PagerAdapter {
             });
         }
         ListView listView = (ListView) view.findViewById(R.id.content_frame);
-
-
         ArrayList<Post> curListPost = mMapPostPerPage.get(Integer.valueOf(loadPageIndex));
-        if (curListPost == null) {
-//            curListPost = new ArrayList<>();
-            if (mPage3Listener != null) {
-                mPage3Listener.preloadPage(loadPageIndex);
-            }
-        } else {
+        if (curListPost != null) {
             view.findViewById(R.id.layout_progress).setVisibility(View.GONE);
             listView.addHeaderView(getNavigationView(Gravity.CENTER, loadPageIndex));
             listView.addFooterView(getNavigationView(Gravity.CENTER, loadPageIndex));
             Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, curListPost, mImageLoader, mImageStart, mTextSize);
             listView.setAdapter(adapter);
         }
-
-
-//        if (mMapPostPerPage.containsKey(Integer.valueOf(loadPageIndex))) {
-//            view = mContext.getLayoutInflater().inflate(R.layout.layout_page3_item, null);
-//            final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-//            if (mPage3Listener != null) {
-//                refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//                    @Override
-//                    public void onRefresh() {
-//                        mPage3Listener.onSwipeTReresh(refreshLayout);
-//                    }
-//                });
-//            }
-//            ListView listView = (ListView) view.findViewById(R.id.content_frame);
-//            listView.addHeaderView(getNavigationView(Gravity.CENTER, loadPageIndex));
-//            listView.addFooterView(getNavigationView(Gravity.CENTER, loadPageIndex));
-//            Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, mMapPostPerPage.get(Integer.valueOf(loadPageIndex)), mImageLoader, mImageStart, mTextSize);
-//            adapter.setSize(this.mTextSize);
-//            listView.setAdapter(adapter);
-//        } else {
-//            view = new View(mContext);
-//            if (mPage3Listener != null) {
-//                mPage3Listener.preloadPage(loadPageIndex);
-//            }
-//        }
         container.addView(view);
         return view;
     }
@@ -121,7 +91,7 @@ public class Page3PagerAdapter extends PagerAdapter {
     }
 
     public void setTotalPage(int mTotalPage) {
-        Log.e("AAAAAAAA", "update total page : "  + mTotalPage);
+        Log.e(TAG, "update total page : "  + mTotalPage);
         this.mTotalPage = mTotalPage;
     }
 
@@ -132,7 +102,6 @@ public class Page3PagerAdapter extends PagerAdapter {
     public interface Page3PagerListener {
         void onSwipeTReresh(SwipeRefreshLayout swipeRefreshLayout);
         void onGoPage(int type);
-        void preloadPage(int page);
     }
 
     private View getNavigationView(int i, int curPos) {

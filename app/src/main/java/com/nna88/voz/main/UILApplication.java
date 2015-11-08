@@ -3,8 +3,11 @@ package com.nna88.voz.main;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -29,6 +32,12 @@ public class UILApplication extends Application {
                 .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
                         .tasksProcessingOrder(QueueProcessingType.LIFO).build()
         );
+
+//        ImagePipelineConfig config = ImagePipelineConfig.newBuilder(context)
+//                .setbitmap
+//                .build();
+//        Fresco.initialize(context, config);
+        Fresco.initialize(context);
     }
 
     @TargetApi(9)

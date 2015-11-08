@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.ViewCompat;
 import android.text.Layout.Alignment;
@@ -30,6 +31,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.nna88.voz.PhotoView.PhotoViewAttacher;
 import com.nna88.voz.contain.Post;
 import com.nna88.voz.listview.TextViewFixTouchConsume.LocalLinkMovementMethod;
@@ -45,6 +55,8 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+
+import java.net.URI;
 import java.util.ArrayList;
 
 public class Page3ListViewAdapter extends BaseAdapter {
@@ -94,54 +106,12 @@ public class Page3ListViewAdapter extends BaseAdapter {
         }
     }
 
-    class DownloadImageListener implements ImageLoadingListener {
-        final int index;
-        final Post post;
-
-        DownloadImageListener(Post pst, int i) {
-            post = pst;
-            index = i;
-        }
-
-        public void onLoadingCancelled(String str, View view) {
-//            post.image.SetBitmap(index, Page3ListViewAdapter.bmImageFailed);
-//            Page3ListViewAdapter.mAdapter.notifyDataSetChanged();
-//            Page3ListViewAdapter.loadImage(post, index + 1);
-        }
-
-        public void onLoadingComplete(String str, View view, Bitmap bitmap) {
-            if (bitmap != null) {
-                try {
-//                    Bitmap newBmp = getResizedBitmap(bitmap);
-                    post.image.SetBitmap(index, bitmap);
-                } catch (Exception e) {
-                    post.image.SetBitmap(index, bmImageFailed);
-                    notifyDataSetChanged();
-                    loadImage(post, index + 1);
-                    e.printStackTrace();
-                    return;
-                }
-            }
-            notifyDataSetChanged();
-            loadImage(post, index + 1);
-        }
-
-        public void onLoadingFailed(String str, View view, FailReason failReason) {
-            post.image.SetBitmap(index, bmImageFailed);
-            notifyDataSetChanged();
-            loadImage(post, index + 1);
-        }
-
-        public void onLoadingStarted(String str, View view) {
-        }
-    }
-
     public interface OnImageClickListestener {
         void onImageClick(int i, String str);
     }
 
     static class ViewHolder {
-        ImageView avatar;
+        SimpleDraweeView avatar;
         JellyBeanSpanFixTextView contain;
         TextView index;
         TextView jd;
@@ -206,7 +176,9 @@ public class Page3ListViewAdapter extends BaseAdapter {
         optionsEmo = new Builder().cacheInMemory(true).cacheOnDisc(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
                 .bitmapConfig(Config.ARGB_8888).delayBeforeLoading(0).build();
+        mImageSize = new ImageSize(Global.width / 2, Global.width / 2);
         setImageSize();
+
     }
 
 
@@ -221,7 +193,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
 //        } else {
 //            mImageSize = new ImageSize(Global.width / 2, Global.height);
 //        }
-        mImageSize = new ImageSize(Global.width / 2, Global.height / 2);
+
     }
 
     public void addImage(TextView textView, Post post) {
@@ -429,7 +401,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.list_item3, null);
             holder.layout = (LinearLayout) view.findViewById(R.id.listLayout);
-            holder.avatar = (ImageView) view.findViewById(R.id.list3_avatar);
+            holder.avatar = (SimpleDraweeView) view.findViewById(R.id.list3_avatar);
             holder.user = (TextView) view.findViewById(R.id.list3_user);
             holder.time = (TextView) view.findViewById(R.id.list3_time);
             holder.index = (TextView) view.findViewById(R.id.list3_index);
@@ -464,13 +436,9 @@ public class Page3ListViewAdapter extends BaseAdapter {
         holder.posts.setTextSize(mTextSize4);
         holder.userTitle.setTextSize(mTextSize4);
         holder.contain.setTextSize(mTextSize1);
-//        if (post.Avatar() != null) {
-//            holder.avatar.setImageBitmap(post.Avatar());
-//        } else {
-//            holder.avatar.setImageDrawable(drawableAvatar);
-//        }
         if (!TextUtils.isEmpty(post.getUrlAvatar()) && !isScrolling) {
-            imageLoader.displayImage(post.getUrlAvatar(), holder.avatar, optionsEmo);
+//            imageLoader.displayImage(post.getUrlAvatar(), holder.avatar, optionsEmo);
+            holder.avatar.setImageURI(Uri.parse(post.getUrlAvatar()));
         } else {
             holder.avatar.setImageDrawable(drawableAvatar);
         }
@@ -488,7 +456,6 @@ public class Page3ListViewAdapter extends BaseAdapter {
         } else {
             holder.user.setCompoundDrawables(drawableOffline, null, null, null);
         }
-//        loadImage(post, 0);
 
 //        addImage(holder.contain, post);
         if (post.isMultiQuote()) {
@@ -502,12 +469,20 @@ public class Page3ListViewAdapter extends BaseAdapter {
             String imageUrl = post.image.getStr(i);
             if (imageUrl.contains("http://") || imageUrl.contains("https://")) {
                 try {
-                    ImageView imageView = new ImageView(context);
+                    SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());
-                    imageView.setLayoutParams(layoutParams);
-                    imageView.setImageBitmap(bmImageStart);
-                    imageLoader.displayImage(imageUrl, imageView, options);
-                    holder.mGridImage.addView(imageView);
+                    layoutParams.setMargins(0, 0 , 0, 10);
+                    simpleDraweeView.setLayoutParams(layoutParams);
+                    simpleDraweeView.setImageURI(Uri.parse(imageUrl));
+                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(imageUrl))
+                            .setResizeOptions(new ResizeOptions(mImageSize.getWidth(), mImageSize.getHeight()))
+                            .build();
+                    DraweeController controller = Fresco.newDraweeControllerBuilder()
+                            .setImageRequest(request)
+                            .build();
+                    simpleDraweeView.setController(controller);
+
+                    holder.mGridImage.addView(simpleDraweeView);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -516,33 +491,6 @@ public class Page3ListViewAdapter extends BaseAdapter {
 
 
         return view;
-    }
-
-
-
-    private void loadImage(Post post, int i) {
-        try {
-            if (i < post.image.getSize()) {
-                String str = post.image.getStr(i);
-//                    if (str.contains("images/smilies")) {
-//                        imageLoader.loadImage(getlinkBitmapAssert(str), mImageSize, optionsEmo, new DownloadImageListener(post, i));
-//                    } else
-                    if (!str.contains("http://") && !str.contains("https://")) {
-                        loadImage(post, i + 1);
-                    } else if (str.contains("attachmentid")) {
-                        loadImage(post, i + 1);
-                    } else if (Global.iSizeImage == 0) {
-                        loadImage(post, i + 1);
-                    } else if (post.image.getBitmap(i).equals(bmImageStart)) {
-                        imageLoader.loadImage(str, mImageSize, options, new DownloadImageListener(post, i));
-                    } else {
-                        loadImage(post, i + 1);
-                    }
-            }
-        } catch (Exception e) {
-            loadImage(post, i + 1);
-            e.printStackTrace();
-        }
     }
 
     public void setOnImageClickListener(OnImageClickListestener onImageClickListestener) {
