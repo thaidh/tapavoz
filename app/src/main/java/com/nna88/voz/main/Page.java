@@ -867,23 +867,23 @@ public class Page extends NavigationDrawerActivity {
                         e.printStackTrace();
                         break;
                     }
-                case Page.STATE_OFFSCREEN /*1*/:
+                case 1 /*1*/:
                     Page.this.doc = Page.this.mParser.login(Page.this.mUser);
                     break;
-                case Page.STATE_RETURNING /*2*/:
+                case 2 /*2*/:
                     Page.this.doc = Page.this.mParser.Logout();
                     break;
-                case HttpRouteDirector.TUNNEL_TARGET /*3*/:
+                case 3 /*3*/:
                     Page.this.doc = Page.this.mParser.quoteGet(numArr[Page.STATE_OFFSCREEN].intValue(), numArr[Page.STATE_RETURNING].intValue());
                     break;
-                case HttpRouteDirector.TUNNEL_PROXY /*4*/:
+                case 4 /*4*/:
                     try {
                         Page.this.doc = Page.this.mParser.PostReplyQuote(Page.this.doc2, Page.this.mUser, Page.this.sPost, Page.this.specifiedpost);
                         break;
                     } catch (Exception e2) {
                         break;
                     }
-                case HttpRouteDirector.LAYER_PROTOCOL /*5*/:
+                case 5 /*5*/:
                     try {
                         element = (Element) Page.this.doc2.select("div[align=center]").get(Page.STATE_OFFSCREEN);
                         first = element.select("input[name*=securitytoken]").first();
@@ -900,7 +900,7 @@ public class Page extends NavigationDrawerActivity {
                     } catch (Exception e3) {
                         break;
                     }
-                case R.styleable.Toolbar_contentInsetLeft /*6*/:
+                case 6 /*6*/:
                     try {
                         element = (Element) Page.this.doc2.select("div[align=center]").get(Page.STATE_OFFSCREEN);
                         first = element.select("input[name*=securitytoken]").first();
@@ -913,11 +913,11 @@ public class Page extends NavigationDrawerActivity {
                     } catch (Exception e4) {
                         break;
                     }
-                case R.styleable.Toolbar_contentInsetRight /*7*/:
+                case 7 /*7*/:
                     element = Page.this.doc.select("input[name*=securitytoken]").first();
                     Page.this.doc = Page.this.mParser.Subscribe(Page.this.sIdThread, element != null ? element.attr("value") : null);
                     break;
-                case R.styleable.Toolbar_popupTheme /*8*/:
+                case 8 /*8*/:
                     Page.this.doc = Page.this.mParser.UnSubscribe(Page.this.sIdThread);
                     break;
 //                case MetaData.DEFAULT_MAX_ADS /*10*/:
@@ -926,23 +926,23 @@ public class Page extends NavigationDrawerActivity {
 //                    }
 //                    Page.this.doc = Page.this.mParser.SearchQuote();
 //                    break;
-                case R.styleable.Toolbar_titleMargins /*11*/:
+                case 11 /*11*/:
                     Page.this.doc = Page.this.mParser.myRecentPost();
                     break;
-                case R.styleable.Toolbar_titleMarginStart /*12*/:
+                case 12 /*12*/:
                     Page.this.doc = Page.this.mParser.myRecentThread();
                     break;
-                case R.styleable.Toolbar_titleMarginEnd /*13*/:
+                case 13 /*13*/:
                     Page.this.doc = Page.this.mParser.AdvanceSearch(Page.this.mUser.Token(), Page.this.sMessSearch, Page.this.sForum, Page.this.sSearch_ShowPost);
                     break;
-                case R.styleable.Toolbar_titleMarginTop /*14*/:
+                case 14 /*14*/:
                     Page.this.doc = Page.this.mParser.Search(Page.this.mUser.Token(), Page.this.sMessSearch, Page.this.sSearch_ShowPost);
                     break;
-                case R.styleable.Toolbar_titleMarginBottom /*15*/:
+                case 15 /*15*/:
                     Page.this.doc = Page.this.mParser.getPM();
                     break;
             }
-            return numArr[Page.STATE_ONSCREEN];
+            return numArr[0];
         }
 
         protected void onPostExecute(Integer num) {
@@ -953,7 +953,7 @@ public class Page extends NavigationDrawerActivity {
                 e.printStackTrace();
             }
             switch (num.intValue()) {
-                case Page.STATE_OFFSCREEN /*1*/:
+                case 1 /*1*/:
                     if (Page.this.doc != null) {
                         Page.this.writeSetingUser(Page.this.mUser.cookies());
                         Page.this.mUser.setLogin(true);
@@ -965,7 +965,7 @@ public class Page extends NavigationDrawerActivity {
                     Page.this.toast("T\u00ean \u0111\u0103ng nh\u1eadp ho\u1eb7c m\u1eadt kh\u1ea9u sai!");
                     Page.this.alertLogin();
                     break;
-                case Page.STATE_RETURNING /*2*/:
+                case 2 /*2*/:
                     UserInfo userInfo = Page.this.mUser;
                     UserInfo.mCookieStore = null;
                     Page.this.mUser.cookies(null);

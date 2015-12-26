@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.internal.view.SupportMenu;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.internal.widget.ViewUtils;
 import android.text.Layout.Alignment;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -24,6 +25,7 @@ import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
@@ -176,25 +179,13 @@ public class Page3ListViewAdapter extends BaseAdapter {
         optionsEmo = new Builder().cacheInMemory(true).cacheOnDisc(true)
                 .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
                 .bitmapConfig(Config.ARGB_8888).delayBeforeLoading(0).build();
-        mImageSize = new ImageSize(Global.width / 2, Global.width / 2);
-        setImageSize();
-
+        mImageSize = new ImageSize(Global.width - Util.convertDpToPx(context, 10), Global.width - Util.convertDpToPx(context, 10));
     }
-
-
 
     private void log(String str) {
         Log.d("nna", str);
     }
 
-    private void setImageSize() {
-//        if (Global.iSizeImage != 0) {
-//            mImageSize = new ImageSize(Global.width / Global.iSizeImage, Global.height / Global.iSizeImage);
-//        } else {
-//            mImageSize = new ImageSize(Global.width / 2, Global.height);
-//        }
-
-    }
 
     public void addImage(TextView textView, Post post) {
         try {
@@ -471,16 +462,19 @@ public class Page3ListViewAdapter extends BaseAdapter {
                 try {
                     SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());
-                    layoutParams.setMargins(0, 0 , 0, 10);
+                    layoutParams.setMargins(0, 0, 0, 10);
+                    layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+
                     simpleDraweeView.setLayoutParams(layoutParams);
                     simpleDraweeView.setImageURI(Uri.parse(imageUrl));
-                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(imageUrl))
-                            .setResizeOptions(new ResizeOptions(mImageSize.getWidth(), mImageSize.getHeight()))
-                            .build();
-                    DraweeController controller = Fresco.newDraweeControllerBuilder()
-                            .setImageRequest(request)
-                            .build();
-                    simpleDraweeView.setController(controller);
+                    simpleDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
+//                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(imageUrl))
+//                            .setResizeOptions(new ResizeOptions(mImageSize.getWidth(), mImageSize.getHeight()))
+//                            .build();
+//                    DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                            .setImageRequest(request)
+//                            .build();
+//                    simpleDraweeView.setController(controller);
 
                     holder.mGridImage.addView(simpleDraweeView);
                 } catch (Exception e) {
