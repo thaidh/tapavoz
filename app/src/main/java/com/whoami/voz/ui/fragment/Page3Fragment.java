@@ -1,5 +1,7 @@
 package com.whoami.voz.ui.fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -13,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -23,6 +26,8 @@ import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -108,11 +113,7 @@ public class Page3Fragment extends Fragment {
     ImageLoader imageLoader;
     int indexI;
     int indexJ;
-//    private ArrayList<EmoClass2> mListEmo;
-//    private ArrayList<String> lImage;
     private String linkapicaptcha;
-    private ArrayList<TaskLoadAvatart> mListTaskDownAvatart;
-//    private ArrayList<DownImageAttach> mListTaskImageAttach;
     private String mPostId;
     private QuickAction mQuickAction;
     private String mTextTitle;
@@ -139,23 +140,11 @@ public class Page3Fragment extends Fragment {
     private IdentityHashMap mListSideMenu2;
     private BaseAdapter mAdapterSideMenu2;
     private int iPage;
-    protected LinearLayout linearHeader;
-    protected LinearLayout linearFooter;
     protected ImageLoad mImageLoad;
-    protected ImageView mImg1Footer;
-    protected ImageView mImg1Header;
-    protected ImageView mImg2Footer;
-    protected ImageView mImg2Header;
-    protected ImageView mImg3Footer;
-    protected ImageView mImg3Header;
-    protected ImageView mImg4Footer;
-    protected ImageView mImg4Header;
     protected int mItemCount;
     protected int[] mItemOffsetY;
     protected int[] mItemtemp;
     private boolean scrollIsComputed;
-    protected TextView butPageFooter;
-    protected TextView butPageHeader;
     private View mRootView;
     private int mColorText2;
     private SharedPreferences settings;
@@ -237,7 +226,6 @@ public class Page3Fragment extends Fragment {
         this.mLayoutProgress = (LinearLayout) mRootView.findViewById(R.id.layoutprogress);
         Global.iDensity = getResources().getDisplayMetrics().density;
 
-        this.mListTaskDownAvatart = new ArrayList();
         this.bmImageStart = BitmapFactory.decodeResource(getResources(), R.drawable.stub_image);
         this.bmImageFailed = BitmapFactory.decodeResource(getResources(), R.drawable.image_for_empty_url);
 //        this.adapter = new Page3ListViewAdapter(getActivity(), mListPost, mImageLoad.imageLoader, bmImageStart, mTextSize);
@@ -266,18 +254,18 @@ public class Page3Fragment extends Fragment {
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     try {
                         int position = mViewPager.getCurrentItem() + 1;
-                        if (position != mCurPage && !mMapPostPerPage.containsKey(Integer.valueOf(position))
-                                && Math.abs(position - mCurPage) == 1) {
-                            if (position > mCurPage) {
-                                Log.i(TAG, "Go next " + position + "");
-                                goPage(GO_NEXT, 0);
-                            } else {
-                                Log.i(TAG, "Go prev " + position + "");
-                                goPage(GO_PREVIOUS, 0);
-                            }
-                        } else {
-                            mCurPage = position;
-                        }
+//                        if (position != mCurPage && !mMapPostPerPage.containsKey(Integer.valueOf(position))
+//                                && Math.abs(position - mCurPage) == 1) {
+//                            if (position > mCurPage) {
+//                                Log.i(TAG, "Go next " + position + "");
+//                                goPage(GO_NEXT, 0);
+//                            } else {
+//                                Log.i(TAG, "Go prev " + position + "");
+//                                goPage(GO_PREVIOUS, 0);
+//                            }
+//                        } else {
+//                            mCurPage = position;
+//                        }
                         mCurPage = position;
                         loadPage(position);
                     } catch (Exception e) {
@@ -304,9 +292,6 @@ public class Page3Fragment extends Fragment {
                         case GO_FIRST: {
                             if (mViewPager.getCurrentItem() != 0) {
                                 mViewPager.setCurrentItem(0);
-                                if (!mMapPostPerPage.containsKey(Integer.valueOf(1))) {
-                                    goPage(GO_FIRST, 0);
-                                }
                             }
                             break;
                         }
@@ -314,32 +299,34 @@ public class Page3Fragment extends Fragment {
                             int lasItemIndex = mTotalPage - 1;
                             if (mViewPager.getCurrentItem() != lasItemIndex) {
                                 mViewPager.setCurrentItem(lasItemIndex);
-                                if (!mMapPostPerPage.containsKey(Integer.valueOf(mTotalPage))) {
-                                    goPage(GO_LAST, 0);
-                                }
                             }
                             break;
                         }
                         case GO_PREVIOUS:{
-                            int itemIndex = mCurPage - 1;
-                            if (itemIndex - 1 > 0) {
-                                mViewPager.setCurrentItem(itemIndex - 1);
+                            if (mCurPage - 1 > 0) {
+                                mCurPage = mCurPage - 1;
+                                mViewPager.setCurrentItem(mCurPage - 1);
                             }
                             break;
                         }
                         case GO_NEXT: {
-                            int itemIndex = mCurPage - 1;
-                            if (itemIndex + 1 < mTotalPage) {
-                                mViewPager.setCurrentItem(itemIndex + 1);
+                            if (mCurPage + 1 <= mTotalPage) {
+                                mCurPage = mCurPage + 1;
+                                mViewPager.setCurrentItem(mCurPage - 1);
                             }
                             break;
 
                         }
                     }
-                    refreshCurrentPage(mCurPage, false);
+//                    refreshCurrentPage(mCurPage, false);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void showDialogGoPage() {
+                alertGoPage();
             }
         });
         mViewPager.setAdapter(mPage3PagerAdapter);
@@ -763,7 +750,7 @@ public class Page3Fragment extends Fragment {
                     this.mTask.execute(new Integer[]{Integer.valueOf(6)});
                     return;
                 }
-                str = BuildConfig.FLAVOR;
+                str = "";
                 intent = new Intent(getContext(), PageNewThread.class);
                 bundle = new Bundle();
                 if (this.iPostType != 0) {
@@ -825,7 +812,6 @@ public class Page3Fragment extends Fragment {
                 Element r0 = element.select("a[href=private.php]").first();
                 this.mPostId = getPostIdFromUrl(this.mParser.getUrl());
                 String strPageIndex = parsePage(0, 0, doc);
-                setPage(strPageIndex);
                 if (r0 != null) {
                     this.mUser.setUserId(((Element) element.select("td[class=alt2]").get(0)).select("a[href*=mem]").attr("href").split("=")[1]);
                     r0 = element.select("input[name*=securitytoken]").first();
@@ -951,51 +937,55 @@ public class Page3Fragment extends Fragment {
     }
 
     private void refreshCurrentPage(final int curPage, final boolean forceRefresh) {
-        Log.i(TAG, "Refresh page :  " + curPage);
-        View page = mViewPager.findViewWithTag(curPage);
-        if (page != null) {
-            ListView listView = (ListView) page.findViewById(R.id.content_frame);
-            if (forceRefresh) {
-                if (listView.getAdapter() != null && mMapPostPerPage.containsKey(Integer.valueOf(mCurPage))) {
-                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(mCurPage)), mImageLoad.imageLoader, bmImageStart, mTextSize);
-                    View header = listView.findViewWithTag("Header");
-                    listView.removeHeaderView(header);
-                    View footer = listView.findViewWithTag("Footer");
-                    listView.removeFooterView(footer);
+        try {
+            Log.i(TAG, "Refresh page :  " + curPage);
+            View page = mViewPager.findViewWithTag(curPage);
+            if (page != null) {
+                ListView listView = (ListView) page.findViewById(R.id.content_frame);
+                if (forceRefresh) {
+                    if (listView.getAdapter() != null && mMapPostPerPage.containsKey(Integer.valueOf(mCurPage))) {
+                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(mCurPage)), mImageLoad.imageLoader, bmImageStart, mTextSize);
+                        View header = listView.findViewWithTag("Header");
+                        listView.removeHeaderView(header);
+                        View footer = listView.findViewWithTag("Footer");
+                        listView.removeFooterView(footer);
 
-                    listView.addHeaderView(getNavigationView(mCurPage, "Header"));
-                    listView.addFooterView(getNavigationView(mCurPage, "Footer"));
-                    listView.setAdapter(adapter);
+                        listView.addHeaderView(getNavigationView(mCurPage, "Header"));
+                        listView.addFooterView(getNavigationView(mCurPage, "Footer"));
+                        listView.setAdapter(adapter);
 
-                    mPage3PagerAdapter.notifyDataSetChanged();
+                        mPage3PagerAdapter.notifyDataSetChanged();
+                    }
+                } else {
+                    (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
+                    if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(curPage)), mImageLoad.imageLoader, bmImageStart, mTextSize);
+                        listView.addHeaderView(getNavigationView(curPage, "Header"));
+                        listView.addFooterView(getNavigationView(curPage, "Footer"));
+                        listView.setAdapter(adapter);
+                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+    //                        if (scrollState == SCROLL_STATE_IDLE) {
+    //                            adapter.setIsScrolling(false);
+    //                            adapter.notifyDataSetChanged();
+    //                        } else {
+    //                            adapter.setIsScrolling(true);
+    //                        }
+                            }
+
+                            @Override
+                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                            }
+                        });
+                        mPage3PagerAdapter.notifyDataSetChanged();
+                    }
+
                 }
-            } else {
-                (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
-                if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(curPage)), mImageLoad.imageLoader, bmImageStart, mTextSize);
-                    listView.addHeaderView(getNavigationView(curPage, "Header"));
-                    listView.addFooterView(getNavigationView(curPage, "Footer"));
-                    listView.setAdapter(adapter);
-                    listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(AbsListView view, int scrollState) {
-//                        if (scrollState == SCROLL_STATE_IDLE) {
-//                            adapter.setIsScrolling(false);
-//                            adapter.notifyDataSetChanged();
-//                        } else {
-//                            adapter.setIsScrolling(true);
-//                        }
-                        }
-
-                        @Override
-                        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                        }
-                    });
-                    mPage3PagerAdapter.notifyDataSetChanged();
-                }
-
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1009,15 +999,19 @@ public class Page3Fragment extends Fragment {
         butPageFooter.setText(page + "/" + mTotalPage);
         ImageView mImg3Footer = (ImageView) navigationView.findViewById(R.id.next);
         ImageView mImg4Footer = (ImageView) navigationView.findViewById(R.id.fast_next);
+        butPageFooter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertGoPage();
+            }
+        });
+
         mImg1Footer.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 try {
                     mViewPager.setCurrentItem(0);
-                    if (!mMapPostPerPage.containsKey(Integer.valueOf(1))) {
-                        goPage(GO_FIRST, 0);
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1026,14 +1020,27 @@ public class Page3Fragment extends Fragment {
         mImg4Footer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 try {
-//                    mCurPage = mTotalPage;
                     mViewPager.setCurrentItem(mTotalPage - 1);
-                    if (!mMapPostPerPage.containsKey(Integer.valueOf(mTotalPage))) {
-                        goPage(GO_LAST, 0);
-                    }
-//                    refreshCurrentPage(mCurPage);
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+            }
+        });
+        mImg2Footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurPage - 1 > 0) {
+                    mCurPage = mCurPage - 1;
+                    mViewPager.setCurrentItem(mCurPage - 1);
+                }
+            }
+        });
+        mImg3Footer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCurPage + 1 <= mTotalPage) {
+                    mCurPage = mCurPage + 1;
+                    mViewPager.setCurrentItem(mCurPage - 1);
                 }
             }
         });
@@ -1088,216 +1095,6 @@ public class Page3Fragment extends Fragment {
             return null;
         }
     }
-
-    protected void setPage(String str) {
-//        setEnableBackFooter(true);
-//        setEnableNextFooter(true);
-//        if (iPage == 3) {
-//            setEnableBackHeader(true);
-//            setEnableNextHeader(true);
-//        }
-//        if (str == null) {
-//            this.butPageFooter.setText("Page 1/1");
-//            setEnableBackFooter(false);
-//            setEnableNextFooter(false);
-//            if (this.iPage == 3) {
-//                this.butPageHeader.setText("Page 1/1");
-//                setEnableBackHeader(false);
-//                setEnableNextHeader(false);
-//                return;
-//            }
-//            return;
-//        }
-//        if (str.contains("/")) {
-//            if (str.split("/")[Page.STATE_ONSCREEN].equals("1")) {
-//                setEnableBackFooter(false);
-//            }
-//            if (str.split("/")[Page.STATE_ONSCREEN].equals(str.split("/")[Page.STATE_OFFSCREEN])) {
-//                setEnableNextFooter(false);
-//            }
-//        }
-//        this.butPageFooter.setText(" Page " + str + " ");
-//        if (this.iPage == 3) {
-//            if (str.contains("/")) {
-//                if (str.split("/")[Page.STATE_ONSCREEN].equals("1")) {
-//                    setEnableBackHeader(false);
-//                } else {
-//                    setEnableBackHeader(true);
-//                }
-//                if (str.split("/")[Page.STATE_ONSCREEN].equals(str.split("/")[Page.STATE_OFFSCREEN])) {
-//                    setEnableNextHeader(false);
-//                } else {
-//                    setEnableNextHeader(true);
-//                }
-//            }
-//            this.butPageHeader.setText(" Page " + str + " ");
-//        }
-    }
-
-    private void setEnableBackFooter(boolean z) {
-        if (z) {
-            this.mImg1Footer.setEnabled(true);
-            this.mImg2Footer.setEnabled(true);
-            this.mImg1Footer.setImageResource(R.drawable.tapatalk_fast_back_common_dark);
-            this.mImg2Footer.setImageResource(R.drawable.tapatalk_back_common_dark);
-        } else {
-            this.mImg1Footer.setEnabled(false);
-            this.mImg2Footer.setEnabled(false);
-            this.mImg1Footer.setImageResource(R.drawable.tapatalk_fast_back_disable_dark);
-            this.mImg2Footer.setImageResource(R.drawable.tapatalk_back_disable_dark);
-        }
-    }
-
-    private void setEnableBackHeader(boolean z) {
-        if (z) {
-            this.mImg1Header.setEnabled(true);
-            this.mImg2Header.setEnabled(true);
-            this.mImg1Header.setImageResource(R.drawable.tapatalk_fast_back_common_dark);
-            this.mImg2Header.setImageResource(R.drawable.tapatalk_back_common_dark);
-        } else {
-            this.mImg1Header.setEnabled(false);
-            this.mImg2Header.setEnabled(false);
-            this.mImg1Header.setImageResource(R.drawable.tapatalk_fast_back_disable_dark);
-            this.mImg2Header.setImageResource(R.drawable.tapatalk_back_disable_dark);
-        }
-    }
-
-    private void setEnableNextFooter(boolean z) {
-        if (z) {
-            this.mImg3Footer.setEnabled(true);
-            this.mImg4Footer.setEnabled(true);
-            this.mImg4Footer.setImageResource(R.drawable.tapatalk_fast_forward_common_dark);
-            this.mImg3Footer.setImageResource(R.drawable.tapatalk_forward_common_dark);
-        } else {
-            this.mImg3Footer.setEnabled(false);
-            this.mImg4Footer.setEnabled(false);
-            this.mImg4Footer.setImageResource(R.drawable.tapatalk_fast_forward_disable_dark);
-            this.mImg3Footer.setImageResource(R.drawable.tapatalk_forward_disable_dark);
-        }
-
-    }
-
-    private void setEnableNextHeader(boolean z) {
-        if (z) {
-            this.mImg3Header.setEnabled(true);
-            this.mImg4Header.setEnabled(true);
-            this.mImg4Header.setImageResource(R.drawable.tapatalk_fast_forward_common_dark);
-            this.mImg3Header.setImageResource(R.drawable.tapatalk_forward_common_dark);
-        } else {
-            this.mImg3Header.setEnabled(false);
-            this.mImg4Header.setEnabled(false);
-            this.mImg4Header.setImageResource(R.drawable.tapatalk_fast_forward_disable_dark);
-            this.mImg3Header.setImageResource(R.drawable.tapatalk_forward_disable_dark);
-        }
-
-    }
-
-    private class TaskLoadAvatart {
-        ImageLoader imageLoader;
-        int index;
-
-        public TaskLoadAvatart(int i, ImageLoader imageLoader) {
-            this.index = i;
-            this.imageLoader = imageLoader;
-        }
-
-        public void cancle() {
-            this.imageLoader.stop();
-        }
-
-        public void execute() {
-            this.imageLoader.loadImage(((Post) mListPost.get(this.index)).getUrlAvatar(), mImageLoad.options, new ImageLoadingListener() {
-                public void onLoadingCancelled(String str, View view) {
-                }
-
-                public void onLoadingComplete(String str, View view, Bitmap bitmap) {
-                    if (mListPost.size() > TaskLoadAvatart.this.index) {
-                        ((Post) mListPost.get(TaskLoadAvatart.this.index)).setAvatar(bitmap);
-                    }
-//                    adapter.notifyDataSetChanged();
-                }
-
-                public void onLoadingFailed(String str, View view, FailReason failReason) {
-                }
-
-                public void onLoadingStarted(String str, View view) {
-                }
-            });
-        }
-    }
-
-    private class EmoClass2 {
-        public int postIndex;
-        public int imageIndex;
-        public String url;
-
-        public EmoClass2(String str, int postIdx, int imageIndex) {
-            this.postIndex = postIdx;
-            this.imageIndex = imageIndex;
-            this.url = str;
-        }
-    }
-
-//    private void loadEmo(int i) {
-//        try {
-//            if (i < mListEmo.size()) {
-//                EmoClass2 emo = mListEmo.get(i);
-//                this.mImageLoad.imageLoader.loadImage(getlinkBitmapAssert(emo.url), mImageLoad.options, new LoadEmojListener(i));
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    class LoadEmojListener implements ImageLoadingListener {
-//        final int index;
-//
-//        LoadEmojListener(int i) {
-//            this.index = i;
-//        }
-//
-//        public void onLoadingCancelled(String str, View view) {
-//            try {
-//                EmoClass2 emo = mListEmo.get(index);
-//                ((Post) mListPost.get(emo.postIndex)).image.SetBitmap(emo.imageIndex, bmImageFailed);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            loadEmo(index + 1);
-//        }
-//
-//        public void onLoadingComplete(String str, View view, Bitmap bitmap) {
-//            if (bitmap != null) {
-//                try {
-//                    EmoClass2 emo = mListEmo.get(index);
-//                    ((Post) mListPost.get(emo.postIndex)).image.SetBitmap(emo.imageIndex, bitmap);
-//                } catch (Exception e) {
-//                    Exception exception = e;
-//                    try {
-//                        EmoClass2 emo = mListEmo.get(index);
-//                        ((Post) mListPost.get(emo.postIndex)).image.SetBitmap(emo.imageIndex, bmImageFailed);
-//                    } catch (Exception e2) {
-//                        e2.printStackTrace();
-//                    }
-//                    exception.printStackTrace();
-//                }
-//            }
-//            loadEmo(index + 1);
-//        }
-//
-//        public void onLoadingFailed(String str, View view, FailReason failReason) {
-//            try {
-//                EmoClass2 emo = mListEmo.get(index);
-//                ((Post) mListPost.get(emo.postIndex)).image.SetBitmap(emo.imageIndex, bmImageFailed);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            loadEmo(this.index + 1);
-//        }
-//
-//        public void onLoadingStarted(String str, View view) {
-//        }
-//    }
 
     private void parsePage3(Element element, Post post, boolean z) {
         if (element != null) {
@@ -1443,66 +1240,39 @@ public class Page3Fragment extends Fragment {
 //        post.addText(element.text());
     }
 
-
-    private void loadAvatarUniversal(int i) {
-        try {
-            if (i < mListPost.size()) {
-                this.mImageLoad.imageLoader.loadImage(((Post) mListPost.get(i)).getUrlAvatar(), this.mImageLoad.options, new AnonymousClass10(i));
-            }
-        } catch (Exception e) {
-            loadAvatarUniversal(i + 1);
-            e.printStackTrace();
-        }
-    }
-
-    class AnonymousClass10 implements ImageLoadingListener {
-        final /* synthetic */ int val$i;
-
-        AnonymousClass10(int i) {
-            this.val$i = i;
-        }
-
-        public void onLoadingCancelled(String str, View view) {
-            loadAvatarUniversal(this.val$i + 1);
-        }
-
-        public void onLoadingComplete(String str, View view, Bitmap bitmap) {
-            if (bitmap != null) {
-                try {
-                    ((Post) mListPost.get(this.val$i)).setAvatar(getResizedBitmapAvatart(bitmap));
-                } catch (Exception e) {
-                    loadAvatarUniversal(this.val$i + 1);
-                    e.printStackTrace();
-                    return;
+    protected void alertGoPage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        View inflate = getActivity().getLayoutInflater().inflate(R.layout.login, null);
+        final EditText editText = (EditText) inflate.findViewById(R.id.alert_edit1);
+        TextView textView = (TextView) inflate.findViewById(R.id.alert_txt1);
+        TextView textView2 = (TextView) inflate.findViewById(R.id.alert_txt2);
+        Button button = (Button) inflate.findViewById(R.id.alert_ok);
+        Button button2 = (Button) inflate.findViewById(R.id.alert_cancle);
+        ((EditText) inflate.findViewById(R.id.alert_edit2)).setVisibility(View.GONE);
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        textView.setVisibility(View.GONE);
+        textView2.setVisibility(View.GONE);
+        builder.setTitle("Page").setView(inflate);
+        final Dialog dialog = builder.create();
+        dialog.show();
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "click 1111111");
+                String strPage = editText.getText().toString();
+                int page = Integer.parseInt(strPage) - 1;
+                if (page >= 0 && page < mTotalPage) {
+                    mViewPager.setCurrentItem(page);
                 }
+                dialog.dismiss();
             }
-//           adapter.notifyDataSetChanged();
-            loadAvatarUniversal(this.val$i + 1);
-        }
-
-        public void onLoadingFailed(String str, View view, FailReason failReason) {
-            loadAvatarUniversal(this.val$i + 1);
-        }
-
-        public void onLoadingStarted(String str, View view) {
-        }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "click 222222222");
+                dialog.dismiss();
+            }
+        });
     }
-
-    public Bitmap getResizedBitmapAvatart(Bitmap bitmap) {
-        bitmap.getWidth();
-        bitmap.getHeight();
-        return bitmap;
-    }
-
-    protected void goPage(int i, int i2) throws Exception {
-//        String url = parsePage(i, i2, null);
-//        if (url != null) {
-//            mParser.setUrl(url);
-//            TaskCancle();
-//            mTask = new TaskGetHtml();
-//            mTask.execute(new Integer[]{Integer.valueOf(0)});
-//        }
-    }
-
-
 }

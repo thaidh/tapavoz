@@ -427,6 +427,8 @@ public class Page3ListViewAdapter extends BaseAdapter {
         holder.posts.setTextSize(mTextSize4);
         holder.userTitle.setTextSize(mTextSize4);
         holder.contain.setTextSize(mTextSize1);
+        holder.contain.setMovementMethod(LocalLinkMovementMethod.getInstance());
+        holder.contain.setClickable(false);
         if (!TextUtils.isEmpty(post.getUrlAvatar()) && !isScrolling) {
 //            imageLoader.displayImage(post.getUrlAvatar(), holder.avatar, optionsEmo);
             holder.avatar.setImageURI(Uri.parse(post.getUrlAvatar()));

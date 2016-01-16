@@ -742,40 +742,11 @@ public class Page extends NavigationDrawerActivity {
         }
     }
 
-    /* renamed from: com.nna88.voz.main.Page.54 */
-    class AnonymousClass54 implements View.OnClickListener {
-        final /* synthetic */ Button val$buttonCancle;
-        final /* synthetic */ Button val$buttonOK;
-        final /* synthetic */ EditText val$edit1;
-        final /* synthetic */ EditText val$edit2;
-        final /* synthetic */ TextView val$text1;
-        final /* synthetic */ TextView val$text2;
-
-        AnonymousClass54(EditText editText, EditText editText2, TextView textView, TextView textView2, Button button, Button button2) {
-            this.val$edit1 = editText;
-            this.val$edit2 = editText2;
-            this.val$text2 = textView;
-            this.val$text1 = textView2;
-            this.val$buttonOK = button;
-            this.val$buttonCancle = button2;
-        }
-
-        public void onClick(View view) {
-            this.val$edit1.setVisibility(View.VISIBLE);
-            this.val$edit2.setVisibility(View.VISIBLE);
-            this.val$text2.setVisibility(View.VISIBLE);
-            this.val$text1.setVisibility(View.VISIBLE);
-            Page.this.mRadioUser = ((Button) view).getText().toString();
-            this.val$buttonOK.setText("Log in");
-            this.val$buttonCancle.setText("Cancel");
-        }
-    }
-
     /* renamed from: com.nna88.voz.main.Page.55 */
     class LoginClickListener implements View.OnClickListener {
-        final /* synthetic */ EditText val$edit1;
-        final /* synthetic */ EditText val$edit2;
-        final /* synthetic */ Dialog val$mDialog;
+        final EditText val$edit1;
+        final EditText val$edit2;
+        final Dialog val$mDialog;
 
         LoginClickListener(EditText editText, EditText editText2, Dialog dialog) {
             this.val$edit1 = editText;
@@ -1707,21 +1678,21 @@ public class Page extends NavigationDrawerActivity {
         Dialog create = builder.create();
         create.show();
         this.mRadioUser = null;
-        String string = this.settings.getString("usered", null);
+//        String string = this.settings.getString("usered", null);
         this.mArrayUsered = new ArrayList();
         this.mArrayPass = new ArrayList();
         this.mArrayUseredId = new ArrayList();
-        if (string != null) {
-            String[] split = string.split(";");
-            length = split.length;
-            for (int i = STATE_ONSCREEN; i < length; i += STATE_OFFSCREEN) {
-                String str = split[i];
-                this.mArrayUsered.add(this.settings.getString("username-" + str, BuildConfig.FLAVOR));
-                this.mArrayPass.add(this.settings.getString("password-" + str, BuildConfig.FLAVOR));
-                this.mArrayUseredId.add(this.settings.getString("userid-" + str, BuildConfig.FLAVOR));
-            }
-        }
-        length = STATE_ONSCREEN;
+//        if (string != null) {
+//            String[] split = string.split(";");
+//            length = split.length;
+//            for (int i = STATE_ONSCREEN; i < length; i += STATE_OFFSCREEN) {
+//                String str = split[i];
+//                this.mArrayUsered.add(this.settings.getString("username-" + str, BuildConfig.FLAVOR));
+//                this.mArrayPass.add(this.settings.getString("password-" + str, BuildConfig.FLAVOR));
+//                this.mArrayUseredId.add(this.settings.getString("userid-" + str, BuildConfig.FLAVOR));
+//            }
+//        }
+        length = 0;
         while (length < this.mArrayUsered.size()) {
             RadioButton radioButton = new RadioButton(this);
             radioButton.setText(this.mArrayUsered.get(length).toString());
@@ -1737,11 +1708,11 @@ public class Page extends NavigationDrawerActivity {
                 btnOK.setText("Log out");
                 btnCancel.setText("Cancel");
             }
-            length += STATE_OFFSCREEN;
+            length += 1;
         }
         RadioButton radioButton2 = new RadioButton(this);
         radioButton2.setText("Add");
-        radioButton2.setBackgroundColor(getResources().getColor(R.color.white));
+//        radioButton2.setBackgroundColor(getResources().getColor(R.color.white));
         radioButton2.setOnClickListener(new AnonymousClass54(editText, editText2, textView2, textView, btnOK, btnCancel));
         radioGroup.addView(radioButton2);
         if (this.mRadioUser == null) {
@@ -1752,6 +1723,35 @@ public class Page extends NavigationDrawerActivity {
         }
         btnOK.setOnClickListener(new LoginClickListener(editText, editText2, create));
         btnCancel.setOnClickListener(new LoginCancelListener(btnCancel, create));
+    }
+
+    /* renamed from: com.nna88.voz.main.Page.54 */
+    class AnonymousClass54 implements View.OnClickListener {
+        final  Button val$buttonCancle;
+        final  Button val$buttonOK;
+        final  EditText val$edit1;
+        final EditText val$edit2;
+        final TextView val$text1;
+        final TextView val$text2;
+
+        AnonymousClass54(EditText editText, EditText editText2, TextView textView, TextView textView2, Button button, Button button2) {
+            this.val$edit1 = editText;
+            this.val$edit2 = editText2;
+            this.val$text2 = textView;
+            this.val$text1 = textView2;
+            this.val$buttonOK = button;
+            this.val$buttonCancle = button2;
+        }
+
+        public void onClick(View view) {
+            this.val$edit1.setVisibility(View.VISIBLE);
+            this.val$edit2.setVisibility(View.VISIBLE);
+            this.val$text2.setVisibility(View.VISIBLE);
+            this.val$text1.setVisibility(View.VISIBLE);
+            Page.this.mRadioUser = ((Button) view).getText().toString();
+            this.val$buttonOK.setText("Log in");
+            this.val$buttonCancle.setText("Cancel");
+        }
     }
 
     protected void alertPickerColor(int i) {
@@ -2480,39 +2480,43 @@ public class Page extends NavigationDrawerActivity {
     }
 
     public void writeSetingUser(Map<String, String> map) {
-        Editor edit = this.settings.edit();
-        if (map != null) {
-            edit.putString("vflastvisit", (String) map.get("vflastvisit"));
-            edit.putString("vflastactivity", (String) map.get("vflastactivity"));
-            edit.putString("vfuserid", (String) map.get("vfuserid"));
-            edit.putString("vfpassword", (String) map.get("vfpassword"));
-            edit.putString("vfimloggedin", (String) map.get("vfimloggedin"));
-            edit.putString("vfsessionhash", (String) map.get("vfsessionhash"));
-            this.mUser.setCookieStore(map);
-            String str = (String) map.get("vfuserid");
-            if (!(this.mUsername == null || this.mPassword == null)) {
-                edit.putString("username-" + str, this.mUsername);
-                edit.putString("password-" + str, this.mPassword);
-                edit.putString("userid-" + str, str);
-                this.mUsername = null;
-                this.mPassword = null;
+        try {
+            Editor edit = this.settings.edit();
+            if (map != null) {
+                edit.putString("vflastvisit", (String) map.get("vflastvisit"));
+                edit.putString("vflastactivity", (String) map.get("vflastactivity"));
+                edit.putString("vfuserid", (String) map.get("vfuserid"));
+                edit.putString("vfpassword", (String) map.get("vfpassword"));
+                edit.putString("vfimloggedin", (String) map.get("vfimloggedin"));
+                edit.putString("vfsessionhash", (String) map.get("vfsessionhash"));
+                this.mUser.setCookieStore(map);
+                String str = (String) map.get("vfuserid");
+                if (!(this.mUsername == null || this.mPassword == null)) {
+                    edit.putString("username-" + str, this.mUsername);
+                    edit.putString("password-" + str, this.mPassword);
+                    edit.putString("userid-" + str, str);
+                    this.mUsername = null;
+                    this.mPassword = null;
+                }
+                String string = this.settings.getString("usered", null);
+                if (string == null) {
+                    edit.putString("usered", str);
+                } else if (!string.contains(str)) {
+                    edit.putString("usered", string + ";" + str);
+                }
+            } else {
+                edit.putString("vflastvisit", BuildConfig.FLAVOR);
+                edit.putString("vflastactivity", BuildConfig.FLAVOR);
+                edit.putString("vfuserid", BuildConfig.FLAVOR);
+                edit.putString("vfpassword", BuildConfig.FLAVOR);
+                edit.putString("vfimloggedin", BuildConfig.FLAVOR);
+                edit.putString("vfsessionhash", BuildConfig.FLAVOR);
+                this.mUser.setCookieStore(null);
             }
-            String string = this.settings.getString("usered", null);
-            if (string == null) {
-                edit.putString("usered", str);
-            } else if (!string.contains(str)) {
-                edit.putString("usered", string + ";" + str);
-            }
-        } else {
-            edit.putString("vflastvisit", BuildConfig.FLAVOR);
-            edit.putString("vflastactivity", BuildConfig.FLAVOR);
-            edit.putString("vfuserid", BuildConfig.FLAVOR);
-            edit.putString("vfpassword", BuildConfig.FLAVOR);
-            edit.putString("vfimloggedin", BuildConfig.FLAVOR);
-            edit.putString("vfsessionhash", BuildConfig.FLAVOR);
-            this.mUser.setCookieStore(null);
+            edit.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        edit.commit();
     }
 
     public void writeStringForums(String str) {

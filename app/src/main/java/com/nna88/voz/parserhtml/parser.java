@@ -481,7 +481,14 @@ public class parser {
             try {
                 capcha = (String) new JSONObject(parse.text()).get("captcha");
 
-                Response execute1 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", capcha).data("api_salt", BuildConfig.FLAVOR).method(Method.POST).execute();
+                Response execute1 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php")
+                        .timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1")
+                        .data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass())
+                        .data("api_vb_login_md5password_utf", userInfo.md5Pass())
+                        .data("api_vb_login_password", userInfo.Pass())
+                        .data("api_vb_login_username", userInfo.User())
+                        .data("api_2factor", "")
+                        .data("api_captcha", capcha).data("api_salt", "").method(Method.POST).execute();
                 document = execute1.parse();
                 jSONObject = new JSONObject(document.text());
                 JSONObject jsUserInfo = (JSONObject) jSONObject.get("userinfo");

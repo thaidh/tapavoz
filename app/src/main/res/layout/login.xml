@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
     <RadioGroup
         android:id="@id/rg_usered"
@@ -16,7 +17,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="5.0dip"
         android:gravity="left"
-        android:text="UserName:" />
+        android:textColor="@color/blue"
+
+        android:text="UserName:"/>
 
     <EditText
         android:id="@id/alert_edit1"
@@ -26,7 +29,11 @@
         android:layout_margin="5.0dip"
         android:capitalize="none"
         android:ems="10"
-        android:padding="5.0dip" />
+        android:padding="5.0dip"
+        android:textColor="@color/blue"
+        android:background="@color/black"
+        android:focusableInTouchMode="true"
+        android:focusable="true"/>
 
     <TextView
         android:id="@id/alert_txt2"
@@ -34,7 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="5.0dip"
         android:gravity="left"
-        android:text="Password:" />
+        android:text="Password:"
+        android:textColor="@color/blue"/>
 
     <EditText
         android:id="@id/alert_edit2"
@@ -45,7 +53,11 @@
         android:capitalize="none"
         android:ems="10"
         android:padding="5.0dip"
-        android:password="true" />
+        android:password="true"
+        android:textColor="@color/blue"
+        android:background="@color/black"
+        android:focusableInTouchMode="true"
+        android:focusable="true"/>
 
     <LinearLayout
         android:layout_width="fill_parent"

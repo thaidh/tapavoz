@@ -102,6 +102,7 @@ public class Page3PagerAdapter extends PagerAdapter {
     public interface Page3PagerListener {
         void onSwipeTReresh(SwipeRefreshLayout swipeRefreshLayout);
         void onGoPage(int type);
+        void showDialogGoPage();
     }
 
     private View getNavigationView(int i, int curPos) {
@@ -113,6 +114,14 @@ public class Page3PagerAdapter extends PagerAdapter {
         butPageFooter.setText(curPos + "/" + mTotalPage);
         ImageView mImg3Footer = (ImageView) linearFooter.findViewById(R.id.next);
         ImageView mImg4Footer = (ImageView) linearFooter.findViewById(R.id.fast_next);
+
+        butPageFooter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPage3Listener.showDialogGoPage();
+            }
+        });
+
         mImg1Footer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 try {
