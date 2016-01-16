@@ -118,7 +118,8 @@
         <activity
             android:name="com.whoami.voz.ui.activity.BaseActivity"
             android:label="@string/title_activity_base"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 

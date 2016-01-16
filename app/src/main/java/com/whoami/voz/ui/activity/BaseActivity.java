@@ -1,9 +1,9 @@
 package com.whoami.voz.ui.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,7 +12,7 @@ import com.nna88.voz.main.R;
 import com.whoami.voz.ui.adapter.MyFragmentAdapter;
 import com.whoami.voz.ui.fragment.Page3Fragment;
 
-public class BaseActivity extends FragmentActivity {
+public class BaseActivity extends AppCompatActivity {
     ViewPager viewPager;
     MyFragmentAdapter myFragmentAdapter;
 

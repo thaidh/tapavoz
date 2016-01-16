@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/drawer_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        >
+        android:layout_height="fill_parent">
 
         <!--<android.support.v4.widget.SwipeRefreshLayout-->
-            <!--android:id="@+id/activity_main_swipe_refresh_layout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent">-->
+        <!--android:id="@+id/activity_main_swipe_refresh_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
 
 
-            <!--<ListView-->
-                <!--android:id="@id/content_frame"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="fill_parent"-->
-                <!--android:layout_marginLeft="8.0dip"-->
-                <!--android:layout_marginRight="8.0dip"-->
-                <!--android:cacheColorHint="#00000000"-->
-                <!--android:divider="@android:color/transparent"/>-->
+        <!--<ListView-->
+        <!--android:id="@id/content_frame"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:layout_marginLeft="8.0dip"-->
+        <!--android:layout_marginRight="8.0dip"-->
+        <!--android:cacheColorHint="#00000000"-->
+        <!--android:divider="@android:color/transparent"/>-->
 
 
         <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_awesome_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue"
+            android:minHeight="?attr/actionBarSize" />
+
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/my_awesome_toolbar">
+
         </android.support.v4.view.ViewPager>
 
 
@@ -48,7 +55,7 @@
                 android:id="@id/compose_button_bar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
         </HorizontalScrollView>
 
 
@@ -65,10 +72,8 @@
 
         <ProgressBar
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
-
-
 
 
 </FrameLayout>

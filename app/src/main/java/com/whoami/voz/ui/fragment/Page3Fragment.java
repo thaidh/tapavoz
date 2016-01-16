@@ -15,7 +15,10 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -53,8 +56,6 @@ import com.nna88.voz.ui.SidebarAdapter;
 import com.nna88.voz.util.ImageLoad;
 import com.nna88.voz.util.UserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.whoami.voz.ui.adapter.Page3PagerAdapter;
 
 import org.apache.commons.io.FileUtils;
@@ -154,6 +155,7 @@ public class Page3Fragment extends Fragment {
     private Page3PagerAdapter mPage3PagerAdapter;
     private int mTotalPage = 1;
     private int mCurPage = 1;
+    private Toolbar toolbar;
 
     /**
      * Use this factory method to create a new instance of
@@ -207,6 +209,7 @@ public class Page3Fragment extends Fragment {
         mRootView = inflater.inflate(R.layout.layout_page3_fragment, container, false);
 
 
+
         mColorText2 = Global.getTextClolor2();
         settings = getActivity().getSharedPreferences("Setting", Page.STATE_ONSCREEN);
         this.mUser = new UserInfo();
@@ -236,6 +239,9 @@ public class Page3Fragment extends Fragment {
         this.mParser = new parser(Global.URL);
         this.mParser.setUrl(url);
 
+
+        toolbar = (Toolbar) mRootView.findViewById(R.id.my_awesome_toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         mViewPager = (ViewPager) mRootView.findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(1);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -254,18 +260,6 @@ public class Page3Fragment extends Fragment {
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     try {
                         int position = mViewPager.getCurrentItem() + 1;
-//                        if (position != mCurPage && !mMapPostPerPage.containsKey(Integer.valueOf(position))
-//                                && Math.abs(position - mCurPage) == 1) {
-//                            if (position > mCurPage) {
-//                                Log.i(TAG, "Go next " + position + "");
-//                                goPage(GO_NEXT, 0);
-//                            } else {
-//                                Log.i(TAG, "Go prev " + position + "");
-//                                goPage(GO_PREVIOUS, 0);
-//                            }
-//                        } else {
-//                            mCurPage = position;
-//                        }
                         mCurPage = position;
                         loadPage(position);
                     } catch (Exception e) {
@@ -848,7 +842,7 @@ public class Page3Fragment extends Fragment {
                     Element parent = element2.parent();
                     if (select.select("div[class=smallfont]:has(strong)").first() != null) {
                         this.mTextTitle = select.select("div[class=smallfont]:has(strong)").first().text();
-//                        setTitle(this.mTextTitle);
+                        setTitle(this.mTextTitle);
                     }
                     Element previousElementSibling = parent.previousElementSibling();
                     Element previousElementSibling2 = previousElementSibling.previousElementSibling();
@@ -922,6 +916,18 @@ public class Page3Fragment extends Fragment {
                 mMapPostPerPage.put(Integer.valueOf(mCurPage), new ArrayList<Post>(mListPost));
             }
         }
+    }
+
+    private void setTitle(final String mTextTitle) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (toolbar != null && !TextUtils.isEmpty(mTextTitle)) {
+                    toolbar.setTitle(mTextTitle);
+                }
+            }
+        });
+
     }
 
     private void loadPage(int curPage) {
