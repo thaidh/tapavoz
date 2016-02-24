@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build.VERSION;
@@ -31,11 +29,10 @@ import android.widget.Toast;
 import com.nna88.voz.contain.containEmo;
 import com.nna88.voz.listview.GridAdapter;
 import com.nna88.voz.mysqlite.MySQLiteHelper;
-import com.nna88.voz.parserhtml.parser;
+import com.nna88.voz.parserhtml.HtmlParser;
 import com.nna88.voz.util.UploadImage2;
 import com.nna88.voz.util.UserInfo;
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.conn.params.ConnManagerParams;
@@ -52,7 +49,7 @@ public class PageNewThread extends Activity {
     public final Handler mHandler;
     protected Dialog mLoading;
     OnClickListener mOnCameraClick;
-    private parser mParser;
+    private HtmlParser mParser;
     OnClickListener mPostCancleClick;
     OnClickListener mPostEmoClick;
     OnClickListener mPostReplyClick;
@@ -538,12 +535,12 @@ public class PageNewThread extends Activity {
         this.iPostType = getIntent().getIntExtra("POSTTYPE", 0);
         if (this.iPostType == 5) {
             this.sforums = getIntent().getStringExtra("FORUM");
-            this.mParser = new parser("https://vozforums.com/newthread.php?do=newthread&f=" + this.sforums);
+            this.mParser = new HtmlParser("https://vozforums.com/newthread.php?do=newthread&f=" + this.sforums);
             this.mTask = new Task();
             this.mTask.execute(new Integer[]{Integer.valueOf(0)});
         } else if (this.iPostType == 6) {
             this.mTask = new Task();
-            this.mParser = new parser("https://vozforums.com/newthread.php?do=newthread&f=" + this.sforums);
+            this.mParser = new HtmlParser("https://vozforums.com/newthread.php?do=newthread&f=" + this.sforums);
             this.pmToken = getIntent().getStringExtra("TOKEN");
             this.pmMid = getIntent().getStringExtra("MID");
             this.pmUserId = getIntent().getStringExtra("USERID");
@@ -558,7 +555,7 @@ public class PageNewThread extends Activity {
         } else if (this.iPostType == 7) {
             this.mTask = new Task();
             this.pmMid = getIntent().getStringExtra("MID");
-            this.mParser = new parser("https://vozforums.com/private.php?do=newpm&u=" + this.pmMid);
+            this.mParser = new HtmlParser("https://vozforums.com/private.php?do=newpm&u=" + this.pmMid);
             this.mTask.execute(new Integer[]{Integer.valueOf(0)});
         } else {
             this.textTitle.setText(getIntent().getExtras().getString(MySQLiteHelper.COLUMN_TITLE));

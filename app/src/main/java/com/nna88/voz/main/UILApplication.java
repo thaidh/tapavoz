@@ -15,6 +15,8 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration.Builder;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
 public class UILApplication extends Application {
     private static Context mContext;
@@ -44,10 +46,19 @@ public class UILApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
+        refWatcher = LeakCanary.install(this);
         initImageLoader(getApplicationContext());
     }
 
     public static Context getAppContext() {
         return mContext;
     }
+
+    public static RefWatcher getRefWatcher(Context context) {
+        UILApplication application = (UILApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+    private RefWatcher refWatcher;
+
 }

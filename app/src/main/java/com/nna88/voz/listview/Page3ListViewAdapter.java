@@ -196,20 +196,22 @@ public class Page3ListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
+//        Global.setBackgoundMain(holder.txtViewDevider);
+//        holder.txtViewDevider.setVisibility(View.VISIBLE);
         if (Global.bDevider) {
             Global.setBackgoundMain(holder.txtViewDevider);
             holder.txtViewDevider.setVisibility(View.VISIBLE);
         } else {
             holder.txtViewDevider.setVisibility(View.GONE);
         }
-        Global.setTextContain(holder.contain);
-        Global.setTextColor1(holder.time);
-        Global.setTextColor1(holder.index);
-        Global.setTextColor1(holder.userTitle);
-        Global.setTextColor1(holder.jd);
-        Global.setTextColor1(holder.user);
-        Global.setTextColor1(holder.posts);
-        Global.setTextColor1(holder.userTitle);
+//        Global.setTextContain(holder.contain);
+//        Global.setTextColor1(holder.time);
+//        Global.setTextColor1(holder.index);
+//        Global.setTextColor1(holder.userTitle);
+//        Global.setTextColor1(holder.jd);
+//        Global.setTextColor1(holder.user);
+//        Global.setTextColor1(holder.posts);
+//        Global.setTextColor1(holder.userTitle);
         holder.user.setTextSize(mTextSize3);
         holder.time.setTextSize(mTextSize3);
         holder.index.setTextSize(mTextSize3);
@@ -241,11 +243,11 @@ public class Page3ListViewAdapter extends BaseAdapter {
         }
 
 //        addImage(holder.contain, post);
-        if (post.isMultiQuote()) {
-            Global.setBackgroundItemThreadMultiQuote(holder.layout);
-        } else {
-            Global.setBackgroundItemThread(holder.layout);
-        }
+//        if (post.isMultiQuote()) {
+//            Global.setBackgroundItemThreadMultiQuote(holder.layout);
+//        } else {
+//            Global.setBackgroundItemThread(holder.layout);
+//        }
         holder.contain.setText(post.getContent());
         holder.mGridImage.removeAllViews();
         for (int i = 0; i < post.image.getSize(); i++) {

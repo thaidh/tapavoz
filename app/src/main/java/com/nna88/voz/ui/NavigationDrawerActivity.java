@@ -8,14 +8,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ListView;
+
 import com.nna88.voz.main.R;
 
-public class NavigationDrawerActivity extends AppCompatActivity {
+public class NavigationDrawerActivity extends ActionBarActivity {
     protected DrawerLayout mDrawerLayout;
     private ListView mDrawerLeftList;
     private CharSequence mDrawerTitle;

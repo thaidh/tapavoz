@@ -34,7 +34,6 @@ import org.jsoup.select.Elements;
 public class Page3New extends Page {
     private ArrayList<Post> ListContains;
     private listViewCustom3Html adapter;
-    private FullScreenImage fullScreen;
     private String humanverify_hash;
     private int iCallFromNotification;
     private int iCallFromNotificationQuote;
@@ -512,23 +511,6 @@ public class Page3New extends Page {
     }
 
     public void onBackPressed() {
-        if (this.fullScreen == null || !this.fullScreen.isShowing()) {
-            if (this.iCallFromNotification != 1) {
-                startActivity(new Intent(this, PageCP.class));
-            }
-            if (this.iCallFromNotificationQuote != 1) {
-                Intent intent = new Intent(this, PageQuote.class);
-                intent.putExtra("NUMQUOTE", this.iCallFromNotificationQuote);
-                startActivity(intent);
-            }
-            super.onBackPressed();
-            return;
-        }
-        runOnUiThread(new Runnable() {
-            public void run() {
-                Page3New.this.fullScreen.hide();
-            }
-        });
     }
 
     protected void onCreate(Bundle bundle) {
@@ -560,29 +542,6 @@ public class Page3New extends Page {
                         e.printStackTrace();
                     }
                 }
-            }
-        });
-        this.adapter.setOnActionImageClickListener(new OnActionImageClickListener() {
-
-            /* renamed from: com.nna88.voz.main.Page3New.2.1 */
-            class AnonymousClass1 implements Runnable {
-                final /* synthetic */ String val$link;
-
-                AnonymousClass1(String str) {
-                    this.val$link = str;
-                }
-
-                public void run() {
-                    Page3New.this.fullScreen = new FullScreenImage(Page3New.this.mContext, Page3New.this.getWindow().getDecorView());
-                    Page3New.this.fullScreen.show(this.val$link);
-                    if (Page3New.this.mQuickAction != null) {
-                        Page3New.this.mQuickAction.dismiss();
-                    }
-                }
-            }
-
-            public void onItemClick(String str) {
-                Page3New.this.runOnUiThread(new AnonymousClass1(str));
             }
         });
         this.mTask.execute(new Integer[]{Integer.valueOf(0)});

@@ -45,7 +45,6 @@ public class Page3 extends Page {
     private Page3ListViewAdapter adapter;
     private Bitmap bmImageFailed;
     private Bitmap bmImageStart;
-    private FullScreenImage fullScreen;
     private String humanverify_hash;
     private int iCallFromNotification;
     private int iCallFromNotificationQuote;
@@ -842,7 +841,6 @@ public class Page3 extends Page {
             } else {
                 Post post;
                 int size;
-                log("start parser");
                 this.ListContains.clear();
                 Element element = this.doc.select("div[align=center]").size() > 1 ? (Element) this.doc.select("div[align=center]").get(1) : this.doc;
                 Element r0 = element.select("a[href=private.php]").first();
@@ -1050,19 +1048,6 @@ public class Page3 extends Page {
     }
 
     public void onBackPressed() {
-        if (this.fullScreen == null || !this.fullScreen.isShowing()) {
-            if (this.iCallFromNotification != 1) {
-                startActivity(new Intent(this, PageCP.class));
-            }
-            if (this.iCallFromNotificationQuote != 1) {
-                Intent intent = new Intent(this, PageQuote.class);
-                intent.putExtra("NUMQUOTE", this.iCallFromNotificationQuote);
-                startActivity(intent);
-            }
-            super.onBackPressed();
-            return;
-        }
-        this.fullScreen.hide();
     }
 
     protected void onCreate(Bundle bundle) {
@@ -1093,42 +1078,6 @@ public class Page3 extends Page {
         this.mTask.execute(new Integer[]{Integer.valueOf(0)});
         this.mList.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-                if (Page3.this.fullScreen == null || (Page3.this.mUser.isLogin() && !Page3.this.fullScreen.isShowing())) {
-                    try {
-                        Page3.this.ActionPopup(view, i - 1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        this.adapter.setOnImageClickListener(new OnImageClickListestener() {
-
-            /* renamed from: com.nna88.voz.main.Page3.2.1 */
-            class AnonymousClass1 implements Runnable {
-                final /* synthetic */ String val$urlImage;
-
-                AnonymousClass1(String str) {
-                    this.val$urlImage = str;
-                }
-
-                public void run() {
-                    Page3.this.fullScreen = new FullScreenImage(Page3.this.mContext, Page3.this.getWindow().getDecorView());
-                    Page3.this.fullScreen.show(this.val$urlImage);
-                    if (Page3.this.mQuickAction != null) {
-                        Page3.this.mQuickAction.dismiss();
-                    }
-                }
-            }
-
-            public void onImageClick(int i, String str) {
-                if (i == 0) {
-                    if (str.contains("attachmentid") || str.contains("http://") || str.contains("https://")) {
-                        Page3.this.runOnUiThread(new AnonymousClass1(str));
-                    }
-                } else if (i == 1) {
-                    Page3.this.toast("onquote click");
-                }
             }
         });
         hideAds();

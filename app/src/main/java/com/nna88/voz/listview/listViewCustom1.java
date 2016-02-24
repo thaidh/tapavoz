@@ -1,6 +1,7 @@
 package com.nna88.voz.listview;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,10 @@ public class listViewCustom1 extends BaseAdapter {
         this.inflater = (LayoutInflater) context.getSystemService("layout_inflater");
     }
 
+    public void setData(ArrayList<Forum> forumsList) {
+        contains = forumsList;
+    }
+
     private void log(String str) {
         Log.d("nna", str);
     }
@@ -73,15 +78,18 @@ public class listViewCustom1 extends BaseAdapter {
         viewHolder.txtView1.setText(((Forum) this.contains.get(i)).Forum());
         viewHolder.txtView1.setTextSize(this.mTextSize1);
         viewHolder.txtView2.setTextSize(this.mTextSize2);
-        Global.setBackgroundItemThread(viewHolder.layout);
+//        Global.setBackgroundItemThread(viewHolder.layout);
         if (((Forum) this.contains.get(i)).Viewing() == null) {
             viewHolder.txtView1.setText(((Forum) this.contains.get(i)).Forum());
-            Global.setTextColor2(viewHolder.txtView1);
+//            Global.setTextColor2(viewHolder.txtView1);
+            viewHolder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.red));
             viewHolder.txtView2.setVisibility(View.GONE);
         } else {
             viewHolder.txtView2.setVisibility(View.VISIBLE);
-            Global.setTextColor1(viewHolder.txtView1);
-            Global.setTextColor2(viewHolder.txtView2);
+            viewHolder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.vozTcat));
+            viewHolder.txtView2.setTextColor(ContextCompat.getColor(mContext, R.color.black));
+//            Global.setTextColor1(viewHolder.txtView1);
+//            Global.setTextColor2(viewHolder.txtView2);
             viewHolder.txtView1.setText(((Forum) this.contains.get(i)).Forum());
             if (((Forum) this.contains.get(i)).Viewing().contains("Viewing")) {
                 viewHolder.txtView2.setText(((Forum) this.contains.get(i)).Viewing());

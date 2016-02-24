@@ -1,6 +1,7 @@
 package com.nna88.voz.listview;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class listViewCustom2 extends BaseAdapter {
     public listViewCustom2(Context context, ArrayList<Thread> arrayList) {
         this.contains = arrayList;
         this.mContext = context;
-        this.inflater = (LayoutInflater) context.getSystemService("layout_inflater");
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() {
@@ -47,7 +48,7 @@ public class listViewCustom2 extends BaseAdapter {
     }
 
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Thread thread = (Thread) this.contains.get(i);
+        Thread thread = this.contains.get(i);
         if (view == null) {
             this.holder = new ViewHolder();
             view = this.inflater.inflate(R.layout.list_item2, null);
@@ -59,23 +60,25 @@ public class listViewCustom2 extends BaseAdapter {
         } else {
             this.holder = (ViewHolder) view.getTag();
         }
-        Global.setBackgroundItemThread(this.holder.relativelayout);
+//        Global.setBackgroundItemThread(this.holder.relativelayout);
         this.holder.txtView1.setTextSize(this.mTextSize1);
         this.holder.txtView2.setTextSize(this.mTextSize2);
         if (thread.UrlThread() == null) {
-            Global.setTextColor2(this.holder.txtView1);
+//            Global.setTextColor2(this.holder.txtView1);
+            holder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.red));
             this.holder.txtView1.setText(thread.Thread());
             this.holder.txtView2.setText(null);
-            this.holder.txtView2.setVisibility(8);
+            this.holder.txtView2.setVisibility(View.GONE);
         } else {
-            Global.setTextColor2(this.holder.txtView2);
+//            Global.setTextColor2(this.holder.txtView2);
+            holder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.vozTcat));
             this.holder.txtView1.setText(thread.Thread());
-            this.holder.txtView2.setVisibility(0);
-            if (thread.isSticky()) {
-                Global.setTextSticky(this.holder.txtView1);
-            } else {
-                Global.setTextColor1(this.holder.txtView1);
-            }
+            this.holder.txtView2.setVisibility(View.VISIBLE);
+//            if (thread.isSticky()) {
+//                Global.setTextSticky(this.holder.txtView1);
+//            } else {
+//                Global.setTextColor1(this.holder.txtView1);
+//            }
             if (thread.Reply() == null) {
                 this.holder.txtView2.setText(thread.LastPost());
             } else {
@@ -94,7 +97,7 @@ public class listViewCustom2 extends BaseAdapter {
                 e.printStackTrace();
             }
         } else {
-            this.holder.imgView.setVisibility(8);
+            this.holder.imgView.setVisibility(View.GONE);
         }
         this.holder.relativelayout.setClickable(false);
         this.holder.relativelayout.setFocusable(false);

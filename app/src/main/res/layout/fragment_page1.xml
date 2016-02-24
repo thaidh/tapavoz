@@ -1,30 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@id/drawer_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#ffffff">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="com.whoami.voz.ui.fragment.Page1Fragment">
 
+    <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/my_awesome_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-            android:minHeight="?attr/actionBarSize" />
+        android:id="@+id/my_awesome_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:minHeight="?attr/actionBarSize" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/my_awesome_toolbar"
-            android:paddingBottom="40.0dip">
-
-        </android.support.v4.view.ViewPager>
-
+        <ListView
+            android:id="@+id/content_frame"
+            android:layout_below="@+id/my_awesome_toolbar"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cacheColorHint="#00000000"
+            android:paddingBottom="40.0dp"
+            android:divider="@android:color/transparent"/>
 
         <HorizontalScrollView
             android:id="@id/layoutQuickreturn"
@@ -42,7 +44,6 @@
                 android:orientation="horizontal" />
         </HorizontalScrollView>
 
-
     </RelativeLayout>
 
 
@@ -58,6 +59,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
 
 </FrameLayout>

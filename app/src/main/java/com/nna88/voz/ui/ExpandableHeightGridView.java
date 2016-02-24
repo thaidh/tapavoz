@@ -2,9 +2,7 @@ package com.nna88.voz.ui;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.internal.widget.RtlSpacingHelper;
 import android.util.AttributeSet;
-import android.view.View.MeasureSpec;
 import android.widget.GridView;
 
 public class ExpandableHeightGridView extends GridView {
@@ -31,7 +29,7 @@ public class ExpandableHeightGridView extends GridView {
 
     public void onMeasure(int i, int i2) {
         if (isExpanded()) {
-            super.onMeasure(i, MeasureSpec.makeMeasureSpec(ViewCompat.MEASURED_SIZE_MASK, RtlSpacingHelper.UNDEFINED));
+            super.onMeasure(i, MeasureSpec.makeMeasureSpec(ViewCompat.MEASURED_SIZE_MASK, MeasureSpec.EXACTLY));
             getLayoutParams().height = getMeasuredHeight();
             return;
         }

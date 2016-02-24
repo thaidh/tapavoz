@@ -28,7 +28,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class parser {
+public class HtmlParser {
     public static final int TIMEOUT = 20000;
     static UserInfo mUser;
     Document doc;
@@ -40,7 +40,7 @@ public class parser {
         mUser = new UserInfo();
     }
 
-    public parser(String str) {
+    public HtmlParser(String str) {
         this.sNotif = BuildConfig.FLAVOR;
         this.mUserIdRecentPost = null;
         this.m_url = str;

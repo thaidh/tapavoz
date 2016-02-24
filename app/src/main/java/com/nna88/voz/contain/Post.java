@@ -3,9 +3,7 @@ package com.nna88.voz.contain;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.text.Layout;
 import android.text.SpannableString;
-import android.text.style.AlignmentSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.QuoteSpan;
@@ -14,7 +12,6 @@ import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 
-import com.nna88.voz.PhotoView.PhotoViewAttacher;
 import com.nna88.voz.main.BuildConfig;
 import com.nna88.voz.main.Global;
 import com.nna88.voz.main.R;
@@ -22,11 +19,11 @@ import com.nna88.voz.main.UILApplication;
 import com.nna88.voz.quickaction.QuickAction;
 import com.nna88.voz.util.Util;
 import com.nna88.voz.util.spanable;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.whoami.voz.ui.utils.EmoLoader;
 
-import java.util.ArrayList;
 import org.jsoup.nodes.Element;
+
+import java.util.ArrayList;
 
 public class Post {
     public static final String urlAvatar = "http://pik.vn/2014277c7c6c-57e7-4a12-bb2a-c83315886870.png";
@@ -345,7 +342,7 @@ public class Post {
 //                    content.setSpan(new ForegroundColorSpan(-8388480), start, end, 18);
 //                }
                 mContent.setSpan(new RelativeSizeSpan((font.size(curPos) > 3 ? (float) (((double) (font.size(curPos) - 3)) / 10.0d)
-                        : (float) (((double) (-(font.size(curPos) - 3))) / 10.0d)) + PhotoViewAttacher.DEFAULT_MIN_SCALE), start, end, 18);
+                        : (float) (((double) (-(font.size(curPos) - 3))) / 10.0d)) + 1), start, end, 18);
                 curPos++;
             }
             curPos = 0;

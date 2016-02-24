@@ -62,7 +62,6 @@
         <item name="android:textAppearanceMediumInverse">@style/TextAppearance.AppCompat.Medium.Inverse</item>
         <item name="android:textAppearanceSmallInverse">@style/TextAppearance.AppCompat.Small.Inverse</item>
         <item name="android:windowBackground">@color/background_material_dark</item>
-        <item name="android:windowNoTitle">true</item>
         <item name="android:dropDownListViewStyle">@style/Widget.AppCompat.ListView.DropDown</item>
         <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
         <item name="android:textColorHighlight">@color/highlighted_text_material_dark</item>
@@ -97,7 +96,6 @@
         <item name="android:textAppearanceMediumInverse">@style/TextAppearance.AppCompat.Medium.Inverse</item>
         <item name="android:textAppearanceSmallInverse">@style/TextAppearance.AppCompat.Small.Inverse</item>
         <item name="android:windowBackground">@color/background_material_dark</item>
-        <item name="android:windowNoTitle">true</item>
         <item name="android:dropDownListViewStyle">@style/Widget.AppCompat.ListView.DropDown</item>
         <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
         <item name="android:textColorHighlight">@color/highlighted_text_material_dark</item>
@@ -132,7 +130,6 @@
         <item name="android:textAppearanceMediumInverse">@style/TextAppearance.AppCompat.Medium.Inverse</item>
         <item name="android:textAppearanceSmallInverse">@style/TextAppearance.AppCompat.Small.Inverse</item>
         <item name="android:windowBackground">@color/background_material_light</item>
-        <item name="android:windowNoTitle">true</item>
         <item name="android:dropDownListViewStyle">@style/Widget.AppCompat.ListView.DropDown</item>
         <item name="android:spinnerStyle">@style/Widget.AppCompat.Spinner</item>
         <item name="android:textColorHighlight">@color/highlighted_text_material_light</item>
@@ -399,7 +396,6 @@
     </style>
     <style name="Base.Widget.AppCompat.ActivityChooserView" parent="">
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/abc_ab_share_pack_holo_dark</item>
         <item name="divider">?dividerVertical</item>
         <item name="showDividers">middle</item>
         <item name="dividerPadding">6.0dip</item>
@@ -494,7 +490,6 @@
         <item name="android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
     </style>
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:windowNoTitle">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowFullscreen">false</item>
         <item name="windowActionBar">false</item>
@@ -821,7 +816,6 @@
     </style>
     <style name="Base.Widget.AppCompat.Light.ActionBar.TabBar" parent="@style/Base.Widget.AppCompat.ActionBar.TabBar" />
     <style name="Base.Widget.AppCompat.Light.ActivityChooserView" parent="@style/Base.Widget.AppCompat.ActivityChooserView">
-        <item name="android:background">@drawable/abc_ab_share_pack_holo_light</item>
     </style>
     <style name="Base.Widget.AppCompat.PopupWindow" parent="@android:style/Widget.PopupWindow" />
     <style name="Base.Widget.AppCompat.SearchView" parent="@android:style/Widget">
@@ -898,11 +892,9 @@
     <style name="Theme.AppCompat.Light.Dialog" parent="@style/Base.Theme.AppCompat.Light.Dialog" />
     <style name="Theme.AppCompat.Light.DialogWhenLarge" parent="@style/Base.Theme.AppCompat.Light.DialogWhenLarge" />
     <style name="Theme.AppCompat.Light.NoActionBar" parent="@style/Theme.AppCompat.Light">
-        <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
     <style name="Theme.AppCompat.NoActionBar" parent="@style/Theme.AppCompat">
-        <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
     <style name="ThemeOverlay.AppCompat" parent="@style/Base.ThemeOverlay.AppCompat" />
@@ -997,6 +989,5 @@
 
     <style name="MyMaterialTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
     </style>
 </resources>

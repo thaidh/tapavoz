@@ -34,6 +34,7 @@
                 android:layout_margin="@dimen/xlargeMargin"
                 android:text="text1\n\n\nadfd"
                 android:textSize="@dimen/xlargeTextSize1"
+                android:textColor="@color/blue"
                 android:textStyle="bold" />
 
             <TextView
@@ -42,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/xlargeMargin"
                 android:text="text2"
+                android:textColor="@color/black"
                 android:textSize="@dimen/xlargeTextSize2" />
         </LinearLayout>
     </RelativeLayout>

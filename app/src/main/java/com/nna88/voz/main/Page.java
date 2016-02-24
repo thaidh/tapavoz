@@ -61,11 +61,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nna88.voz.PhotoView.PhotoViewAttacher;
-import com.nna88.voz.colorpicker.ColorPicker;
-import com.nna88.voz.colorpicker.ColorPicker.OnColorChangedListener;
-import com.nna88.voz.colorpicker.OpacityBar;
-import com.nna88.voz.colorpicker.SVBar;
 import com.nna88.voz.listview.SettingAdapter;
 import com.nna88.voz.listview.WebkitCookieManagerProxy;
 import com.nna88.voz.listview.listViewCustom1;
@@ -73,7 +68,7 @@ import com.nna88.voz.listview.listViewCustom2;
 import com.nna88.voz.listview.Page3ListViewAdapter;
 import com.nna88.voz.listview.listViewCustom3Html;
 import com.nna88.voz.mysqlite.CommentsDataSource;
-import com.nna88.voz.parserhtml.parser;
+import com.nna88.voz.parserhtml.HtmlParser;
 import com.nna88.voz.ui.ExpandableHeightGridView;
 import com.nna88.voz.ui.NavigationDrawerActivity;
 import com.nna88.voz.ui.SidebarAdapter;
@@ -147,7 +142,7 @@ public class Page extends NavigationDrawerActivity {
     protected ArrayList<Object> mListSideMenu2;
     protected int mMinRawY;
     protected Object mObjectAdapter;
-    protected parser mParser;
+    protected HtmlParser mParser;
     private String mPassword;
     protected int mQuickReturnHeight;
     protected LinearLayout mQuickReturnLayout;
@@ -266,43 +261,6 @@ public class Page extends NavigationDrawerActivity {
         }
     }
 
-    /* renamed from: com.nna88.voz.main.Page.26 */
-    class AnonymousClass26 implements OnColorChangedListener {
-        final /* synthetic */ EditText val$editHexColor;
-        final /* synthetic */ int val$id;
-
-        AnonymousClass26(EditText editText, int i) {
-            this.val$editHexColor = editText;
-            this.val$id = i;
-        }
-
-        public void onColorChanged(int i) {
-            this.val$editHexColor.setText(String.valueOf(Integer.toHexString(i)));
-            if (this.val$id == Page.STATE_RETURNING) {
-                Global.mCusThemeTitleBg = i;
-                Global.themeColor[8][Page.STATE_RETURNING] = i;
-            } else if (this.val$id == 0) {
-                Global.mCusThemeBg = i;
-                Global.themeColor[8][Page.STATE_ONSCREEN] = i;
-            } else if (this.val$id == Page.STATE_OFFSCREEN) {
-                Global.mCusThemeBgFocus = i;
-            } else if (this.val$id == 4) {
-                Global.mCusThemeTxt1 = i;
-                Global.themeColor[8][4] = i;
-            } else if (this.val$id == 5) {
-                Global.mCusThemeTxt2 = i;
-                Global.themeColor[8][5] = i;
-            } else if (this.val$id == 3) {
-                Global.mCusThemeTxtTitle = i;
-                Global.themeColor[8][3] = i;
-            } else if (this.val$id == 6) {
-                Global.mCusThemeQuicklink = i;
-                Global.themeColor[8][6] = i;
-            }
-            Page.this.UpdateUI();
-            Page.this.writeSetCusTheme();
-        }
-    }
 
     /* renamed from: com.nna88.voz.main.Page.28 */
     class AnonymousClass28 implements OnClickListener {
@@ -1375,7 +1333,7 @@ public class Page extends NavigationDrawerActivity {
         imageView.setLayoutParams(layoutParams);
         this.mQuickReturnLayout.addView(imageView);
         LayoutParams layoutParams2 =
-                parseInt >= 5 ? new LinearLayout.LayoutParams((Global.width - (convertDpToPx * STATE_RETURNING)) / 5, -1) : new LinearLayout.LayoutParams(STATE_ONSCREEN, -1, PhotoViewAttacher.DEFAULT_MIN_SCALE);
+                parseInt >= 5 ? new LinearLayout.LayoutParams((Global.width - (convertDpToPx * STATE_RETURNING)) / 5, -1) : new LinearLayout.LayoutParams(STATE_ONSCREEN, -1, 1);
         while (i < Integer.parseInt(Global.iNumQuickLink)) {
             TextView textView = new TextView(this.mQuickReturnLayout.getContext());
             Global.setBackgroundItemThread(textView);
@@ -1761,17 +1719,6 @@ public class Page extends NavigationDrawerActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
-        ColorPicker colorPicker = (ColorPicker) inflate.findViewById(R.id.picker);
-        EditText editText = (EditText) inflate.findViewById(R.id.editColor);
-        SVBar sVBar = (SVBar) inflate.findViewById(R.id.svbar);
-        OpacityBar opacityBar = (OpacityBar) inflate.findViewById(R.id.opacitybar);
-        colorPicker.addSVBar(sVBar);
-        colorPicker.addOpacityBar(opacityBar);
-        int i2 = i == STATE_RETURNING ? Global.mCusThemeTitleBg : i == 0 ? Global.mCusThemeBg : i == STATE_OFFSCREEN ? Global.mCusThemeBgFocus : i == 4 ? Global.mCusThemeTxt1 : i == 5 ? Global.mCusThemeTxt2 : i == R.id.typeTextTitle ? 3 : i == 6 ? Global.mCusThemeQuicklink : STATE_ONSCREEN;
-        colorPicker.setColor(i2);
-        editText.setText(String.valueOf(Integer.toHexString(i2)));
-        editText.setEnabled(false);
-        colorPicker.setOnColorChangedListener(new AnonymousClass26(editText, i));
         builder.create().show();
     }
 
@@ -2081,7 +2028,7 @@ public class Page extends NavigationDrawerActivity {
         getRevolution();
         initUI();
         readSettings();
-        this.mParser = new parser(Global.URL);
+        this.mParser = new HtmlParser(Global.URL);
         this.mTask = new TaskGetHtml();
         this.textTitle = (TextView) findViewById(Resources.getSystem().getIdentifier("action_bar_title", "id", "android"));
         CookieSyncManager.createInstance(this);
@@ -2265,7 +2212,7 @@ public class Page extends NavigationDrawerActivity {
     }
 
     public void readSettings() {
-        this.mTextSize = this.settings.getFloat("FontSize", PhotoViewAttacher.DEFAULT_MIN_SCALE);
+        this.mTextSize = this.settings.getFloat("FontSize", 1);
         Global.iSize = this.mTextSize;
         Global.bSwipe = this.settings.getBoolean("SWIPE", true);
         Global.bTopicHeader = this.settings.getBoolean("TOPICHEADER", false);

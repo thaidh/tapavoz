@@ -3,21 +3,16 @@ package com.nna88.voz.util;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.graphics.Rect;
-import android.support.v7.internal.widget.ActivityChooserView;
-import android.support.v7.internal.widget.RtlSpacingHelper;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListAdapter;
 import android.widget.Scroller;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -109,7 +104,7 @@ public class HorizontialListView extends AdapterView<ListAdapter> {
             layoutParams = new LayoutParams(-1, -1);
         }
         addViewInLayout(view, i, layoutParams, true);
-        view.measure(MeasureSpec.makeMeasureSpec(getWidth(), RtlSpacingHelper.UNDEFINED), MeasureSpec.makeMeasureSpec(getHeight(), RtlSpacingHelper.UNDEFINED));
+        view.measure(MeasureSpec.makeMeasureSpec(getWidth(), MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(getHeight(), MeasureSpec.AT_MOST));
     }
 
     private void fillList(int i) {
