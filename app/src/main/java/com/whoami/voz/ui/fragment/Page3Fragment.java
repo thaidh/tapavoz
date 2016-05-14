@@ -142,7 +142,7 @@ public class Page3Fragment extends BaseFragment {
     private int mCurPage = 1;
 
     private Toolbar toolbar;
-    private Page3PagerAdapter.Page3PagerListener page3PagerListener = new Page3PagerAdapter.Page3PagerListener() {
+    private  Page3PagerAdapter.Page3PagerListener page3PagerListener = new Page3PagerAdapter.Page3PagerListener() {
         @Override
         public void onSwipeTReresh(SwipeRefreshLayout swipeRefreshLayout) {
 //            refreshPage();

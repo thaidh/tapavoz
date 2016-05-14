@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -26,6 +27,8 @@ import com.nna88.voz.main.R;
 import com.nna88.voz.mysqlite.Comment;
 import com.nna88.voz.util.Util;
 import com.whoami.voz.ui.activity.BaseActivity;
+import com.whoami.voz.ui.adapter.Page2PagerAdapter;
+import com.whoami.voz.ui.adapter.Page3PagerAdapter;
 import com.whoami.voz.ui.utils.HtmlLoader;
 
 import org.jsoup.nodes.Document;
@@ -49,7 +52,7 @@ public class Page2Fragment extends BaseFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private ArrayList<Thread> ListContains;
-    private listViewCustom2 adapter;
+//    private listViewCustom2 adapter;
     List<Comment> lComment;
     private String mTextTitle;
     private String url;
@@ -57,9 +60,11 @@ public class Page2Fragment extends BaseFragment {
     // TODO: Rename and change types of parameters
     private String mParamUrl;
     private String mParamTitle;
-    private ListView mList;
+//    private ListView mList;
     private Toolbar toolbar;
     private LinearLayout mLayoutProgress;
+    private ViewPager mViewPager;
+    private Page2PagerAdapter mPage2PagerAdapter;
 
 
     public Page2Fragment() {
@@ -97,7 +102,7 @@ public class Page2Fragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_page1, container, false);
+        return inflater.inflate(R.layout.fragment_page3, container, false);
     }
 
     @Override
@@ -107,58 +112,64 @@ public class Page2Fragment extends BaseFragment {
         toolbar.setTitle(mParamTitle);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         mLayoutProgress = (LinearLayout) view.findViewById(R.id.layoutprogress);
-        mList = (ListView) view.findViewById(R.id.content_frame);
-        ListContains = new ArrayList();
-        adapter = new listViewCustom2(getContext(), this.ListContains);
-        adapter.setSize(1);
-        mList.setAdapter(this.adapter);
+        mViewPager = (ViewPager) view.findViewById(R.id.pager);
+        mViewPager.setOffscreenPageLimit(1);
 
-        showLoadingView(true);
-        HtmlLoader.getInstance().fetchData(Global.URL + mParamUrl, new HtmlLoader.HtmlLoaderListener() {
-            @Override
-            public void onCallback(Document doc) {
-                try {
+        mPage2PagerAdapter = new Page2PagerAdapter(getActivity(), Global.URL + mParamUrl, 10);
+//        mPage3PagerAdapter.setPage3Listener(page3PagerListener);
+        mViewPager.setAdapter(mPage2PagerAdapter);
+//        mList = (ListView) view.findViewById(R.id.content_frame);
+//        ListContains = new ArrayList();
+//        adapter = new listViewCustom2(getContext(), this.ListContains);
+//        adapter.setSize(1);
+//        mList.setAdapter(this.adapter);
 
-                    parseDataPage2(doc);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        showLoadingView(true);
+//        HtmlLoader.getInstance().fetchData(Global.URL + mParamUrl, new HtmlLoader.HtmlLoaderListener() {
+//            @Override
+//            public void onCallback(Document doc) {
+//                try {
+//
+//                    parseDataPage2(doc);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
 
-        this.mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-                try {
-                    if (ListContains.get(i).isUrl() == 0) {
-                        if (ListContains.get(i).UrlThread() != null) {
-                            Page2Fragment fragment = Page2Fragment.newInstance(ListContains.get(i).UrlThread(), ListContains.get(i).Thread());
-                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                            ft.add(R.id.container, fragment, "AAAA");
-                            ft.addToBackStack("Page2Fragment");
-                            ft.commit();
-                        }
-                    } else if (ListContains.get(i).isUrl() == 1) {
-                        Page3Fragment fragment = null;
-
-                        if (ListContains.get(i).UrlLastPosst() != null) {
-                            if (ListContains.get(i).UrlLastPosst() != null) {
-                                fragment = Page3Fragment.newInstance("", ListContains.get(i).UrlLastPosst());
-                            }
-                        } else if (ListContains.get(i).UrlThread() != null) {
-                            fragment = Page3Fragment.newInstance(ListContains.get(i).Thread(), ListContains.get(i).UrlThread());
-                        }
-                        if (fragment != null) {
-                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                            ft.add(R.id.container, fragment, "AAAA");
-                            ft.addToBackStack("Page3Fragment");
-                            ft.commit();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        this.mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
+//                try {
+//                    if (ListContains.get(i).isUrl() == 0) {
+//                        if (ListContains.get(i).UrlThread() != null) {
+//                            Page2Fragment fragment = Page2Fragment.newInstance(ListContains.get(i).UrlThread(), ListContains.get(i).Thread());
+//                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                            ft.add(R.id.container, fragment, "AAAA");
+//                            ft.addToBackStack("Page2Fragment");
+//                            ft.commit();
+//                        }
+//                    } else if (ListContains.get(i).isUrl() == 1) {
+//                        Page3Fragment fragment = null;
+//
+//                        if (ListContains.get(i).UrlLastPosst() != null) {
+//                            if (ListContains.get(i).UrlLastPosst() != null) {
+//                                fragment = Page3Fragment.newInstance("", ListContains.get(i).UrlLastPosst());
+//                            }
+//                        } else if (ListContains.get(i).UrlThread() != null) {
+//                            fragment = Page3Fragment.newInstance(ListContains.get(i).Thread(), ListContains.get(i).UrlThread());
+//                        }
+//                        if (fragment != null) {
+//                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                            ft.add(R.id.container, fragment, "AAAA");
+//                            ft.addToBackStack("Page3Fragment");
+//                            ft.commit();
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     void parseDataPage2(Document doc) throws Exception {
@@ -295,8 +306,8 @@ public class Page2Fragment extends BaseFragment {
                 @Override
                 public void run() {
                     showLoadingView(false);
-                    adapter.notifyDataSetChanged();
-                    mList.clearFocus();
+//                    adapter.notifyDataSetChanged();
+//                    mList.clearFocus();
                 }
             });
 

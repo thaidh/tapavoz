@@ -87,9 +87,6 @@ public class Page3PagerAdapter extends PagerAdapter {
         View view = mContext.getLayoutInflater().inflate(R.layout.layout_page3_item, null);
         view.setTag(loadPageIndex);
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-//        if (mPage3Listener != null) {
-//
-//        }
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -224,7 +221,7 @@ public class Page3PagerAdapter extends PagerAdapter {
         return linearFooter;
     }
 
-    private void loadPage(int curPage, boolean refres) {
+    private void loadPage(final int curPage, boolean refres) {
         //download page data
         try {
             if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
@@ -236,7 +233,7 @@ public class Page3PagerAdapter extends PagerAdapter {
                         @Override
                         public void onCallback(Document doc) {
                             try {
-                                parseDataPage3(0, doc, null, true);
+                                parseDataPage3(0, doc, null, true, curPage);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -260,7 +257,7 @@ public class Page3PagerAdapter extends PagerAdapter {
         return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
     }
 
-    void parseDataPage3(int typeParse, Document doc, Document doc2, boolean refresh) throws Exception {
+    void parseDataPage3(int typeParse, Document doc, Document doc2, boolean refresh, int curPage) throws Exception {
 //        if (doc == null && this.mParser.sNotif != null) {
 //            toast(this.mParser.sNotif);
 //        }
@@ -450,7 +447,7 @@ public class Page3PagerAdapter extends PagerAdapter {
 //                        this.mItemtemp = new int[(this.mItemCount + 1)];
 //                    }
 //                    this.scrollIsComputed = true;
-                    mMapPostPerPage.put(Integer.valueOf(loadPageIndex), new ArrayList<Post>(mListPost));
+                    mMapPostPerPage.put(Integer.valueOf(curPage), mListPost);
                 }
 
                 mContext.runOnUiThread(new Runnable() {
