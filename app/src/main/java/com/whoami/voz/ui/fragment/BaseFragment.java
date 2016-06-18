@@ -31,7 +31,9 @@ public class BaseFragment extends Fragment {
     @Override public void onDestroy() {
         super.onDestroy();
         RefWatcher refWatcher = UILApplication.getRefWatcher(getActivity());
-        refWatcher.watch(this);
+        if (refWatcher != null) {
+            refWatcher.watch(this);
+        }
     }
 
     @Override

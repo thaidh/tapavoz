@@ -8,10 +8,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.nna88.voz.contain.Post;
 import com.nna88.voz.listview.Page3ListViewAdapter;
@@ -20,6 +25,7 @@ import com.nna88.voz.main.BuildConfig;
 import com.nna88.voz.main.Global;
 import com.nna88.voz.main.R;
 import com.nna88.voz.util.Util;
+import com.whoami.voz.ui.delegate.PagerListener;
 import com.whoami.voz.ui.fragment.Page2Fragment;
 import com.whoami.voz.ui.fragment.Page3Fragment;
 
@@ -28,8 +34,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import com.nna88.voz.contain.Thread;
 import com.whoami.voz.ui.utils.HtmlLoader;
+import com.whoami.voz.ui.widget.NavigationBar;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -38,38 +46,27 @@ import org.jsoup.select.Elements;
 /**
  * Created by thaidh on 5/14/16.
  */
-public class Page2PagerAdapter extends PagerAdapter {
+public class Page2PagerAdapter extends BasePagerAdapter {
     private static final String TAG = Page2PagerAdapter.class.getSimpleName();
     private Activity mContext;
-    private int mTotalPage;
-    private int loadPageIndex;
+
     private Map<Integer, ArrayList<Thread>> mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
             return size() > Page3Fragment.MAX_ENTRIES;
         }
     };
-    private String mUrl;
     private boolean isLoading;
 
     public Page2PagerAdapter(Activity mContext, String mUrl, int mTotalPage) {
         this.mContext = mContext;
         this.mUrl = mUrl;
         this.mTotalPage = mTotalPage;
-    }
-
-    @Override
-    public int getCount() {
-        return mTotalPage;
+        this.pageCount = mTotalPage;
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view.equals(object);
-    }
-
-    @Override
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
     }
 
     @Override
@@ -87,47 +84,28 @@ public class Page2PagerAdapter extends PagerAdapter {
                 refreshLayout.setRefreshing(false);
             }
         });
-        ListView listView = (ListView) view.findViewById(R.id.content_frame);
+        final ListView listView = (ListView) view.findViewById(R.id.content_frame);
+        View navigationHeader = mContext.getLayoutInflater().inflate(R.layout.navigation_bar, null);
+        navigationHeader.setTag(TAG_NAVIGATION_HEADER);
+        setPagerListener(mPagerListener);
+        View navigationFooter = mContext.getLayoutInflater().inflate(R.layout.navigation_bar, null);
+        navigationFooter.setTag(TAG_NAVIGATION_FOOTER);
+        listView.addHeaderView(navigationHeader);
+        listView.addFooterView(navigationFooter);
         final ArrayList<Thread> curListPost = mMapPostPerPage.get(Integer.valueOf(loadPageIndex));
         if (curListPost != null) {
             view.findViewById(R.id.layout_progress).setVisibility(View.GONE);
-//            listView.addHeaderView(getNavigationView(Gravity.CENTER, loadPageIndex));
-//            listView.addFooterView(getNavigationView(Gravity.CENTER, loadPageIndex));
             listViewCustom2 adapter = new listViewCustom2(mContext, curListPost);
-            adapter.setSize(1);
+            NavigationBar navigationHeaderBar = (NavigationBar) view.findViewWithTag(TAG_NAVIGATION_HEADER);
+            navigationHeaderBar.refresh(loadPageIndex, mTotalPage);
+            NavigationBar navigationFooterBar = (NavigationBar) view.findViewWithTag(TAG_NAVIGATION_FOOTER);
+            navigationFooterBar.refresh(loadPageIndex, mTotalPage);
             listView.setAdapter(adapter);
+
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-                    try {
-                    if (curListPost.get(i).isUrl() == 0) {
-                        if (curListPost.get(i).UrlThread() != null) {
-                            Page2Fragment fragment = Page2Fragment.newInstance(curListPost.get(i).UrlThread(), curListPost.get(i).Thread());
-                            FragmentTransaction ft = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
-                            ft.add(R.id.container, fragment, "AAAA");
-                            ft.addToBackStack("Page2Fragment");
-                            ft.commit();
-                        }
-                    } else if (curListPost.get(i).isUrl() == 1) {
-                        Page3Fragment fragment = null;
-
-                        if (curListPost.get(i).UrlLastPosst() != null) {
-                            if (curListPost.get(i).UrlLastPosst() != null) {
-                                fragment = Page3Fragment.newInstance("", curListPost.get(i).UrlLastPosst());
-                            }
-                        } else if (curListPost.get(i).UrlThread() != null) {
-                            fragment = Page3Fragment.newInstance(curListPost.get(i).Thread(), curListPost.get(i).UrlThread());
-                        }
-                        if (fragment != null) {
-                            FragmentTransaction ft = ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction();
-                            ft.add(R.id.container, fragment, "AAAA");
-                            ft.addToBackStack("Page3Fragment");
-                            ft.commit();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    handleThreadClicked(i, listView, curListPost);
                 }
             });
         } else {
@@ -142,36 +120,25 @@ public class Page2PagerAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
-    public void setTotalPage(int mTotalPage) {
-        Log.e(TAG, "update total page : " + mTotalPage);
-        this.mTotalPage = mTotalPage;
-    }
-
     private void loadPage(final int curPage, boolean refres) {
-        //download page data
         try {
-            if (!isLoading) {
-                if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                    String url = getUrlWithPage(curPage);
-                    if (url != null) {
-                        //                new TaskGetHtmlSilent().execute(new String[]{url});
-//                    setProgress(true);
-                        isLoading = true;
-                        HtmlLoader.getInstance().fetchData(url, new HtmlLoader.HtmlLoaderListener() {
-                            @Override
-                            public void onCallback(Document doc) {
-                                try {
-                                    parseDataPage2(doc, curPage);
-                                    isLoading = false;
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
+            if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+                String url = getUrlWithPage(curPage);
+                if (url != null) {
+                    isLoading = true;
+                    HtmlLoader.getInstance().fetchData(url, new HtmlLoader.HtmlLoaderListener() {
+                        @Override
+                        public void onCallback(Document doc) {
+                            try {
+                                parseDataPage2(doc, curPage);
+                                isLoading = false;
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        });
-                    }
+                        }
+                    });
                 } else {
-//                refreshCurrentPage(curPage, false);
-                    notifyDataSetChanged();
+                    refreshCurrentPage(curPage, false);
                 }
             }
         } catch (Exception e) {
@@ -179,13 +146,13 @@ public class Page2PagerAdapter extends PagerAdapter {
         }
     }
 
-    void parseDataPage2(Document doc, int curPage) throws Exception {
+    void parseDataPage2(Document doc, final int curPage) throws Exception {
         if (doc != null) {
             ArrayList<Thread> ListContains = new ArrayList<>();
             ListContains.clear();
             Element first = doc.select("a[href=private.php]").first();
             //todo set page
-//            setPage(parsePage(0, 0));
+            parsePage(0, 0, doc);
 //            if (first != null) {
 //                this.mUser.setUserId(((Element) doc.select("td[class=alt2]").get(0)).select("a[href*=mem]").attr("href").split("=")[1]);
 //                first = doc.select("input[name*=securitytoken]").first();
@@ -314,7 +281,8 @@ public class Page2PagerAdapter extends PagerAdapter {
             mContext.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    notifyDataSetChanged();
+                    setTotalPage(mTotalPage);
+                    refreshCurrentPage(curPage, false);
                 }
             });
 
@@ -368,5 +336,74 @@ public class Page2PagerAdapter extends PagerAdapter {
         }
         String concat = mUrl.substring(0, mUrl.lastIndexOf("=") + 1).concat(String.valueOf(mPage));
         return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
+    }
+
+    private void refreshCurrentPage(final int curPage, final boolean forceRefresh) {
+        try {
+            Log.i(TAG, "Refresh page :  " + curPage);
+            View page = mPagerListener.findPageView(curPage);
+            if (page != null) {
+                final ListView listView = (ListView) page.findViewById(R.id.content_frame);
+                NavigationBar navigationHeaderBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_HEADER);
+                navigationHeaderBar.refresh(curPage, mTotalPage);
+                NavigationBar navigationFooterBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_FOOTER);
+                navigationFooterBar.refresh(curPage, mTotalPage);
+                if (forceRefresh) {
+                    if (listView.getAdapter() != null && mMapPostPerPage.containsKey(curPage)) {
+                        listViewCustom2 adapter = new listViewCustom2(mContext, mMapPostPerPage.get(curPage));
+                        listView.setAdapter(adapter);
+                    }
+                } else {
+                    (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
+                    if (listView.getAdapter() == null && mMapPostPerPage.containsKey(curPage)) {
+                        final ArrayList<Thread> curListPost = mMapPostPerPage.get(curPage);
+                        final listViewCustom2 adapter = new listViewCustom2(mContext, curListPost);
+                        listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                                handleThreadClicked(i, listView, curListPost);
+                            }
+                        });
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleThreadClicked(int i, ListView listView, ArrayList<Thread> curListPost) {
+        try {
+            i = i - listView.getHeaderViewsCount();
+            if (curListPost.get(i).isUrl() == 0) {
+                if (curListPost.get(i).UrlThread() != null) {
+                    Page2Fragment fragment = Page2Fragment.newInstance(curListPost.get(i).UrlThread(), curListPost.get(i).Thread());
+                    FragmentTransaction ft = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+                    ft.add(R.id.container, fragment, "AAAA");
+                    ft.addToBackStack("Page2Fragment");
+                    ft.commit();
+                }
+            } else if (curListPost.get(i).isUrl() == 1) {
+                Page3Fragment fragment = null;
+
+                if (curListPost.get(i).UrlLastPosst() != null) {
+                    if (curListPost.get(i).UrlLastPosst() != null) {
+                        fragment = Page3Fragment.newInstance("", curListPost.get(i).UrlLastPosst());
+                    }
+                } else if (curListPost.get(i).UrlThread() != null) {
+                    fragment = Page3Fragment.newInstance(curListPost.get(i).Thread(), curListPost.get(i).UrlThread());
+                }
+                if (fragment != null) {
+                    FragmentTransaction ft = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+                    ft.add(R.id.container, fragment, "AAAA");
+                    ft.addToBackStack("Page3Fragment");
+                    ft.commit();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

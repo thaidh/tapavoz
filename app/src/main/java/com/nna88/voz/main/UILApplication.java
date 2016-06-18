@@ -46,7 +46,7 @@ public class UILApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
-        refWatcher = LeakCanary.install(this);
+//        refWatcher = LeakCanary.install(this);
         initImageLoader(getApplicationContext());
     }
 

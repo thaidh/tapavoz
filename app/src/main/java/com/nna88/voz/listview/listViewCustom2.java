@@ -33,6 +33,11 @@ public class listViewCustom2 extends BaseAdapter {
         this.contains = arrayList;
         this.mContext = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        setSize(1);
+    }
+
+    public void setData(ArrayList<Thread> contains) {
+        this.contains = new ArrayList<>(contains);
     }
 
     public int getCount() {

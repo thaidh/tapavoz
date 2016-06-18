@@ -26,6 +26,7 @@ import com.nna88.voz.util.UserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.whoami.voz.ui.fragment.Page3Fragment;
 import com.whoami.voz.ui.utils.HtmlLoader;
+import com.whoami.voz.ui.widget.NavigationBar;
 
 import org.apache.commons.io.IOUtils;
 import org.jsoup.nodes.Document;
@@ -43,13 +44,9 @@ import java.util.Map;
 /**
  * Created by thaidh on 10/3/15.
  */
-public class Page3PagerAdapter extends PagerAdapter {
+public class Page3PagerAdapter extends BasePagerAdapter {
     private static final String TAG = Page3PagerAdapter.class.getSimpleName();
-
     private String mUrl;
-    private int mTotalPage;
-    private int mCurPage = 1;
-    private ArrayList<Post> mListPosts;
     private Activity mContext;
     private Bitmap mImageStart;
     private float mTextSize;
@@ -59,20 +56,15 @@ public class Page3PagerAdapter extends PagerAdapter {
             return size() > Page3Fragment.MAX_ENTRIES;
         }
     };
-    Page3PagerListener mPage3Listener;
+
 
     public Page3PagerAdapter(Activity mContext, int mTotalPage, Map<Integer, ArrayList<Post>> mMapPostPerPage, String mUrl, Bitmap mImageStart, float mTextSize) {
         this.mTotalPage = mTotalPage;
+        pageCount = mTotalPage;
         this.mTextSize = mTextSize;
         this.mContext = mContext;
         this.mUrl = mUrl;
         this.mImageStart = mImageStart;
-//        this.mMapPostPerPage = new LinkedHashMap<>(mMapPostPerPage);
-    }
-
-    @Override
-    public int getCount() {
-        return mTotalPage;
     }
 
     @Override
@@ -90,18 +82,30 @@ public class Page3PagerAdapter extends PagerAdapter {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                    mPage3Listener.onSwipeTReresh(refreshLayout);
                 loadPage(position + 1, true);
                 refreshLayout.setRefreshing(false);
             }
         });
         ListView listView = (ListView) view.findViewById(R.id.content_frame);
+
+        NavigationBar navigationHeader = (NavigationBar) mContext.getLayoutInflater().inflate(R.layout.navigation_bar, null);
+        navigationHeader.setTag(TAG_NAVIGATION_HEADER);
+        navigationHeader.setPagerListener(mPagerListener);
+        NavigationBar navigationFooter = (NavigationBar) mContext.getLayoutInflater().inflate(R.layout.navigation_bar, null);
+        navigationFooter.setTag(TAG_NAVIGATION_FOOTER);
+        navigationFooter.setPagerListener(mPagerListener);
+
+        listView.addHeaderView(navigationHeader);
+        listView.addFooterView(navigationFooter);
+
         ArrayList<Post> curListPost = mMapPostPerPage.get(Integer.valueOf(loadPageIndex));
         if (curListPost != null) {
             view.findViewById(R.id.layout_progress).setVisibility(View.GONE);
-            listView.addHeaderView(getNavigationView(Gravity.CENTER, loadPageIndex));
-            listView.addFooterView(getNavigationView(Gravity.CENTER, loadPageIndex));
             Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, curListPost, null, mImageStart, mTextSize);
+            NavigationBar navigationHeaderBar = (NavigationBar) view.findViewWithTag(TAG_NAVIGATION_HEADER);
+            navigationHeaderBar.refresh(loadPageIndex, mTotalPage);
+            NavigationBar navigationFooterBar = (NavigationBar) view.findViewWithTag(TAG_NAVIGATION_FOOTER);
+            navigationFooterBar.refresh(loadPageIndex, mTotalPage);
             listView.setAdapter(adapter);
         } else {
             loadPage(loadPageIndex, false);
@@ -115,120 +119,12 @@ public class Page3PagerAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
-    public void setTotalPage(int mTotalPage) {
-        Log.e(TAG, "update total page : " + mTotalPage);
-        this.mTotalPage = mTotalPage;
-    }
-
-    public void setPage3Listener(Page3PagerListener mPage3Listener) {
-        this.mPage3Listener = mPage3Listener;
-    }
-
-    @Override
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
-    }
-
-    public interface Page3PagerListener {
-        void onSwipeTReresh(SwipeRefreshLayout swipeRefreshLayout);
-
-        void onGoPage(int type);
-
-        void showDialogGoPage();
-    }
-
-    private View getNavigationView(int i, int curPos) {
-        LinearLayout linearFooter = (LinearLayout) mContext.getLayoutInflater().inflate(R.layout.threadfoot, null);
-        ImageView mImg1Footer = (ImageView) linearFooter.findViewById(R.id.fast_prev);
-        ImageView mImg2Footer = (ImageView) linearFooter.findViewById(R.id.prev);
-        TextView butPageFooter = (TextView) linearFooter.findViewById(R.id.page_list);
-        butPageFooter.setText(curPos + "/" + mTotalPage);
-        ImageView mImg3Footer = (ImageView) linearFooter.findViewById(R.id.next);
-        ImageView mImg4Footer = (ImageView) linearFooter.findViewById(R.id.fast_next);
-
-        butPageFooter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPage3Listener.showDialogGoPage();
-            }
-        });
-
-        mImg1Footer.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-                    mPage3Listener.onGoPage(Page3Fragment.GO_FIRST);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mImg2Footer.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-                    mPage3Listener.onGoPage(Page3Fragment.GO_PREVIOUS);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        butPageFooter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-//                alertGoPage();
-            }
-        });
-        mImg3Footer.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-                    mPage3Listener.onGoPage(Page3Fragment.GO_NEXT);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mImg4Footer.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-                    mPage3Listener.onGoPage(Page3Fragment.GO_LAST);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        linearFooter.setGravity(i);
-        //update button navigation state
-        if (curPos == 1 && curPos == mTotalPage) {
-            mImg1Footer.setEnabled(false);
-            mImg2Footer.setEnabled(false);
-            mImg3Footer.setEnabled(false);
-            mImg4Footer.setEnabled(false);
-        } else if (curPos == 0) {
-            mImg1Footer.setEnabled(false);
-            mImg2Footer.setEnabled(false);
-            mImg3Footer.setEnabled(true);
-            mImg4Footer.setEnabled(true);
-
-        } else if (curPos == mTotalPage) {
-            mImg1Footer.setEnabled(true);
-            mImg2Footer.setEnabled(true);
-            mImg3Footer.setEnabled(false);
-            mImg4Footer.setEnabled(false);
-        } else {
-            mImg1Footer.setEnabled(true);
-            mImg2Footer.setEnabled(true);
-            mImg3Footer.setEnabled(true);
-            mImg4Footer.setEnabled(true);
-        }
-        return linearFooter;
-    }
-
     private void loadPage(final int curPage, boolean refres) {
         //download page data
         try {
             if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
                 String url = getUrlWithPage(curPage);
                 if (url != null) {
-                    //                new TaskGetHtmlSilent().execute(new String[]{url});
-//                    setProgress(true);
                     HtmlLoader.getInstance().fetchData(url, new HtmlLoader.HtmlLoaderListener() {
                         @Override
                         public void onCallback(Document doc) {
@@ -241,7 +137,6 @@ public class Page3PagerAdapter extends PagerAdapter {
                     });
                 }
             } else {
-//                refreshCurrentPage(curPage, false);
                 notifyDataSetChanged();
             }
         } catch (Exception e) {
@@ -257,7 +152,7 @@ public class Page3PagerAdapter extends PagerAdapter {
         return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
     }
 
-    void parseDataPage3(int typeParse, Document doc, Document doc2, boolean refresh, int curPage) throws Exception {
+    void parseDataPage3(int typeParse, Document doc, Document doc2, boolean refresh, final int curPage) throws Exception {
 //        if (doc == null && this.mParser.sNotif != null) {
 //            toast(this.mParser.sNotif);
 //        }
@@ -455,8 +350,9 @@ public class Page3PagerAdapter extends PagerAdapter {
                     public void run() {
 //                        setProgress(false);
 //                        mPage3PagerAdapter.setTotalPage(mTotalPage);
-//                        refreshCurrentPage(mCurPage, false);
-                        notifyDataSetChanged();
+                        setTotalPage(mTotalPage);
+                        refreshCurrentPage(curPage, false);
+//                        notifyDataSetChanged();
                     }
                 });
 
@@ -465,58 +361,34 @@ public class Page3PagerAdapter extends PagerAdapter {
         }
     }
 
-//    private void refreshCurrentPage(final int curPage, final boolean forceRefresh) {
-//        try {
-//            Log.i(TAG, "Refresh page :  " + curPage);
-//            View page = mViewPager.findViewWithTag(curPage);
-//            if (page != null) {
-//                ListView listView = (ListView) page.findViewById(R.id.content_frame);
-//                if (forceRefresh) {
-//                    if (listView.getAdapter() != null && mMapPostPerPage.containsKey(Integer.valueOf(mCurPage))) {
-//                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(mCurPage)), null, bmImageStart, mTextSize);
-//                        View header = listView.findViewWithTag("Header");
-//                        listView.removeHeaderView(header);
-//                        View footer = listView.findViewWithTag("Footer");
-//                        listView.removeFooterView(footer);
-//
-//                        listView.addHeaderView(getNavigationView(mCurPage, "Header"));
-//                        listView.addFooterView(getNavigationView(mCurPage, "Footer"));
-//                        listView.setAdapter(adapter);
-//
-//                        mPage3PagerAdapter.notifyDataSetChanged();
-//                    }
-//                } else {
-//                    (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
-//                    if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-//                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(curPage)), null, bmImageStart, mTextSize);
-//                        listView.addHeaderView(getNavigationView(curPage, "Header"));
-//                        listView.addFooterView(getNavigationView(curPage, "Footer"));
-//                        listView.setAdapter(adapter);
-//                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-//                            @Override
-//                            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//                                //                        if (scrollState == SCROLL_STATE_IDLE) {
-//                                //                            adapter.setIsScrolling(false);
-//                                //                            adapter.notifyDataSetChanged();
-//                                //                        } else {
-//                                //                            adapter.setIsScrolling(true);
-//                                //                        }
-//                            }
-//
-//                            @Override
-//                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//
-//                            }
-//                        });
-//                        mPage3PagerAdapter.notifyDataSetChanged();
-//                    }
-//
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void refreshCurrentPage(final int curPage, final boolean forceRefresh) {
+        try {
+            Log.i(TAG, "Refresh page :  " + curPage);
+            View page = mPagerListener.findPageView(curPage);
+            if (page != null) {
+                ListView listView = (ListView) page.findViewById(R.id.content_frame);
+                NavigationBar navigationHeaderBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_HEADER);
+                navigationHeaderBar.refresh(curPage, mTotalPage);
+                NavigationBar navigationFooterBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_FOOTER);
+                navigationFooterBar.refresh(curPage, mTotalPage);
+                if (forceRefresh) {
+                    if (listView.getAdapter() != null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, mTextSize);
+                        listView.setAdapter(adapter);
+                    }
+                } else {
+                    (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
+                    if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, mTextSize);
+                        listView.setAdapter(adapter);
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     String parsePage(int action, int i2, Document doc) throws Exception {
 //        if (doc == null) {
@@ -745,9 +617,6 @@ public class Page3PagerAdapter extends PagerAdapter {
         }
     }
 
-    public int getCurPage() {
-        return mCurPage;
-    }
 
     public int getTotalPage() {
         return mTotalPage;

@@ -99,34 +99,15 @@ public class Page1Fragment extends BaseFragment {
         mList = (ListView) view.findViewById(R.id.content_frame);
         mLayoutProgress = (LinearLayout) view.findViewById(R.id.layoutprogress);
         this.forumsList = new ArrayList();
+        for (int i = 0; i < 100; i++) {
+            forumsList.add(new Forum("A" + i, "B" + i, "C" + i));
+        }
         this.adapter = new listViewCustom1(getContext(), this.forumsList);
         this.adapter.setSize(1);
         this.mList.setAdapter(this.adapter);
         Uri data = null;
-        if (data != null) {
-//            String uri = data.toString();
-//            Intent intent;
-//            if (uri.contains("forumdisplay.php")) {
-//                intent = new Intent(this.mContext, Page2.class);
-//                intent.putExtra("URL", uri);
-//                intent.putExtra("TITLE", BuildConfig.FLAVOR);
-//                startActivityForResult(intent, 4);
-//            } else if (uri.contains("showthread.php") || uri.contains("showpost.php")) {
-//                intent = new Intent(this.mContext, Page3.class);
-//                intent.putExtra("URL", uri);
-//                intent.putExtra("TITLE", BuildConfig.FLAVOR);
-//                startActivityForResult(intent, 4);
-//            } else if (uri.contains("index.php")) {
-//                this.mTask.execute(new Integer[]{Integer.valueOf(0)});
-//            } else if (uri.equals("https://vozforums.com")) {
-//                this.mTask.execute(new Integer[]{Integer.valueOf(0)});
-//            } else if (uri.equals("http://www.vozforums.com")) {
-//                this.mTask.execute(new Integer[]{Integer.valueOf(0)});
-//            } else {
-//                toast("link error:" + uri);
-//                finish();
-//            }
-        } else {
+//        if (data != null) {
+//        } else {
             showLoadingView(true);
             HtmlLoader.getInstance().fetchData("https://vozforums.com", new HtmlLoader.HtmlLoaderListener() {
                 @Override
@@ -138,7 +119,7 @@ public class Page1Fragment extends BaseFragment {
                     }
                 }
             });
-        }
+//        }
         this.mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
                 if (forumsList.get(i).UrlForum() != null) {
