@@ -116,8 +116,9 @@
 
     </LinearLayout>
 
-    <TextView
+    <View
         android:id="@id/textDevider"
         android:layout_width="fill_parent"
-        android:layout_height="5.0dip" />
+        android:background="@color/primary_material_light"
+        android:layout_height="1.0dip" />
 </LinearLayout>

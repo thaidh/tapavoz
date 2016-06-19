@@ -109,9 +109,9 @@ public class Page1Fragment extends BaseFragment {
 //        if (data != null) {
 //        } else {
             showLoadingView(true);
-            HtmlLoader.getInstance().fetchData("https://vozforums.com", new HtmlLoader.HtmlLoaderListener() {
+            HtmlLoader.getInstance().fetchData("https://vozforums.com", 0, new HtmlLoader.HtmlLoaderListener() {
                 @Override
-                public void onCallback(Document doc) {
+                public void onCallback(Document doc, int page) {
                     try {
                         parseDataPage1(doc);
                     } catch (Exception e) {

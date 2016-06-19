@@ -1,6 +1,7 @@
 package com.whoami.voz.ui.adapter;
 
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
@@ -8,6 +9,8 @@ import com.whoami.voz.ui.delegate.PagerListener;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by thaidh on 5/18/16.
@@ -21,6 +24,7 @@ public abstract class BasePagerAdapter  extends PagerAdapter{
     protected static final String TAG_NAVIGATION_HEADER = "navigation_header";
     protected static final String TAG_NAVIGATION_FOOTER = "navigation_footer";
     private static final String TAG = BasePagerAdapter.class.getSimpleName();
+    protected WeakReference<ViewPager> mViewPager;
     protected PagerListener mPagerListener;
     protected int loadPageIndex;
     protected int mTotalPage;

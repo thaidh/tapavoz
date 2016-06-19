@@ -53,11 +53,6 @@ public class Page3Fragment extends BaseFragment {
     private String mParam2;
 
     public static final int MAX_ENTRIES = 5;
-    private static Map<Integer, ArrayList<Post>> mMapPostPerPage = new LinkedHashMap() {
-        public boolean removeEldestEntry(Map.Entry eldest) {
-            return size() > MAX_ENTRIES;
-        }
-    };
 
     private ArrayList<Post> mListPost = new ArrayList<>();
     private Bitmap bmImageFailed;
@@ -136,8 +131,6 @@ public class Page3Fragment extends BaseFragment {
         if (getArguments() != null) {
             Bundle bundle = getArguments();
             mParam1 = getArguments().getString(ARG_PARAM1);
-            //clear data
-            mMapPostPerPage.clear();
             url = getArguments().getString(URL_PARAM);
 
             if (!url.contains(Global.URL) && !url.contains(Global.URL2)) {
@@ -180,7 +173,7 @@ public class Page3Fragment extends BaseFragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         mViewPager = (ViewPager) mRootView.findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(1);
-        mPage3PagerAdapter = new Page3PagerAdapter(getActivity(), 1, mMapPostPerPage, url, bmImageStart, 1.0f);
+        mPage3PagerAdapter = new Page3PagerAdapter(getActivity(), 1, url, bmImageStart, 1.0f, mViewPager);
         mPage3PagerAdapter.setPagerListener(new PagerListener() {
             @Override
             public View findPageView(int curPage) {

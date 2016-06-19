@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,6 +31,7 @@ import com.whoami.voz.ui.fragment.Page2Fragment;
 import com.whoami.voz.ui.fragment.Page3Fragment;
 
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -56,11 +58,12 @@ public class Page2PagerAdapter extends BasePagerAdapter {
         }
     };
 
-    public Page2PagerAdapter(Activity mContext, String mUrl, int mTotalPage) {
+    public Page2PagerAdapter(Activity mContext, String mUrl, int mTotalPage, ViewPager viewPager) {
         this.mContext = mContext;
         this.mUrl = mUrl;
         this.mTotalPage = mTotalPage;
         this.pageCount = mTotalPage;
+        this.mViewPager = new WeakReference<ViewPager>(viewPager);
     }
 
     @Override
@@ -124,11 +127,11 @@ public class Page2PagerAdapter extends BasePagerAdapter {
             if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
                 String url = getUrlWithPage(curPage);
                 if (url != null) {
-                    HtmlLoader.getInstance().fetchData(url, new HtmlLoader.HtmlLoaderListener() {
+                    HtmlLoader.getInstance().fetchData(url, curPage, new HtmlLoader.HtmlLoaderListener() {
                         @Override
-                        public void onCallback(Document doc) {
+                        public void onCallback(Document doc, int page) {
                             try {
-                                parseDataPage2(doc, curPage);
+                                parseDataPage2(doc, page);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -277,7 +280,7 @@ public class Page2PagerAdapter extends BasePagerAdapter {
                 @Override
                 public void run() {
                     setTotalPage(mTotalPage);
-                    refreshCurrentPage(curPage, false);
+                    refreshCurrentPage(curPage);
                 }
             });
 
@@ -333,22 +336,17 @@ public class Page2PagerAdapter extends BasePagerAdapter {
         return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
     }
 
-    private void refreshCurrentPage(final int curPage, final boolean forceRefresh) {
+    private void refreshCurrentPage(final int curPage) {
         try {
-            Log.i(TAG, "Refresh page :  " + curPage);
-            View page = mPagerListener.findPageView(curPage);
-            if (page != null) {
-                final ListView listView = (ListView) page.findViewById(R.id.content_frame);
-                NavigationBar navigationHeaderBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_HEADER);
-                navigationHeaderBar.refresh(curPage, mTotalPage);
-                NavigationBar navigationFooterBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_FOOTER);
-                navigationFooterBar.refresh(curPage, mTotalPage);
-                if (forceRefresh) {
-                    if (listView.getAdapter() != null && mMapPostPerPage.containsKey(curPage)) {
-                        listViewCustom2 adapter = new listViewCustom2(mContext, mMapPostPerPage.get(curPage));
-                        listView.setAdapter(adapter);
-                    }
-                } else {
+            if (mViewPager.get() != null) {
+                Log.i(TAG, "Refresh page :  " + curPage);
+                View page = mViewPager.get().findViewWithTag(curPage);
+                if (page != null) {
+                    final ListView listView = (ListView) page.findViewById(R.id.content_frame);
+                    NavigationBar navigationHeaderBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_HEADER);
+                    navigationHeaderBar.refresh(curPage, mTotalPage);
+                    NavigationBar navigationFooterBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_FOOTER);
+                    navigationFooterBar.refresh(curPage, mTotalPage);
                     (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
                     if (listView.getAdapter() == null && mMapPostPerPage.containsKey(curPage)) {
                         final ArrayList<Thread> curListPost = mMapPostPerPage.get(curPage);
@@ -361,7 +359,6 @@ public class Page2PagerAdapter extends BasePagerAdapter {
                             }
                         });
                     }
-
                 }
             }
         } catch (Exception e) {

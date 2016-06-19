@@ -117,7 +117,7 @@ public class Page2Fragment extends BaseFragment {
         mViewPager = (ViewPager) view.findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(1);
 
-        mPage2PagerAdapter = new Page2PagerAdapter(getActivity(), Global.URL + mParamUrl, 1);
+        mPage2PagerAdapter = new Page2PagerAdapter(getActivity(), Global.URL + mParamUrl, 1, mViewPager);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

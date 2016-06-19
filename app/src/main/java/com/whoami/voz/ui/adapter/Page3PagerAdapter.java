@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
@@ -27,6 +28,7 @@ import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -47,13 +49,14 @@ public class Page3PagerAdapter extends BasePagerAdapter {
     };
 
 
-    public Page3PagerAdapter(Activity mContext, int mTotalPage, Map<Integer, ArrayList<Post>> mMapPostPerPage, String mUrl, Bitmap mImageStart, float mTextSize) {
+    public Page3PagerAdapter(Activity mContext, int mTotalPage, String mUrl, Bitmap mImageStart, float mTextSize, ViewPager viewPager) {
         this.mTotalPage = mTotalPage;
         pageCount = mTotalPage;
         this.mTextSize = mTextSize;
         this.mContext = mContext;
         this.mUrl = mUrl;
         this.mImageStart = mImageStart;
+        mViewPager = new WeakReference<ViewPager>(viewPager);
     }
 
     @Override
@@ -106,24 +109,38 @@ public class Page3PagerAdapter extends BasePagerAdapter {
         container.removeView((View) object);
     }
 
-    public void loadPage(final int curPage, boolean refres) {
-        //download page data
+    private HtmlLoader.HtmlLoaderListener htmlLoaderListener = new HtmlLoader.HtmlLoaderListener() {
+        @Override
+        public void onCallback(Document doc, int curPage) {
+            try {
+                parseDataPage3(0, doc, null, true, curPage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
+    public void loadPage(final int curPage, boolean refres) {
         try {
             if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
                 Log.i(TAG, "Load page : " + loadPageIndex);
-                String url = getUrlWithPage(curPage);
+                final String url = getUrlWithPage(curPage);
                 if (url != null) {
-                    HtmlLoader.getInstance().fetchData(url, new HtmlLoader.HtmlLoaderListener() {
-                        @Override
-                        public void onCallback(Document doc) {
-                            try {
-                                parseDataPage3(0, doc, null, true, curPage);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    HtmlLoader.getInstance().fetchData(url, curPage, htmlLoaderListener);
+//                    FetchHtmlWorker.queueTask(new FetchHtmlTask() {
+//                        @Override
+//                        public void doTask() {
+//                            try {
+//                                OkHttpClient client = new OkHttpClient();
+//                                Request request = new Request.Builder().url(url).build();
+//                                okhttp3.Response response = client.newCall(request).execute();
+//                                Document doc = Jsoup.parse(response.body().string());
+//                                parseDataPage3(0, doc, null, true, curPage);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
                 }
             }
         } catch (Exception e) {
@@ -351,19 +368,21 @@ public class Page3PagerAdapter extends BasePagerAdapter {
     private void refreshCurrentPage(final int curPage) {
         try {
             Log.i(TAG, "Refresh page :  " + curPage);
-            View page = mPagerListener.findPageView(curPage);
-            if (page != null) {
-                ListView listView = (ListView) page.findViewById(R.id.content_frame);
-                NavigationBar navigationHeaderBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_HEADER);
-                navigationHeaderBar.refresh(curPage, mTotalPage);
-                NavigationBar navigationFooterBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_FOOTER);
-                navigationFooterBar.refresh(curPage, mTotalPage);
-                (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
-                if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, mTextSize);
-                    listView.setAdapter(adapter);
-                }
+            if (mViewPager.get() != null) {
+                View page = mViewPager.get().findViewWithTag(curPage);
+                if (page != null) {
+                    ListView listView = (ListView) page.findViewById(R.id.content_frame);
+                    NavigationBar navigationHeaderBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_HEADER);
+                    navigationHeaderBar.refresh(curPage, mTotalPage);
+                    NavigationBar navigationFooterBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_FOOTER);
+                    navigationFooterBar.refresh(curPage, mTotalPage);
+                    (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
+                    if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, mTextSize);
+                        listView.setAdapter(adapter);
+                    }
 
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

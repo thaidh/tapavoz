@@ -93,7 +93,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
         LinearLayout layout;
         TextView posts;
         TextView time;
-        TextView txtViewDevider;
+        View txtViewDevider;
         TextView user;
         TextView userTitle;
         LinearLayout mGridImage;
@@ -190,7 +190,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
             holder.jd = (TextView) view.findViewById(R.id.list3_jd);
             holder.posts = (TextView) view.findViewById(R.id.list3_post);
             holder.userTitle = (TextView) view.findViewById(R.id.list3_usertitle);
-            holder.txtViewDevider = (TextView) view.findViewById(R.id.textDevider);
+            holder.txtViewDevider =  view.findViewById(R.id.textDevider);
             holder.mGridImage = (LinearLayout) view.findViewById(R.id.grid_image);
             view.setTag(holder);
         } else {
@@ -198,12 +198,12 @@ public class Page3ListViewAdapter extends BaseAdapter {
         }
 //        Global.setBackgoundMain(holder.txtViewDevider);
 //        holder.txtViewDevider.setVisibility(View.VISIBLE);
-        if (Global.bDevider) {
-            Global.setBackgoundMain(holder.txtViewDevider);
-            holder.txtViewDevider.setVisibility(View.VISIBLE);
-        } else {
-            holder.txtViewDevider.setVisibility(View.GONE);
-        }
+        holder.txtViewDevider.setVisibility(View.VISIBLE);
+//        if (Global.bDevider) {
+//            Global.setBackgoundMain(holder.txtViewDevider);
+//        } else {
+//            holder.txtViewDevider.setVisibility(View.GONE);
+//        }
 //        Global.setTextContain(holder.contain);
 //        Global.setTextColor1(holder.time);
 //        Global.setTextColor1(holder.index);
