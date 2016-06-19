@@ -1,24 +1,12 @@
 package com.nna88.voz.parserhtml;
 
 import android.util.Log;
+
 import com.nna88.voz.main.BuildConfig;
 import com.nna88.voz.main.Global;
 import com.nna88.voz.mysqlite.MySQLiteHelper;
 import com.nna88.voz.util.UserInfo;
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.util.List;
-import java.util.Map;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.params.HttpClientParams;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.cookie.SM;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection.Method;
@@ -27,6 +15,13 @@ import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class HtmlParser {
     public static final int TIMEOUT = 20000;
@@ -342,38 +337,44 @@ public class HtmlParser {
 
     public Document getDoc() {
         try {
-            DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
-            HttpUriRequest httpGet = new HttpGet(this.m_url);
-            if (mUser.getCookiStore() != null) {
-                httpGet.addHeader(SM.COOKIE, mUser.getCookiStore());
-            }
-            HttpClientParams.setRedirecting(defaultHttpClient.getParams(), false);
-            HttpResponse execute = defaultHttpClient.execute(httpGet);
-            if (execute.getStatusLine().getStatusCode() != 200) {
-                Header[] headers = execute.getHeaders("Location");
-                if (!(headers == null || headers.length == 0)) {
-                    this.m_url = headers[headers.length - 1].getValue();
-                    return getDoc();
-                }
-            }
-            HttpEntity entity = execute.getEntity();
-            String entityUtils = entity != null ? EntityUtils.toString(entity) : null;
-            if (entity != null) {
-                entity.consumeContent();
-            }
-            List cookies = defaultHttpClient.getCookieStore().getCookies();
-            if (cookies.isEmpty()) {
-                mUser.setLogin(false);
-            } else {
-                for (int i = 0; i < cookies.size(); i++) {
-                    if (((Cookie) cookies.get(i)).getName().equals("vfsessionhash")) {
-                        mUser.setLogin(true);
-                        break;
-                    }
-                }
-            }
-            defaultHttpClient.getConnectionManager().shutdown();
-            return Jsoup.parse(entityUtils);
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder().url(m_url).build();
+            okhttp3.Response response = client.newCall(request).execute();
+            return Jsoup.parse(response.body().string());
+
+
+//            DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
+//            HttpUriRequest httpGet = new HttpGet(this.m_url);
+//            if (mUser.getCookiStore() != null) {
+//                httpGet.addHeader(SM.COOKIE, mUser.getCookiStore());
+//            }
+//            HttpClientParams.setRedirecting(defaultHttpClient.getParams(), false);
+//            HttpResponse execute = defaultHttpClient.execute(httpGet);
+//            if (execute.getStatusLine().getStatusCode() != 200) {
+//                Header[] headers = execute.getHeaders("Location");
+//                if (!(headers == null || headers.length == 0)) {
+//                    this.m_url = headers[headers.length - 1].getValue();
+//                    return getDoc();
+//                }
+//            }
+//            HttpEntity entity = execute.getEntity();
+//            String entityUtils = entity != null ? EntityUtils.toString(entity) : null;
+//            if (entity != null) {
+//                entity.consumeContent();
+//            }
+//            List cookies = defaultHttpClient.getCookieStore().getCookies();
+//            if (cookies.isEmpty()) {
+//                mUser.setLogin(false);
+//            } else {
+//                for (int i = 0; i < cookies.size(); i++) {
+//                    if (((Cookie) cookies.get(i)).getName().equals("vfsessionhash")) {
+//                        mUser.setLogin(true);
+//                        break;
+//                    }
+//                }
+//            }
+//            defaultHttpClient.getConnectionManager().shutdown();
+//            return Jsoup.parse(entityUtils);
         } catch (IOException e) {
             try {
                 e.printStackTrace();
@@ -390,59 +391,6 @@ public class HtmlParser {
             }
         }
     }
-
-    public Document getDocWithUrl(String url) {
-        try {
-            DefaultHttpClient defaultHttpClient = new DefaultHttpClient();
-            HttpUriRequest httpGet = new HttpGet(url);
-            if (mUser.getCookiStore() != null) {
-                httpGet.addHeader(SM.COOKIE, mUser.getCookiStore());
-            }
-            HttpClientParams.setRedirecting(defaultHttpClient.getParams(), false);
-            HttpResponse execute = defaultHttpClient.execute(httpGet);
-            if (execute.getStatusLine().getStatusCode() != 200) {
-                Header[] headers = execute.getHeaders("Location");
-                if (!(headers == null || headers.length == 0)) {
-                    url = headers[headers.length - 1].getValue();
-                    return getDoc();
-                }
-            }
-            HttpEntity entity = execute.getEntity();
-            String entityUtils = entity != null ? EntityUtils.toString(entity) : null;
-            if (entity != null) {
-                entity.consumeContent();
-            }
-            List cookies = defaultHttpClient.getCookieStore().getCookies();
-            if (cookies.isEmpty()) {
-                mUser.setLogin(false);
-            } else {
-                for (int i = 0; i < cookies.size(); i++) {
-                    if (((Cookie) cookies.get(i)).getName().equals("vfsessionhash")) {
-                        mUser.setLogin(true);
-                        break;
-                    }
-                }
-            }
-            defaultHttpClient.getConnectionManager().shutdown();
-            return Jsoup.parse(entityUtils);
-        } catch (IOException e) {
-            try {
-                e.printStackTrace();
-                return null;
-            } catch (Exception e2) {
-                this.sNotif = "Cannot access vozForums\n";
-                if (e2 instanceof HttpStatusException) {
-                    this.sNotif += "\nStatus: " + ((HttpStatusException) e2).getStatusCode();
-                } else if (e2 instanceof SocketTimeoutException) {
-                    this.sNotif += "\nTimeout";
-                }
-                e2.printStackTrace();
-                return null;
-            }
-        }
-    }
-
-
 
     public Document getPM() {
         try {

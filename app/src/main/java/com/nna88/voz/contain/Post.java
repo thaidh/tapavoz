@@ -15,7 +15,7 @@ import android.text.style.UnderlineSpan;
 import com.nna88.voz.main.BuildConfig;
 import com.nna88.voz.main.Global;
 import com.nna88.voz.main.R;
-import com.nna88.voz.main.UILApplication;
+import com.nna88.voz.main.MainApplication;
 import com.nna88.voz.quickaction.QuickAction;
 import com.nna88.voz.util.Util;
 import com.nna88.voz.util.spanable;
@@ -30,7 +30,7 @@ public class Post {
     public static final String urlOffline = "http://pik.vn/2014672b230d-420c-4855-adc8-bb370d696e37.png";
     public static final String urlOnline = "http://pik.vn/2014e76c1d82-9947-4362-991c-c29457164f29.png";
     public static final String EMO_PREFIX = "images/smilies";
-    public static final int DP32 = Util.convertDpToPx(UILApplication.getAppContext(), 32);
+    public static final int DP32 = Util.convertDpToPx(MainApplication.getAppContext(), 32);
     public static final int TEXT_SIZE = 1;
 
 
@@ -356,7 +356,7 @@ public class Post {
             while (curPos < quote.getSize()) {
                 start = quote.getStart(curPos).intValue();
                 end = quote.getEnd(curPos).intValue();
-                mContent.setSpan(new QuoteSpan(UILApplication.getAppContext().getResources().getColor(R.color.ics_blue_dark)), start, end, 18);
+                mContent.setSpan(new QuoteSpan(MainApplication.getAppContext().getResources().getColor(R.color.ics_blue_dark)), start, end, 18);
                 mContent.setSpan(new StyleSpan(2), start, end, 18);
                 mContent.setSpan(new ForegroundColorSpan(QuickAction.WOOD_TEXT_TITLE), start, end, 18);
                 curPos++;
@@ -378,28 +378,7 @@ public class Post {
 
             curPos = 0;
             while (curPos < image.getSize()) {
-//                if (image.getStr(curPos).contains("http://") || image.getStr(curPos).contains("https://")) {
-//                    if (curPos < image.getSize()
-//                            && image.getStart(curPos).intValue() < mContent.length()
-//                            && image.getEnd(curPos).intValue() < mContent.length()) {
-//                        AlignmentSpan.Standard standard = new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER);
-//                        ImageSpan span = new ImageSpan(UILApplication.getAppContext(), image.getBitmap(curPos), 0);
-//                        start = image.getStart(curPos).intValue();
-//                        end = image.getEnd(curPos).intValue();
-////                        CustomClickableSpan customClickableSpan = new CustomClickableSpan(mContent.subSequence(start, end).toString());
-//                        mContent.setSpan(span, start, end, 18);
-//                        mContent.setSpan(standard, start + -2 >= 0 ? start - 2 : 0, end, 18);
-////                        mContent.setSpan(customClickableSpan, start, end, 33);
-//                    }
-//                } else {
                     if (image.getStr(curPos).contains(EMO_PREFIX)) {
-//                        BitmapDrawable d = new BitmapDrawable(UILApplication.getAppContext().getResources(), EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos)));
-//                        d.setBounds(0, 0, (int) (((float) DP32) * TEXT_SIZE), (int) (((float) DP32) * TEXT_SIZE));
-//                    if (image.getStr(curPos).contains("attachmentid")) {
-//                        d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-//                    } else {
-//                        d.setBounds(0, 0, (int) (((float) DP32) * TEXT_SIZE), (int) (((float) DP32) * TEXT_SIZE));
-//                    }
                         BitmapDrawable bmp = EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos));
                         if (bmp != null) {
                             ImageSpan span = new ImageSpan(bmp, 0);
@@ -408,7 +387,6 @@ public class Post {
                             mContent.setSpan(span, start, end, 18);
                         }
                     }
-//                }
                 curPos++;
             }
         } catch (Resources.NotFoundException e) {

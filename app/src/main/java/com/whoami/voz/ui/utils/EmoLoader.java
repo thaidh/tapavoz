@@ -8,7 +8,7 @@ import android.support.v4.util.LruCache;
 import android.util.Log;
 
 import com.nna88.voz.contain.Post;
-import com.nna88.voz.main.UILApplication;
+import com.nna88.voz.main.MainApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +64,7 @@ public class EmoLoader {
         BitmapDrawable bitmapDrawable = mEmoCache.get(strName) ;
         if (bitmapDrawable == null) {
             Log.i(TAG, "Init cache emo: " + strName);
-            AssetManager assetManager = UILApplication.getAppContext().getAssets();
+            AssetManager assetManager = MainApplication.getAppContext().getAssets();
             InputStream istr = null;
             try {
                 istr = assetManager.open(getlinkBitmapAssert(strName));
@@ -72,7 +72,7 @@ public class EmoLoader {
                 e.printStackTrace();
             }
             Bitmap bitmap = BitmapFactory.decodeStream(istr);
-            bitmapDrawable = new BitmapDrawable(UILApplication.getAppContext().getResources(), bitmap);
+            bitmapDrawable = new BitmapDrawable(MainApplication.getAppContext().getResources(), bitmap);
             bitmapDrawable.setBounds(0, 0, (int) (((float) Post.DP32) * Post.TEXT_SIZE), (int) (((float) Post.DP32) * Post.TEXT_SIZE));
             mEmoCache.put(strName, bitmapDrawable);
         }

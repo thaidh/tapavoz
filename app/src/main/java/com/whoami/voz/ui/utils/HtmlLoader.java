@@ -56,11 +56,7 @@ public class HtmlLoader {
             switch (numArr[0].intValue()) {
                 case 0:
                     try {
-                        if (!Global.OFFILNE.booleanValue()) {
-                            doc = mParser.getDoc();
-                        } else {
-                            doc = Jsoup.parse(FileUtils.readFileToString(new File("/mnt/sdcard/paga3.html"), AsyncHttpResponseHandler.DEFAULT_CHARSET));
-                        }
+                        doc = mParser.getDoc();
                         if (htmlLoaderListener != null) {
                             htmlLoaderListener.onCallback(doc);
                         }
@@ -85,7 +81,7 @@ public class HtmlLoader {
 //                    doc = mParser.Logout();
 //                    break;
 //                case 3:
-//                    doc = mParser.quoteGet(numArr[Page.STATE_OFFSCREEN].intValue(), numArr[Page.STATE_RETURNING].intValue());
+//                    doc = mParser.quoteGet(numArr[0].intValue(), numArr[Page.STATE_RETURNING].intValue());
 //                    break;
 //                case 4:
 //                    try {

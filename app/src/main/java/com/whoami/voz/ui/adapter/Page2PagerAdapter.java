@@ -83,11 +83,14 @@ public class Page2PagerAdapter extends BasePagerAdapter {
             }
         });
         final ListView listView = (ListView) view.findViewById(R.id.content_frame);
-        View navigationHeader = mContext.getLayoutInflater().inflate(R.layout.navigation_bar, null);
+        NavigationBar navigationHeader = (NavigationBar) mContext.getLayoutInflater().inflate(R.layout.navigation_bar, null);
         navigationHeader.setTag(TAG_NAVIGATION_HEADER);
-        setPagerListener(mPagerListener);
-        View navigationFooter = mContext.getLayoutInflater().inflate(R.layout.navigation_bar, null);
+        navigationHeader.setPagerListener(mPagerListener);
+
+        NavigationBar navigationFooter = (NavigationBar) mContext.getLayoutInflater().inflate(R.layout.navigation_bar, null);
         navigationFooter.setTag(TAG_NAVIGATION_FOOTER);
+        navigationFooter.setPagerListener(mPagerListener);
+
         listView.addHeaderView(navigationHeader);
         listView.addFooterView(navigationFooter);
         final ArrayList<Thread> curListPost = mMapPostPerPage.get(Integer.valueOf(loadPageIndex));

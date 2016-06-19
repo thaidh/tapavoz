@@ -1,24 +1,19 @@
 package com.whoami.voz.ui.fragment;
 
 import android.content.SharedPreferences;
-import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nna88.voz.main.Global;
-import com.nna88.voz.main.Page;
+import com.nna88.voz.main.MainApplication;
 import com.nna88.voz.main.R;
-import com.nna88.voz.main.UILApplication;
 import com.nna88.voz.util.Util;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -30,7 +25,7 @@ public class BaseFragment extends Fragment {
 
     @Override public void onDestroy() {
         super.onDestroy();
-        RefWatcher refWatcher = UILApplication.getRefWatcher(getActivity());
+        RefWatcher refWatcher = MainApplication.getRefWatcher(getActivity());
         if (refWatcher != null) {
             refWatcher.watch(this);
         }
@@ -48,26 +43,12 @@ public class BaseFragment extends Fragment {
         this.mQuickReturnLayout.removeAllViews();
         int convertDpToPx = Util.convertDpToPx(getContext(), 40);
 
-        SharedPreferences settings = getActivity().getSharedPreferences("Setting", Page.STATE_ONSCREEN);
+        SharedPreferences settings = getActivity().getSharedPreferences("Setting", 0);
         Global.iNumQuickLink = settings.getString("NUMQUICKLINK", "5");
         int parseInt = Integer.parseInt(Global.iNumQuickLink);
         ImageView imageView = new ImageView(this.mQuickReturnLayout.getContext());
         imageView.setImageDrawable(getResources().getDrawable(R.drawable.menu_up));
         ViewGroup.LayoutParams layoutParams = new LinearLayout.LayoutParams(convertDpToPx, convertDpToPx);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-//                    Page.this.mList.clearFocus();
-//                    Page.this.mList.post(new Runnable() {
-//                        public void run() {
-//                            Page.this.mList.setSelection(Page.STATE_ONSCREEN);
-//                        }
-//                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 //        Global.setBackgroundItemThread(imageView);
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setLayoutParams(layoutParams);
@@ -124,96 +105,8 @@ public class BaseFragment extends Fragment {
         imageView2.setImageDrawable(getResources().getDrawable(R.drawable.menu_down));
         ViewGroup.LayoutParams layoutParams3 = new LinearLayout.LayoutParams(convertDpToPx, convertDpToPx);
 //        Global.setBackgroundItemThread(imageView2);
-        imageView2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-//                    Page.this.mList.clearFocus();
-//                    Page.this.mList.post(new Runnable() {
-//                        public void run() {
-//                            int count = Page.this.iPage == Page.STATE_OFFSCREEN ? ((listViewCustom1) Page.this.mObjectAdapter).getCount() : Page.this.iPage == Page.STATE_RETURNING ? ((listViewCustom2) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : Page.this.iPage == 3 ? ((listViewCustom3Html) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : Page.this.iPage == 11 ? ((Page3ListViewAdapter) Page.this.mObjectAdapter).getCount() + Page.STATE_OFFSCREEN : ((listViewCustom2) Page.this.mObjectAdapter).getCount();
-//                            Page.this.mList.setSelection(count);
-//                        }
-//                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
         imageView2.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView2.setLayoutParams(layoutParams3);
         this.mQuickReturnLayout.addView(imageView2);
-//        this.mList.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            public void onGlobalLayout() {
-//                Page.this.mQuickReturnHeight = Page.this.mQuickReturnLayout.getHeight();
-//            }
-//        });
-//        this.mList.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            public void onScroll(AbsListView absListView, int i, int i2, int i3) {
-//                Page.this.mScrollY = Page.STATE_ONSCREEN;
-//                if (Page.this.scrollIsComputed) {
-//                    Page.this.mScrollY = Page.this.getComputedScrollY();
-//                }
-//                int i4 = Page.this.mScrollY;
-//                switch (Page.this.mState) {
-//                    case Page.STATE_ONSCREEN /*0*/:
-//                        if (i4 > Page.this.mQuickReturnHeight) {
-//                            Page.this.mState = Page.STATE_OFFSCREEN;
-//                            Page.this.mMinRawY = i4;
-//                        }
-//                        Page.this.mQuickReturnLayout.setVisibility(Page.STATE_ONSCREEN);
-//                        break;
-//                    case Page.STATE_OFFSCREEN /*1*/:
-//                        if (i4 >= Page.this.mMinRawY) {
-//                            Page.this.mMinRawY = i4;
-//                        } else {
-//                            Page.this.mState = Page.STATE_RETURNING;
-//                        }
-//                        Page.this.mQuickReturnLayout.setVisibility(View.GONE);
-//                        break;
-//                    case Page.STATE_RETURNING /*2*/:
-//                        int i5 = (i4 - Page.this.mMinRawY) + Page.this.mQuickReturnHeight;
-//                        if (i5 < 0) {
-//                            Page.this.mMinRawY = Page.this.mQuickReturnHeight + i4;
-//                            i5 = Page.STATE_ONSCREEN;
-//                        }
-//                        if (i4 == 0) {
-//                            Page.this.mState = Page.STATE_ONSCREEN;
-//                            i5 = Page.STATE_ONSCREEN;
-//                        }
-//                        if (i5 > Page.this.mQuickReturnHeight) {
-//                            Page.this.mState = Page.STATE_OFFSCREEN;
-//                            Page.this.mMinRawY = i4;
-//                        }
-//                        if (i5 != Page.this.mQuickReturnHeight) {
-//                            Page.this.mQuickReturnLayout.setVisibility(Page.STATE_ONSCREEN);
-//                            i4 = i5;
-//                            break;
-//                        }
-//                        Page.this.mQuickReturnLayout.setVisibility(View.GONE);
-//                        i4 = i5;
-//                        break;
-//                    default:
-//                        i4 = Page.STATE_ONSCREEN;
-//                        break;
-//                }
-//                if (Build.VERSION.SDK_INT <= 11) {
-//                    Page.this.anim = new TranslateAnimation(0.0f, 0.0f, (float) i4, (float) i4);
-//                    Page.this.anim.setFillAfter(true);
-//                    Page.this.anim.setDuration(0);
-//                    Page.this.mQuickReturnLayout.startAnimation(Page.this.anim);
-//                    return;
-//                }
-//                Page.this.mQuickReturnLayout.setTranslationY((float) i4);
-//            }
-//
-//            @SuppressLint({"NewApi"})
-//            public void onScrollStateChanged(AbsListView absListView, int i) {
-//                switch (i) {
-//                    case Page.STATE_OFFSCREEN /*1*/:
-//                        Global.bScrolling = true;
-//                    default:
-//                }
-//            }
-//        });
     }
 }

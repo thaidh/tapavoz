@@ -2,14 +2,10 @@ package com.whoami.voz.ui.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,54 +13,29 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nna88.voz.contain.Post;
-import com.nna88.voz.listview.Page3ListViewAdapter;
-import com.nna88.voz.listview.WebkitCookieManagerProxy;
-import com.nna88.voz.main.BuildConfig;
 import com.nna88.voz.main.Global;
 import com.nna88.voz.main.MyNetwork;
-import com.nna88.voz.main.Page;
 import com.nna88.voz.main.R;
 import com.nna88.voz.parserhtml.HtmlParser;
 import com.nna88.voz.quickaction.QuickAction;
-import com.nna88.voz.ui.SidebarAdapter;
 import com.nna88.voz.util.UserInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page3PagerAdapter;
 import com.whoami.voz.ui.delegate.PagerListener;
-import com.whoami.voz.ui.utils.HtmlLoader;
 
-import org.apache.commons.io.IOUtils;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
-
-import java.net.CookieHandler;
-import java.net.CookiePolicy;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -193,10 +164,6 @@ public class Page3Fragment extends BaseFragment {
         Global.iTheme = this.settings.getInt("THEME", 1);
 //        readSettings();
 
-//        this.textTitle = (TextView) mRootView.findViewById(Resources.getSystem().getIdentifier("action_bar_title", "id", "android"));
-        CookieSyncManager.createInstance(getContext());
-        CookieManager.getInstance().setAcceptCookie(true);
-        CookieHandler.setDefault(new WebkitCookieManagerProxy(null, CookiePolicy.ACCEPT_ALL));
         this.mLayoutProgress = (LinearLayout) mRootView.findViewById(R.id.layoutprogress);
         Global.iDensity = getResources().getDisplayMetrics().density;
 
