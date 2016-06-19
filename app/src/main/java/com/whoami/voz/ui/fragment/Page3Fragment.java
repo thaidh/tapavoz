@@ -135,8 +135,6 @@ public class Page3Fragment extends BaseFragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private ViewPager mViewPager;
     private Page3PagerAdapter mPage3PagerAdapter;
-    private int mTotalPage = 1;
-    private int mCurPage = 1;
 
     private Toolbar toolbar;
     /**
@@ -215,7 +213,7 @@ public class Page3Fragment extends BaseFragment {
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         mViewPager = (ViewPager) mRootView.findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(1);
-        mPage3PagerAdapter = new Page3PagerAdapter(getActivity(), mTotalPage, mMapPostPerPage, url, bmImageStart, 1.0f);
+        mPage3PagerAdapter = new Page3PagerAdapter(getActivity(), 1, mMapPostPerPage, url, bmImageStart, 1.0f);
         mPage3PagerAdapter.setPagerListener(new PagerListener() {
             @Override
             public View findPageView(int curPage) {
@@ -245,17 +243,10 @@ public class Page3Fragment extends BaseFragment {
                             break;
                         }
                         case BasePagerAdapter.GO_PREVIOUS:{
-//                        if (mCurPage - 1 > 0) {
-//                            mCurPage = mCurPage - 1;
-//                        }
                             mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
                             break;
                         }
                         case BasePagerAdapter.GO_NEXT: {
-//                        if (mCurPage + 1 <= mTotalPage) {
-//                            mCurPage = mCurPage + 1;
-//                            mViewPager.setCurrentItem(mCurPage - 1);
-//                        }
                             mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
                             break;
 
@@ -271,9 +262,25 @@ public class Page3Fragment extends BaseFragment {
 
             }
         });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPage3PagerAdapter.loadPage(position + 1, false);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mViewPager.setAdapter(mPage3PagerAdapter);
         //init page 1
-//        loadPage(mCurPage);
+        mPage3PagerAdapter.loadPage(1, false);
         return mRootView;
     }
 
@@ -312,7 +319,7 @@ public class Page3Fragment extends BaseFragment {
                 Log.i(TAG, "click 1111111");
                 String strPage = editText.getText().toString();
                 int page = Integer.parseInt(strPage) - 1;
-                if (page >= 0 && page < mTotalPage) {
+                if (page >= 0 && page < mPage3PagerAdapter.getTotalPage()) {
                     mViewPager.setCurrentItem(page);
                 }
                 dialog.dismiss();

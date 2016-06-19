@@ -55,7 +55,6 @@ public class Page2PagerAdapter extends BasePagerAdapter {
             return size() > Page3Fragment.MAX_ENTRIES;
         }
     };
-    private boolean isLoading;
 
     public Page2PagerAdapter(Activity mContext, String mUrl, int mTotalPage) {
         this.mContext = mContext;
@@ -79,7 +78,6 @@ public class Page2PagerAdapter extends BasePagerAdapter {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                    mPage3Listener.onSwipeTReresh(refreshLayout);
                 loadPage(position + 1, true);
                 refreshLayout.setRefreshing(false);
             }
@@ -108,8 +106,6 @@ public class Page2PagerAdapter extends BasePagerAdapter {
                     handleThreadClicked(i, listView, curListPost);
                 }
             });
-        } else {
-            loadPage(loadPageIndex, false);
         }
         container.addView(view);
         return view;
@@ -120,25 +116,21 @@ public class Page2PagerAdapter extends BasePagerAdapter {
         container.removeView((View) object);
     }
 
-    private void loadPage(final int curPage, boolean refres) {
+    public void loadPage(final int curPage, boolean refres) {
         try {
             if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
                 String url = getUrlWithPage(curPage);
                 if (url != null) {
-                    isLoading = true;
                     HtmlLoader.getInstance().fetchData(url, new HtmlLoader.HtmlLoaderListener() {
                         @Override
                         public void onCallback(Document doc) {
                             try {
                                 parseDataPage2(doc, curPage);
-                                isLoading = false;
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
                     });
-                } else {
-                    refreshCurrentPage(curPage, false);
                 }
             }
         } catch (Exception e) {

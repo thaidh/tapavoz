@@ -46,11 +46,9 @@ import java.util.Map;
  */
 public class Page3PagerAdapter extends BasePagerAdapter {
     private static final String TAG = Page3PagerAdapter.class.getSimpleName();
-    private String mUrl;
     private Activity mContext;
     private Bitmap mImageStart;
     private float mTextSize;
-    private int loadPageIndex;
     private Map<Integer, ArrayList<Post>>  mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
             return size() > Page3Fragment.MAX_ENTRIES;
@@ -75,7 +73,7 @@ public class Page3PagerAdapter extends BasePagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         loadPageIndex = position + 1;
-        Log.i(TAG, "LoadPage : " + loadPageIndex);
+        Log.i(TAG, "instantiateItem : " + loadPageIndex);
         View view = mContext.getLayoutInflater().inflate(R.layout.layout_page3_item, null);
         view.setTag(loadPageIndex);
         final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
@@ -107,8 +105,6 @@ public class Page3PagerAdapter extends BasePagerAdapter {
             NavigationBar navigationFooterBar = (NavigationBar) view.findViewWithTag(TAG_NAVIGATION_FOOTER);
             navigationFooterBar.refresh(loadPageIndex, mTotalPage);
             listView.setAdapter(adapter);
-        } else {
-            loadPage(loadPageIndex, false);
         }
         container.addView(view);
         return view;
@@ -119,10 +115,12 @@ public class Page3PagerAdapter extends BasePagerAdapter {
         container.removeView((View) object);
     }
 
-    private void loadPage(final int curPage, boolean refres) {
+    public void loadPage(final int curPage, boolean refres) {
         //download page data
+
         try {
             if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+                Log.i(TAG, "Load page : " + loadPageIndex);
                 String url = getUrlWithPage(curPage);
                 if (url != null) {
                     HtmlLoader.getInstance().fetchData(url, new HtmlLoader.HtmlLoaderListener() {
@@ -136,8 +134,6 @@ public class Page3PagerAdapter extends BasePagerAdapter {
                         }
                     });
                 }
-            } else {
-                notifyDataSetChanged();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -351,7 +347,7 @@ public class Page3PagerAdapter extends BasePagerAdapter {
 //                        setProgress(false);
 //                        mPage3PagerAdapter.setTotalPage(mTotalPage);
                         setTotalPage(mTotalPage);
-                        refreshCurrentPage(curPage, false);
+                        refreshCurrentPage(curPage);
 //                        notifyDataSetChanged();
                     }
                 });
@@ -361,7 +357,7 @@ public class Page3PagerAdapter extends BasePagerAdapter {
         }
     }
 
-    private void refreshCurrentPage(final int curPage, final boolean forceRefresh) {
+    private void refreshCurrentPage(final int curPage) {
         try {
             Log.i(TAG, "Refresh page :  " + curPage);
             View page = mPagerListener.findPageView(curPage);
@@ -371,93 +367,15 @@ public class Page3PagerAdapter extends BasePagerAdapter {
                 navigationHeaderBar.refresh(curPage, mTotalPage);
                 NavigationBar navigationFooterBar = (NavigationBar) page.findViewWithTag(TAG_NAVIGATION_FOOTER);
                 navigationFooterBar.refresh(curPage, mTotalPage);
-                if (forceRefresh) {
-                    if (listView.getAdapter() != null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, mTextSize);
-                        listView.setAdapter(adapter);
-                    }
-                } else {
-                    (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
-                    if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                        final Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, mTextSize);
-                        listView.setAdapter(adapter);
-                    }
-
+                (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
+                if (listView.getAdapter() == null && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
+                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(mContext, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, mTextSize);
+                    listView.setAdapter(adapter);
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    String parsePage(int action, int i2, Document doc) throws Exception {
-//        if (doc == null) {
-//            return null;
-//        }
-        String attr;
-        String text = "zzz";
-        if (doc != null) {
-            Element first = doc.select("div[class=pagenav").first();
-            if (first == null) {
-                return null;
-            }
-
-            text = first.select("td[class=vbmenu_control]").text();
-            loadPageIndex = Integer.parseInt(text.split(" ")[1]);
-            mTotalPage = Integer.parseInt(text.split(" ")[3]);
-            if (mUrl.contains("showthread.php?p=")) {
-                int size = first.getElementsByAttribute("href").size();
-                int i3 = 0;
-                while (i3 < size) {
-                    Element element = (Element) first.getElementsByAttribute("href").get(i3);
-                    if (element != null) {
-                        attr = element.attr("href");
-                        if (!attr.contains("&page=")) {
-                            attr = attr.concat("&page=1");
-                        }
-                        attr = attr.substring(attr.indexOf("?t=") + 3, attr.indexOf("&page"));
-                        attr = "https://vozforums.com/showthread.php?t=" + attr + "&page=" + String.valueOf(loadPageIndex);
-                    } else {
-                        i3 += 1;
-                    }
-                }
-                attr = null;
-                attr = "https://vozforums.com/showthread.php?t=" + attr + "&page=" + String.valueOf(loadPageIndex);
-            } else {
-                attr = mUrl;
-                if (!attr.contains("&page=")) {
-                    attr = attr.concat("&page=1");
-                }
-            }
-        } else {
-            attr = mUrl;
-            if (!attr.contains("&page=")) {
-                attr = attr.concat("&page=1");
-            }
-        }
-
-        switch (action) {
-            case 0:
-                String[] split = text.split(" ");
-                return split[1] + "/" + split[3];
-//            case 1:
-//                return attr.split("&page")[0].concat("&page=" + String.valueOf(i2));
-//            case Page3Fragment.GO_NEXT:
-//                mCurPage++;
-//                return attr.substring(0, attr.lastIndexOf("=") + 1).concat(String.valueOf(mCurPage));
-//            case Page3Fragment.GO_PREVIOUS:
-//                mCurPage--;
-//                String concat = attr.substring(0, attr.lastIndexOf("=") + 1).concat(String.valueOf(mCurPage));
-//                return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
-//            case Page3Fragment.GO_FIRST:
-//                mCurPage = 1;
-//                return attr.split("&page")[0];
-//            case Page3Fragment.GO_LAST:
-//                mCurPage = mTotalPage;
-//                return attr.split("&page")[0].concat("&page=" + String.valueOf(mTotalPage));
-            default:
-                return null;
-
         }
     }
 

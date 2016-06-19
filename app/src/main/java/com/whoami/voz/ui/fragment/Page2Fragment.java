@@ -118,6 +118,22 @@ public class Page2Fragment extends BaseFragment {
         mViewPager.setOffscreenPageLimit(1);
 
         mPage2PagerAdapter = new Page2PagerAdapter(getActivity(), Global.URL + mParamUrl, 1);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mPage2PagerAdapter.loadPage(position + 1, false);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         mViewPager.setAdapter(mPage2PagerAdapter);
         mPage2PagerAdapter.setPagerListener(new PagerListener() {
             @Override
@@ -140,5 +156,6 @@ public class Page2Fragment extends BaseFragment {
 
             }
         });
+        mPage2PagerAdapter.loadPage(1, false);
     }
 }
