@@ -21,8 +21,8 @@ public abstract class BasePagerAdapter  extends PagerAdapter{
     public static final int GO_PREVIOUS = 3;
     public static final int GO_NEXT = 2;
 
-    protected static final String TAG_NAVIGATION_HEADER = "navigation_header";
-    protected static final String TAG_NAVIGATION_FOOTER = "navigation_footer";
+    public static final String TAG_NAVIGATION_HEADER = "navigation_header";
+    public static final String TAG_NAVIGATION_FOOTER = "navigation_footer";
     private static final String TAG = BasePagerAdapter.class.getSimpleName();
     protected WeakReference<ViewPager> mViewPager;
     protected PagerListener mPagerListener;

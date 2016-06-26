@@ -99,9 +99,6 @@ public class Page1Fragment extends BaseFragment {
         mList = (ListView) view.findViewById(R.id.content_frame);
         mLayoutProgress = (LinearLayout) view.findViewById(R.id.layoutprogress);
         this.forumsList = new ArrayList();
-        for (int i = 0; i < 100; i++) {
-            forumsList.add(new Forum("A" + i, "B" + i, "C" + i));
-        }
         this.adapter = new listViewCustom1(getContext(), this.forumsList);
         this.adapter.setSize(1);
         this.mList.setAdapter(this.adapter);

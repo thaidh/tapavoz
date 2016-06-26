@@ -1,29 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@id/drawer_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#ffffff">
+<LinearLayout android:id="@id/drawer_layout"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="#ffffff"
+              android:orientation="vertical">
+
+    <!--<android.support.v7.widget.Toolbar-->
+        <!--android:id="@+id/my_awesome_toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/blue"-->
+        <!--android:minHeight="?attr/actionBarSize"/>-->
+
+    <TextView
+    android:id="@+id/tv_title"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:minHeight="?attr/actionBarSize"
+    android:gravity="center_vertical"
+    android:background="@color/blue"
+    android:singleLine="true"
+    android:textColor="@color/white"
+    android:padding="16.0dp"
+    android:textSize="20.0dp"/>
 
     <RelativeLayout
+        android:id="@+id/main_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/my_awesome_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/blue"
-            android:minHeight="?attr/actionBarSize" />
+
+        <!--<TextView-->
+        <!--android:id="@+id/tv_title"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:minHeight="?attr/actionBarSize"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="16.0dp"/>-->
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/my_awesome_toolbar"
             android:layout_above="@+id/layoutQuickreturn"
             />
-
 
         <HorizontalScrollView
             android:id="@+id/layoutQuickreturn"
@@ -38,25 +59,24 @@
                 android:id="@id/compose_button_bar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:orientation="horizontal"/>
         </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@id/layoutprogress"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#88000000"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
 
     </RelativeLayout>
 
 
-    <LinearLayout
-        android:id="@id/layoutprogress"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#88000000"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-
-</FrameLayout>
+</LinearLayout>
