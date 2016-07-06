@@ -109,7 +109,7 @@
         android:paddingLeft="5.0dip"
         android:text="text\ntext\n"
         android:textColor="@color/black"
-        android:textSize="@dimen/xlargeTextSize1" />
+        android:textSize="@dimen/xlargeTextSize1Bis" />
 
     <LinearLayout
         android:id="@+id/grid_image"

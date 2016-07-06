@@ -74,7 +74,8 @@
     <dimen name="xlargeICon4">20.0dip</dimen>
     <dimen name="xlargeImageWidthThread">30.0dip</dimen>
     <dimen name="xlargeMargin">1.0dip</dimen>
-    <dimen name="xlargeTextSize1">16.0sp</dimen>
+    <dimen name="xlargeTextSize1">18.0sp</dimen>
+    <dimen name="xlargeTextSize1Bis">16.0sp</dimen>
     <dimen name="xlargeTextSize2">14.0sp</dimen>
     <dimen name="xlargeTextSize3">9.0sp</dimen>
     <dimen name="xlargeTextSize4">7.0sp</dimen>
