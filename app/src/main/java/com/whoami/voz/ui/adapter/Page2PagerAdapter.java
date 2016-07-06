@@ -1,49 +1,17 @@
 package com.whoami.voz.ui.adapter;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.nna88.voz.contain.Post;
-import com.nna88.voz.listview.Page3ListViewAdapter;
-import com.nna88.voz.listview.listViewCustom2;
-import com.nna88.voz.main.BuildConfig;
-import com.nna88.voz.main.Global;
 import com.nna88.voz.main.R;
-import com.nna88.voz.util.Util;
-import com.whoami.voz.ui.delegate.PagerListener;
-import com.whoami.voz.ui.fragment.Page2Fragment;
-import com.whoami.voz.ui.fragment.Page3Fragment;
 
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
-import com.nna88.voz.contain.Thread;
-import com.whoami.voz.ui.utils.HtmlLoader;
 import com.whoami.voz.ui.widget.NavigationBar;
-
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 /**
  * Created by thaidh on 5/14/16.

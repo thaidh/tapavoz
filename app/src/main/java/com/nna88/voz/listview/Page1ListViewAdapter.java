@@ -15,13 +15,11 @@ import com.nna88.voz.main.Global;
 import com.nna88.voz.main.R;
 import java.util.ArrayList;
 
-public class listViewCustom1 extends BaseAdapter {
+public class Page1ListViewAdapter extends BaseAdapter {
     private ArrayList<Forum> contains;
     private ViewHolder holder;
     private LayoutInflater inflater;
     private Context mContext;
-    private float mTextSize1;
-    private float mTextSize2;
 
     public static class ViewHolder {
         RelativeLayout layout;
@@ -36,10 +34,10 @@ public class listViewCustom1 extends BaseAdapter {
         }
     }
 
-    public listViewCustom1(Context context, ArrayList<Forum> arrayList) {
+    public Page1ListViewAdapter(Context context, ArrayList<Forum> arrayList) {
         this.mContext = context;
         this.contains = arrayList;
-        this.inflater = (LayoutInflater) context.getSystemService("layout_inflater");
+        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void setData(ArrayList<Forum> forumsList) {
@@ -76,8 +74,6 @@ public class listViewCustom1 extends BaseAdapter {
             viewHolder = viewHolder2;
         }
         viewHolder.txtView1.setText(((Forum) this.contains.get(i)).Forum());
-        viewHolder.txtView1.setTextSize(this.mTextSize1);
-        viewHolder.txtView2.setTextSize(this.mTextSize2);
 //        Global.setBackgroundItemThread(viewHolder.layout);
         if (((Forum) this.contains.get(i)).Viewing() == null) {
             viewHolder.txtView1.setText(((Forum) this.contains.get(i)).Forum());
@@ -101,11 +97,5 @@ public class listViewCustom1 extends BaseAdapter {
         viewHolder.layout.setFocusable(false);
         viewHolder.layout.setFocusableInTouchMode(false);
         return view;
-    }
-
-    public void setSize(float f) {
-        this.mTextSize1 = this.mContext.getResources().getDimension(R.dimen.textSize1) * f;
-        this.mTextSize2 = this.mContext.getResources().getDimension(R.dimen.textSize2) * f;
-        log(BuildConfig.FLAVOR + this.mTextSize1);
     }
 }

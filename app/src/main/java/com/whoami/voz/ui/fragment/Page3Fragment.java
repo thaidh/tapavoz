@@ -450,7 +450,7 @@ public class Page3Fragment extends BaseFragment {
                         String text;
                         String str3 = null;
                         post = new Post();
-                        String str4 = BuildConfig.FLAVOR;
+                        String str4 = "";
                         Element element2 = (Element) it.next();
                         Element parent = element2.parent();
                         if (select.select("div[class=smallfont]:has(strong)").first() != null) {

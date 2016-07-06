@@ -6,6 +6,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
@@ -50,11 +51,11 @@ public class Page3ListViewAdapter extends BaseAdapter {
     private ArrayList<String> lImage;
     private OnImageClickListestener mImageClickListener;
     private ImageSize mImageSize;
-    private float mTextSize;
-    private float mTextSize1;
-    private float mTextSize3;
-    private float mTextSize4;
-    private ArrayList<Post> mcontains;
+//    private float mTextSize;
+//    private float mTextSize1;
+//    private float mTextSize3;
+//    private float mTextSize4;
+    private ArrayList<Post> mPosts;
     private DisplayImageOptions options;
     private DisplayImageOptions optionsEmo;
     private ImageSpan span;
@@ -87,7 +88,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
 
     static class ViewHolder {
         SimpleDraweeView avatar;
-        JellyBeanSpanFixTextView contain;
+        TextView contain;
         TextView index;
         TextView jd;
         LinearLayout layout;
@@ -102,24 +103,24 @@ public class Page3ListViewAdapter extends BaseAdapter {
         }
     }
 
-    public Page3ListViewAdapter(Context context, ArrayList<Post> arrayList, ImageLoader imageLoader, Bitmap bitmap, float f) {
+    public Page3ListViewAdapter(Context context, ArrayList<Post> arrayList, ImageLoader imageLoader, Bitmap bitmap, float size) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        drawableOnline = context.getResources().getDrawable(R.drawable.user_online);
-        drawableOffline = context.getResources().getDrawable(R.drawable.user_offline);
-        drawableAvatar = context.getResources().getDrawable(R.drawable.menu_usercp2);
-        dp32 = Util.convertDpToPx(context, 32);
-        int i = (int) ((((float) dp32) * f) / 4.0f);
-        int i2 = (int) ((((float) dp32) * f) / 4.0f);
-        drawableOnline.setBounds(0, 0, i, i2);
-        drawableOffline.setBounds(0, 0, i, i2);
-        mcontains = arrayList;
+        drawableOnline = ContextCompat.getDrawable(context, R.drawable.user_online);
+        drawableOffline = ContextCompat.getDrawable(context, R.drawable.user_offline);
+        drawableAvatar = ContextCompat.getDrawable(context, R.drawable.menu_usercp2);
+        dp32 = Util.convertDpToPx(context, 8);
+//        int i = (int) ((((float) dp32) * f) / 4.0f);
+//        int i2 = (int) ((((float) dp32) * f) / 4.0f);
+        drawableOnline.setBounds(0, 0, dp32, dp32);
+        drawableOffline.setBounds(0, 0, dp32, dp32);
+        mPosts = arrayList;
         lImage = new ArrayList();
         this.imageLoader = imageLoader;
         initUniversal();
         bmImageFailed = BitmapFactory.decodeResource(context.getResources(), R.drawable.image_for_empty_url);
         bmImageStart = bitmap;
-        setSize(f);
+//        setSize(f);
     }
 
     private String getlinkBitmapAssert(String str) {
@@ -165,7 +166,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return mcontains.size();
+        return mPosts.size();
     }
 
     public Object getItem(int i) {
@@ -177,7 +178,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View view, ViewGroup viewGroup) {
-        Post post = mcontains.get(position);
+        Post post = mPosts.get(position);
         if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.list_item3, null);
@@ -186,7 +187,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
             holder.user = (TextView) view.findViewById(R.id.list3_user);
             holder.time = (TextView) view.findViewById(R.id.list3_time);
             holder.index = (TextView) view.findViewById(R.id.list3_index);
-            holder.contain = (JellyBeanSpanFixTextView) view.findViewById(R.id.list3_contain);
+            holder.contain = (TextView) view.findViewById(R.id.list3_contain);
             holder.jd = (TextView) view.findViewById(R.id.list3_jd);
             holder.posts = (TextView) view.findViewById(R.id.list3_post);
             holder.userTitle = (TextView) view.findViewById(R.id.list3_usertitle);
@@ -212,13 +213,13 @@ public class Page3ListViewAdapter extends BaseAdapter {
 //        Global.setTextColor1(holder.user);
 //        Global.setTextColor1(holder.posts);
 //        Global.setTextColor1(holder.userTitle);
-        holder.user.setTextSize(mTextSize3);
-        holder.time.setTextSize(mTextSize3);
-        holder.index.setTextSize(mTextSize3);
-        holder.jd.setTextSize(mTextSize4);
-        holder.posts.setTextSize(mTextSize4);
-        holder.userTitle.setTextSize(mTextSize4);
-        holder.contain.setTextSize(mTextSize1);
+//        holder.user.setTextSize(mTextSize3);
+//        holder.time.setTextSize(mTextSize3);
+//        holder.index.setTextSize(mTextSize3);
+//        holder.jd.setTextSize(mTextSize4);
+//        holder.posts.setTextSize(mTextSize4);
+//        holder.userTitle.setTextSize(mTextSize4);
+//        holder.contain.setTextSize(mTextSize1);
         holder.contain.setMovementMethod(LocalLinkMovementMethod.getInstance());
         holder.contain.setClickable(false);
         if (!TextUtils.isEmpty(post.getUrlAvatar()) && !isScrolling) {
@@ -229,9 +230,10 @@ public class Page3ListViewAdapter extends BaseAdapter {
         }
 
         holder.user.setText(post.User());
+
         if (post.Time() != null && post.Time().split(" ").length > 3) {
-            holder.time.setText(post.Time().split(" ")[2] + " " + post.Time().split(" ")[3]);
-            holder.index.setText(post.Time().split(" ")[0]);
+            holder.time.setText(post.Time().split(" ")[3] + " " + post.Time().split(" ")[4]);
+            holder.index.setText(post.Time().split(" ")[1]);
         }
         holder.userTitle.setText(post.UserTitle());
         holder.jd.setText(post.JD());
@@ -283,12 +285,5 @@ public class Page3ListViewAdapter extends BaseAdapter {
 
     public void setOnImageClickListener(OnImageClickListestener onImageClickListestener) {
         mImageClickListener = onImageClickListestener;
-    }
-
-    public void setSize(float f) {
-        mTextSize = f;
-        mTextSize1 = context.getResources().getDimension(R.dimen.textSize2) * f;
-        mTextSize3 = context.getResources().getDimension(R.dimen.textSize3) * f;
-        mTextSize4 = context.getResources().getDimension(R.dimen.textSize4) * f;
     }
 }

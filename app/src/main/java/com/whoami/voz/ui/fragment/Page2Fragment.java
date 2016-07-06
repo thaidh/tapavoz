@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,10 +19,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nna88.voz.contain.Thread;
-import com.nna88.voz.listview.listViewCustom2;
+import com.nna88.voz.listview.Page2ListViewAdapter;
 import com.nna88.voz.main.BuildConfig;
 import com.nna88.voz.main.Global;
-import com.nna88.voz.main.MainApplication;
 import com.nna88.voz.main.R;
 import com.nna88.voz.util.Util;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
@@ -411,7 +409,7 @@ public class Page2Fragment extends BaseFragment {
                 (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
                 if ((refresh || listView.getAdapter() == null) && mMapPostPerPage.containsKey(curPage)) {
                     final ArrayList<Thread> curListPost = mMapPostPerPage.get(curPage);
-                    final listViewCustom2 adapter = new listViewCustom2(getActivity(), curListPost);
+                    final Page2ListViewAdapter adapter = new Page2ListViewAdapter(getActivity(), curListPost);
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override

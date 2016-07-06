@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.nna88.voz.contain.Forum;
-import com.nna88.voz.listview.listViewCustom1;
+import com.nna88.voz.listview.Page1ListViewAdapter;
 import com.nna88.voz.main.R;
 import com.nna88.voz.util.UserInfo;
 import com.whoami.voz.ui.utils.HtmlLoader;
@@ -46,7 +46,7 @@ public class Page1Fragment extends BaseFragment {
     private UserInfo mUser;
     private ListView mList;
     private ArrayList<Forum> forumsList;
-    private listViewCustom1 adapter;
+    private Page1ListViewAdapter adapter;
     private StringBuilder sForum;
     private LinearLayout mLayoutProgress;
 
@@ -99,8 +99,7 @@ public class Page1Fragment extends BaseFragment {
         mList = (ListView) view.findViewById(R.id.content_frame);
         mLayoutProgress = (LinearLayout) view.findViewById(R.id.layoutprogress);
         this.forumsList = new ArrayList();
-        this.adapter = new listViewCustom1(getContext(), this.forumsList);
-        this.adapter.setSize(1);
+        this.adapter = new Page1ListViewAdapter(getContext(), this.forumsList);
         this.mList.setAdapter(this.adapter);
         Uri data = null;
 //        if (data != null) {

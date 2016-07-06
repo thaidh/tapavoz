@@ -14,13 +14,11 @@ import com.nna88.voz.main.Global;
 import com.nna88.voz.main.R;
 import java.util.ArrayList;
 
-public class listViewCustom2 extends BaseAdapter {
-    private ArrayList<Thread> contains;
+public class Page2ListViewAdapter extends BaseAdapter {
+    private ArrayList<Thread> mThreads;
     private ViewHolder holder;
     private LayoutInflater inflater;
     private Context mContext;
-    private float mTextSize1;
-    private float mTextSize2;
 
     public static class ViewHolder {
         ImageView imgView;
@@ -29,19 +27,18 @@ public class listViewCustom2 extends BaseAdapter {
         TextView txtView2;
     }
 
-    public listViewCustom2(Context context, ArrayList<Thread> arrayList) {
-        this.contains = arrayList;
+    public Page2ListViewAdapter(Context context, ArrayList<Thread> arrayList) {
+        this.mThreads = arrayList;
         this.mContext = context;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        setSize(1);
     }
 
     public void setData(ArrayList<Thread> contains) {
-        this.contains = new ArrayList<>(contains);
+        this.mThreads = new ArrayList<>(contains);
     }
 
     public int getCount() {
-        return this.contains.size();
+        return this.mThreads.size();
     }
 
     public Object getItem(int i) {
@@ -53,7 +50,7 @@ public class listViewCustom2 extends BaseAdapter {
     }
 
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Thread thread = this.contains.get(i);
+        Thread thread = this.mThreads.get(i);
         if (view == null) {
             this.holder = new ViewHolder();
             view = this.inflater.inflate(R.layout.list_item2, null);
@@ -66,8 +63,6 @@ public class listViewCustom2 extends BaseAdapter {
             this.holder = (ViewHolder) view.getTag();
         }
 //        Global.setBackgroundItemThread(this.holder.relativelayout);
-        this.holder.txtView1.setTextSize(this.mTextSize1);
-        this.holder.txtView2.setTextSize(this.mTextSize2);
         if (thread.UrlThread() == null) {
 //            Global.setTextColor2(this.holder.txtView1);
             holder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.red));
@@ -87,7 +82,7 @@ public class listViewCustom2 extends BaseAdapter {
             if (thread.Reply() == null) {
                 this.holder.txtView2.setText(thread.LastPost());
             } else {
-                this.holder.txtView2.setText(thread.LastPost() + "- Replie:" + ((Thread) this.contains.get(i)).Reply() + " - View:" + ((Thread) this.contains.get(i)).View());
+                this.holder.txtView2.setText(thread.LastPost() + "- Replie:" + ((Thread) this.mThreads.get(i)).Reply() + " - View:" + ((Thread) this.mThreads.get(i)).View());
             }
             if (thread.UrlLastPosst() != null) {
                 this.holder.txtView1.setTypeface(null, 1);
@@ -109,8 +104,4 @@ public class listViewCustom2 extends BaseAdapter {
         return view;
     }
 
-    public void setSize(float f) {
-        this.mTextSize1 = this.mContext.getResources().getDimension(R.dimen.textSize1) * f;
-        this.mTextSize2 = this.mContext.getResources().getDimension(R.dimen.textSize2) * f;
-    }
 }

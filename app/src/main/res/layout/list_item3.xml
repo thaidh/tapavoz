@@ -5,7 +5,9 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:paddingLeft="6.0dp"
+    android:paddingRight="6.0dp">
 
     <RelativeLayout
         android:id="@id/list3_baruser1"
@@ -18,6 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_margin="@dimen/xlargeMargin"
+            android:text="#1"
+            android:textColor="@color/primary_dark_material_light"
             android:textSize="@dimen/xlargeTextSize3" />
 
         <TextView
@@ -27,7 +31,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="@dimen/xlargeMargin"
             android:text="2012"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_dark_material_light"
             android:textSize="@dimen/xlargeTextSize3" />
     </RelativeLayout>
 
@@ -57,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/xlargeMargin"
                 android:text="joindate"
-                android:textColor="@color/black"
+                android:textColor="@color/primary_dark_material_light"
                 android:textSize="@dimen/xlargeTextSize2" />
 
             <TextView
@@ -66,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/xlargeMargin"
                 android:text="post:"
-                android:textColor="@color/black"
+                android:textColor="@color/primary_dark_material_light"
                 android:textSize="@dimen/xlargeTextSize2" />
         </LinearLayout>
 
@@ -98,14 +102,14 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <com.nna88.voz.ui.JellyBeanSpanFixTextView
+    <TextView
         android:id="@id/list3_contain"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5.0dip"
         android:text="text\ntext\n"
         android:textColor="@color/black"
-        android:textSize="@dimen/xlargeTextSize2" />
+        android:textSize="@dimen/xlargeTextSize1" />
 
     <LinearLayout
         android:id="@+id/grid_image"
