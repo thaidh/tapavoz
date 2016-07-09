@@ -7,11 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.nna88.voz.main.R;
+import com.whoami.voz.R;
+import com.whoami.voz.ui.widget.NavigationBar;
 
 import java.lang.ref.WeakReference;
-
-import com.whoami.voz.ui.widget.NavigationBar;
 
 /**
  * Created by thaidh on 5/14/16.

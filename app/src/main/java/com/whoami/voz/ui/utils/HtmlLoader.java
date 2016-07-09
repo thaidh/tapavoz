@@ -2,8 +2,8 @@ package com.whoami.voz.ui.utils;
 
 import android.util.Log;
 
-import com.nna88.voz.main.Global;
-import com.nna88.voz.parserhtml.HtmlParser;
+import com.whoami.voz.ui.main.Global;
+import com.whoami.voz.ui.parserhtml.HtmlParser;
 import com.whoami.voz.ui.worker.FetchHtmlTask;
 import com.whoami.voz.ui.worker.FetchHtmlWorker;
 

@@ -18,16 +18,16 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.nna88.voz.contain.Thread;
-import com.nna88.voz.listview.Page2ListViewAdapter;
-import com.nna88.voz.main.BuildConfig;
-import com.nna88.voz.main.Global;
-import com.nna88.voz.main.R;
-import com.nna88.voz.util.Util;
+import com.whoami.voz.BuildConfig;
+import com.whoami.voz.R;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page2PagerAdapter;
+import com.whoami.voz.ui.adapter.list.Page2ListViewAdapter;
+import com.whoami.voz.ui.contain.Thread;
 import com.whoami.voz.ui.delegate.PagerListener;
+import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.utils.HtmlLoader;
+import com.whoami.voz.ui.utils.Util;
 import com.whoami.voz.ui.widget.NavigationBar;
 
 import org.jsoup.nodes.Document;

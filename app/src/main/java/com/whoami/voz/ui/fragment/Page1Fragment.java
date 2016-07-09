@@ -15,11 +15,11 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.nna88.voz.contain.Forum;
-import com.nna88.voz.listview.Page1ListViewAdapter;
-import com.nna88.voz.main.R;
-import com.nna88.voz.util.UserInfo;
+import com.whoami.voz.R;
+import com.whoami.voz.ui.adapter.list.Page1ListViewAdapter;
+import com.whoami.voz.ui.contain.Forum;
 import com.whoami.voz.ui.utils.HtmlLoader;
+import com.whoami.voz.ui.utils.UserInfo;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

@@ -7,8 +7,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
-import com.nna88.voz.contain.Post;
-import com.nna88.voz.main.MainApplication;
+import com.whoami.voz.ui.contain.Post;
+import com.whoami.voz.ui.main.MainApplication;
 
 import java.io.IOException;
 import java.io.InputStream;

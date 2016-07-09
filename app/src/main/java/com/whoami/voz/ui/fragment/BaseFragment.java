@@ -11,11 +11,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nna88.voz.main.Global;
-import com.nna88.voz.main.MainApplication;
-import com.nna88.voz.main.R;
-import com.nna88.voz.util.Util;
 import com.squareup.leakcanary.RefWatcher;
+import com.whoami.voz.R;
+import com.whoami.voz.ui.main.Global;
+import com.whoami.voz.ui.main.MainApplication;
+import com.whoami.voz.ui.utils.Util;
 
 /**
  * Created by JonSnow on 2/18/2016.

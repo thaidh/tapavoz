@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@id/listitem2"
+    android:id="@+id/listitem2"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@color/vozThread"
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@id/relativelayout"
+        android:id="@+id/relativelayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -19,7 +19,7 @@
             android:layout_centerVertical="true" />
 
         <LinearLayout
-            android:id="@id/layout_text"
+            android:id="@+id/layout_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -28,7 +28,7 @@
             android:paddingLeft="1.0dip">
 
             <TextView
-                android:id="@id/text1"
+                android:id="@+id/text1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/xlargeMargin"

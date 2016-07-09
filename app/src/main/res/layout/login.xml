@@ -7,12 +7,12 @@
     android:background="@color/white">
 
     <RadioGroup
-        android:id="@id/rg_usered"
+        android:id="@+id/rg_usered"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@id/alert_txt1"
+        android:id="@+id/alert_txt1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5.0dip"
@@ -22,7 +22,7 @@
         android:text="UserName:"/>
 
     <EditText
-        android:id="@id/alert_edit1"
+        android:id="@+id/alert_edit1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -36,7 +36,7 @@
         android:focusable="true"/>
 
     <TextView
-        android:id="@id/alert_txt2"
+        android:id="@+id/alert_txt2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5.0dip"
@@ -45,7 +45,7 @@
         android:textColor="@color/blue"/>
 
     <EditText
-        android:id="@id/alert_edit2"
+        android:id="@+id/alert_edit2"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5.0dip"
@@ -66,7 +66,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@id/alert_ok"
+            android:id="@+id/alert_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.15"
@@ -75,7 +75,7 @@
             android:textColor="@color/black"/>
 
         <Button
-            android:id="@id/alert_cancle"
+            android:id="@+id/alert_cancle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.12"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:id="@id/listLayout"
+    android:id="@+id/listLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -10,12 +10,12 @@
     android:paddingRight="6.0dp">
 
     <RelativeLayout
-        android:id="@id/list3_baruser1"
+        android:id="@+id/list3_baruser1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@id/list3_index"
+            android:id="@+id/list3_index"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -25,7 +25,7 @@
             android:textSize="@dimen/xlargeTextSize3" />
 
         <TextView
-            android:id="@id/list3_time"
+            android:id="@+id/list3_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -36,7 +36,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@id/list3_baruser"
+        android:id="@+id/list3_baruser"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -47,7 +47,7 @@
              />
 
         <LinearLayout
-            android:id="@id/layoutjd"
+            android:id="@+id/layoutjd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -56,7 +56,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@id/list3_jd"
+                android:id="@+id/list3_jd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/xlargeMargin"
@@ -65,7 +65,7 @@
                 android:textSize="@dimen/xlargeTextSize2" />
 
             <TextView
-                android:id="@id/list3_post"
+                android:id="@+id/list3_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/xlargeMargin"
@@ -83,7 +83,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@id/list3_user"
+                android:id="@+id/list3_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/xlargeMargin"
@@ -92,7 +92,7 @@
                 android:textSize="@dimen/xlargeTextSize2" />
 
             <TextView
-                android:id="@id/list3_usertitle"
+                android:id="@+id/list3_usertitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/xlargeMargin"
@@ -103,7 +103,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@id/list3_contain"
+        android:id="@+id/list3_contain"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5.0dip"
@@ -121,7 +121,7 @@
     </LinearLayout>
 
     <View
-        android:id="@id/textDevider"
+        android:id="@+id/textDevider"
         android:layout_width="fill_parent"
         android:background="@color/primary_material_light"
         android:layout_height="1.0dip" />

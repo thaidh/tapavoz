@@ -29,7 +29,7 @@
             android:divider="@android:color/transparent"/>
 
         <HorizontalScrollView
-            android:id="@id/layoutQuickreturn"
+            android:id="@+id/layoutQuickreturn"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -38,7 +38,7 @@
             android:scrollbars="horizontal">
 
             <LinearLayout
-                android:id="@id/compose_button_bar"
+                android:id="@+id/compose_button_bar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
@@ -48,7 +48,7 @@
 
 
     <LinearLayout
-        android:id="@id/layoutprogress"
+        android:id="@+id/layoutprogress"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#88000000"

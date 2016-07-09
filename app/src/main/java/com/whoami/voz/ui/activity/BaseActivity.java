@@ -3,18 +3,16 @@ package com.whoami.voz.ui.activity;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
-import com.nna88.voz.main.Global;
-import com.nna88.voz.main.R;
+import com.whoami.voz.R;
 import com.whoami.voz.ui.fragment.Page1Fragment;
+import com.whoami.voz.ui.main.Global;
 
 public class BaseActivity extends AppCompatActivity {
     @Override

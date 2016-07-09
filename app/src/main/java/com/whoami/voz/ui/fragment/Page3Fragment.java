@@ -9,35 +9,28 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.nna88.voz.contain.Post;
-import com.nna88.voz.listview.Page3ListViewAdapter;
-import com.nna88.voz.main.BuildConfig;
-import com.nna88.voz.main.Global;
-import com.nna88.voz.main.MyNetwork;
-import com.nna88.voz.main.R;
-import com.nna88.voz.parserhtml.HtmlParser;
-import com.nna88.voz.quickaction.QuickAction;
-import com.nna88.voz.util.UserInfo;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.whoami.voz.BuildConfig;
+import com.whoami.voz.R;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page3PagerAdapter;
+import com.whoami.voz.ui.adapter.list.Page3ListViewAdapter;
+import com.whoami.voz.ui.contain.Post;
 import com.whoami.voz.ui.delegate.PagerListener;
+import com.whoami.voz.ui.main.Global;
+import com.whoami.voz.ui.parserhtml.HtmlParser;
 import com.whoami.voz.ui.utils.HtmlLoader;
+import com.whoami.voz.ui.utils.UserInfo;
 import com.whoami.voz.ui.widget.NavigationBar;
 
 import org.apache.commons.io.IOUtils;
@@ -48,7 +41,6 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -68,51 +60,15 @@ public class Page3Fragment extends BaseFragment {
 
     public static final int MAX_ENTRIES = 5;
 
-    private ArrayList<Post> mListPost = new ArrayList<>();
-    private Bitmap bmImageFailed;
     private Bitmap bmImageStart;
-    private String humanverify_hash;
-    private int iCallFromNotification;
-    private int iCallFromNotificationQuote;
-    private int iPostType;
-    ImageLoader imageLoader;
-    int indexI;
-    int indexJ;
-    private String linkapicaptcha;
-    private String mPostId;
-    private QuickAction mQuickAction;
-    private String mTextTitle;
-    private MyNetwork myNetwork;
-    private String recaptcha_challenge_field;
     private String url;
-    private String urlCaptcha;
 
     // base activity
     private HtmlParser mParser;
-    private String sIdThread;
-//    private TaskGetHtml mTask;
-//    private Document doc2;
-    private UserInfo mUser;
-    protected String specifiedpost;
-    private String sPost;
-    private String sMessSearch;
-    private String sSearch_ShowPost;
-    private String sForum;
-    private float mTextSize;
 //    private ListView mList;
-    private int iPositiion;
-    private boolean isSubscribe;
-    private IdentityHashMap mListSideMenu2;
-    private BaseAdapter mAdapterSideMenu2;
-    private int iPage;
-    protected int mItemCount;
-    protected int[] mItemOffsetY;
-    protected int[] mItemtemp;
-    private boolean scrollIsComputed;
     private View mRootView;
     private SharedPreferences settings;
     private LinearLayout mLayoutProgress;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private ViewPager mViewPager;
     private Page3PagerAdapter mPage3PagerAdapter;
     private PagerListener mPagerListener;
@@ -159,13 +115,6 @@ public class Page3Fragment extends BaseFragment {
             if (!url.contains(Global.URL) && !url.contains(Global.URL2)) {
                 url = Global.URL + url;
             }
-
-            if (getArguments().getInt("NOTIFICATION", 1) != 1) {
-                this.iCallFromNotification = getArguments().getInt("NOTIFICATION", 1);
-            }
-            if (getArguments().getInt("NOTIFICATIONQUOTE", 1) != 1) {
-                this.iCallFromNotificationQuote = getArguments().getInt("NOTIFICATIONQUOTE", 1);
-            }
         }
     }
 
@@ -176,7 +125,6 @@ public class Page3Fragment extends BaseFragment {
         mRootView = inflater.inflate(R.layout.fragment_page3, container, false);
         mTitleTv = (TextView) mRootView.findViewById(R.id.tv_title);
         settings = getActivity().getSharedPreferences("Setting", 0);
-        this.mUser = new UserInfo();
         Global.iTheme = this.settings.getInt("THEME", 1);
 //        readSettings();
 
@@ -184,8 +132,6 @@ public class Page3Fragment extends BaseFragment {
         Global.iDensity = getResources().getDisplayMetrics().density;
 
         this.bmImageStart = BitmapFactory.decodeResource(getResources(), R.drawable.stub_image);
-        this.bmImageFailed = BitmapFactory.decodeResource(getResources(), R.drawable.image_for_empty_url);
-        this.myNetwork = new MyNetwork();
 
         this.mParser = new HtmlParser(Global.URL);
         this.mParser.setUrl(url);
@@ -243,7 +189,7 @@ public class Page3Fragment extends BaseFragment {
 
             @Override
             public void showDialogGoPage() {
-
+                alertGoPage();
             }
         };
 //        mPage3PagerAdapter.setPagerListener(new PagerListener() {

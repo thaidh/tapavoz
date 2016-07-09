@@ -62,7 +62,7 @@
     </LinearLayout>
 
     <ListView
-        android:id="@id/left_drawer"
+        android:id="@+id/left_drawer"
         android:layout_width="240.0dip"
         android:layout_height="fill_parent"
         android:layout_gravity="start"

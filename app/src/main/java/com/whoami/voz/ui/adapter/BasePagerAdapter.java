@@ -2,7 +2,6 @@ package com.whoami.voz.ui.adapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 
 import com.whoami.voz.ui.delegate.PagerListener;

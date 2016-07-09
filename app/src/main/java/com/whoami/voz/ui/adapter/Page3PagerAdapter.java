@@ -1,9 +1,7 @@
 package com.whoami.voz.ui.adapter;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -11,26 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.nna88.voz.contain.Post;
-import com.nna88.voz.listview.Page3ListViewAdapter;
-import com.nna88.voz.main.BuildConfig;
-import com.nna88.voz.main.Global;
-import com.nna88.voz.main.R;
-import com.nna88.voz.util.UserInfo;
+import com.whoami.voz.R;
+import com.whoami.voz.ui.contain.Post;
 import com.whoami.voz.ui.fragment.Page3Fragment;
-import com.whoami.voz.ui.utils.HtmlLoader;
 import com.whoami.voz.ui.widget.NavigationBar;
-
-import org.apache.commons.io.IOUtils;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

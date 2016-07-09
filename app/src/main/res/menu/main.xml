@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:yourapp="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@id/action_refresh"
+        android:id="@+id/action_refresh"
         android:icon="@drawable/ic_action_back"
         android:title=""
         android:visible="false"
         yourapp:showAsAction="always"/>
     <item
-        android:id="@id/action_back"
+        android:id="@+id/action_back"
         android:icon="@drawable/ic_action_back"
         android:title=""
         android:visible="false"
@@ -23,27 +23,27 @@
         <!-- "file" submenu -->
         <menu>
             <item
-                android:id="@id/action_websearch"
+                android:id="@+id/action_websearch"
                 android:orderInCategory="100"
                 android:title="Settings"
                 yourapp:showAsAction="always"/>
             <item
-                android:id="@id/action_refresh2"
+                android:id="@+id/action_refresh2"
                 android:orderInCategory="100"
                 android:title="Refresh"
                 yourapp:showAsAction="always"/>
             <item
-                android:id="@id/action_share"
+                android:id="@+id/action_share"
                 android:orderInCategory="100"
                 android:title="Share"
                 yourapp:showAsAction="always"/>
             <item
-                android:id="@id/action_help"
+                android:id="@+id/action_help"
                 android:orderInCategory="100"
                 android:title="Helps"
                 yourapp:showAsAction="always"/>
             <item
-                android:id="@id/action_exit"
+                android:id="@+id/action_exit"
                 android:orderInCategory="100"
                 android:title="Exit"
                 yourapp:showAsAction="always"/>
