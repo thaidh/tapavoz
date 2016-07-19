@@ -175,11 +175,10 @@ public class Post {
         return this.m_id;
     }
 
-    public void Info(String str, String str2, String str3, Bitmap bitmap, String str4) {
+    public void Info(String str, String str2, String str3, String str4) {
         this.mUser = str;
         this.mUserTitle = str2;
         this.mTime = str3;
-        this.mAvatar = bitmap;
         this.mUrlAvatar = str4;
     }
 

@@ -340,22 +340,13 @@ public class Page3Fragment extends BaseFragment {
     }
 
     void parseDataPage3(int typeParse, Document doc, Document doc2, final boolean refresh, final int curPage) throws Exception {
-//        if (doc == null && this.mParser.sNotif != null) {
-//            toast(this.mParser.sNotif);
-//        }
         if (doc != null) {
             UserInfo mUser = new UserInfo();
             String mPostId;
-            String str;
-            Intent intent;
-            Bundle bundle;
-            Element first;
             switch (typeParse) {
                 default: {
                     Post post;
                     ArrayList<Post> mListPost = new ArrayList<>();
-//                    parsePage(0, 0, doc);
-                    //parse page
                     Element firstElement = doc.select("div[class=pagenav").first();
                     if (firstElement !=null) {
                         String strPage = firstElement.select("td[class=vbmenu_control]").text();
@@ -390,13 +381,12 @@ public class Page3Fragment extends BaseFragment {
                     }
                     Elements select = element.select("td[id*=td_post]");
                     Iterator it = select.iterator();
-                    int iPositiion = 0;
-                    String str2 = null;
+                    String userTitle = null;
                     while (it.hasNext()) {
-                        String text;
-                        String str3 = null;
+                        String username;
+                        String avatarUrl = null;
                         post = new Post();
-                        String str4 = "";
+                        String time = "";
                         Element element2 = (Element) it.next();
                         Element parent = element2.parent();
                         if (select.select("div[class=smallfont]:has(strong)").first() != null) {
@@ -406,17 +396,17 @@ public class Page3Fragment extends BaseFragment {
                         Element previousElementSibling = parent.previousElementSibling();
                         Element previousElementSibling2 = previousElementSibling.previousElementSibling();
                         if (previousElementSibling.select("img[src*=avatars]").first() != null) {
-                            str3 = previousElementSibling.select("img[src*=avatars]").attr("src");
-                            if (!str3.contains(Global.URL)) {
-                                str3 = Global.URL + str3;
+                            avatarUrl = previousElementSibling.select("img[src*=avatars]").attr("src");
+                            if (!avatarUrl.contains(Global.URL)) {
+                                avatarUrl = Global.URL + avatarUrl;
                             }
                         }
                         if (previousElementSibling.select("div:containsOwn(Join Date)").first() != null) {
-                            text = previousElementSibling.select("div:containsOwn(Join Date)").first().text();
-                            if (text.contains("Date:")) {
-                                text = text.split("Date:")[1];
+                             username = previousElementSibling.select("div:containsOwn(Join Date)").first().text();
+                            if (username.contains("Date:")) {
+                                username = username.split("Date:")[1];
                             }
-                            post.setJD("Jd:" + text);
+                            post.setJD("Jd:" + username);
                         } else {
                             post.setJD(BuildConfig.FLAVOR);
                         }
@@ -433,13 +423,13 @@ public class Page3Fragment extends BaseFragment {
                             }
                         }
                         if (previousElementSibling.select("a[class=bigusername]").first() != null) {
-                            text = previousElementSibling.select("a[class=bigusername]").text();
+                            username = previousElementSibling.select("a[class=bigusername]").text();
                             post.m_UserId = previousElementSibling.select("a[class=bigusername]").first().attr("href").split("u=")[1];
                         } else {
-                            text = str2;
+                            username = userTitle;
                         }
-                        str2 = previousElementSibling.select("div[class=smallfont]").first() != null ? previousElementSibling.select("div[class=smallfont]").first().text() : str4;
-                        str4 = previousElementSibling2.text();
+                        userTitle = previousElementSibling.select("div[class=smallfont]").first() != null ? previousElementSibling.select("div[class=smallfont]").first().text() : time;
+                        time = previousElementSibling2.text();
                         previousElementSibling = element2.select("div[id*=post_message").first();
                         if (previousElementSibling != null) {
                             if (previousElementSibling.attr("id").split("_").length > 2) {
@@ -452,18 +442,18 @@ public class Page3Fragment extends BaseFragment {
                             post.addText(IOUtils.LINE_SEPARATOR_UNIX);
                             parsePage3(previousElementSibling, post, false);
                         }
-                        post.Info(text, str2, str4, null, str3);
+                        post.Info(username, userTitle, time, avatarUrl);
                         if (Global.bSign && element2.select("div:contains(_______)").first() != null) {
-                            post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                            post.addText("\n");
                             parsePage3(element2.select("div:contains(_______)").first(), post, false);
                         }
                         post.initContent();
                         mListPost.add(post);
                         if (post.Id().equals(mPostId)) {
-                            iPositiion = mListPost.indexOf(post) + 1;
-                            str2 = text;
+                            userTitle = username;
                         } else {
-                            str2 = text;
+
+                            userTitle = username;
                         }
                     }
                     mMapPostPerPage.put(Integer.valueOf(curPage), mListPost);
@@ -472,11 +462,8 @@ public class Page3Fragment extends BaseFragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-//                        setProgress(false);
-//                        mPage3PagerAdapter.setTotalPage(mTotalPage);
                         mPage3PagerAdapter.setTotalPage(mTotalPage);
                         refreshCurrentPage(curPage, refresh);
-//                        notifyDataSetChanged();
                     }
                 });
 
@@ -517,7 +504,7 @@ public class Page3Fragment extends BaseFragment {
         }
     }
 
-    private void parsePage3(Element element, Post post, boolean z) {
+    private void parsePage3(Element element, Post post, boolean isGetWholeText) {
         if (element != null) {
             for (Node node : element.childNodes()) {
                 if (node instanceof Element) {
@@ -527,7 +514,7 @@ public class Page3Fragment extends BaseFragment {
                     if (((Element) node).tagName().equals("div")) {
                         first = ((Element) node).select("div").first();
                         if (first.attr("style").contains("padding")) {
-                            post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                            post.addText("\n");
                         }
                         if (first.ownText().contains("Originally Posted by")) {
                             post.addText("Originally Posted by ");
@@ -536,56 +523,55 @@ public class Page3Fragment extends BaseFragment {
                             length2 = post.getText().length();
                             post.web.add(Global.URL + first.select("a").attr("href"), length, length2);
                             post.type.add("", length, length2, 1);
-                            post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                            post.addText("\n");
                         } else {
-                            parsePage3(first, post, z);
-                            post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                            parsePage3(first, post, isGetWholeText);
+                            post.addText("\n");
                         }
                     } else if (((Element) node).tagName().equals("blockquote")) {
                         first = ((Element) node).select("blockquote").first();
-                        post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                        parsePage3(first, post, z);
-                        post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                        post.addText("\n");
+                        parsePage3(first, post, isGetWholeText);
+                        post.addText("\n");
                     } else if (((Element) node).tagName().equals("fieldset")) {
                         first = ((Element) node).select("fieldset").first();
-                        post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                        parsePage3(first, post, z);
-                        post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                        post.addText("\n");
+                        parsePage3(first, post, isGetWholeText);
+                        post.addText("\n");
                     } else if (((Element) node).tagName().equals("b")) {
                         first = ((Element) node).select("b").first();
                         length = post.getText().length();
-                        parsePage3(first, post, z);
+                        parsePage3(first, post, isGetWholeText);
                         post.type.add("", length, post.getText().length(), 1);
                     } else if (((Element) node).tagName().equals("i")) {
                         first = ((Element) node).select("i").first();
                         length = post.getText().length();
-                        parsePage3(first, post, z);
+                        parsePage3(first, post, isGetWholeText);
                         post.type.add("", length, post.getText().length(), 2);
                     } else if (((Element) node).tagName().equals("pre")) {
                         first = ((Element) node).select("pre").first();
                         length = post.getText().length();
-                        parsePage3(first, post, z);
+                        parsePage3(first, post, isGetWholeText);
                         post.quote.add("", length, post.getText().length());
                     } else if (((Element) node).tagName().equals("table")) {
                         first = ((Element) node).select("table").first();
                         length = post.getText().length();
-                        parsePage3(first, post, z);
+                        parsePage3(first, post, isGetWholeText);
                         post.quote.add("", length, post.getText().length());
                     } else if (((Element) node).tagName().equals("ol")) {
-                        parsePage3(((Element) node).select("ol").first(), post, z);
+                        parsePage3(((Element) node).select("ol").first(), post, isGetWholeText);
                     } else if (((Element) node).tagName().equals("tbody")) {
-                        parsePage3(((Element) node).select("tbody").first(), post, z);
+                        parsePage3(((Element) node).select("tbody").first(), post, isGetWholeText);
                     } else if (((Element) node).tagName().equals("li")) {
-                        parsePage3(((Element) node).select("li").first(), post, z);
+                        parsePage3(((Element) node).select("li").first(), post, isGetWholeText);
                     } else if (((Element) node).tagName().equals("tr")) {
                         first = ((Element) node).select("tr").first();
-                        post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                        parsePage3(first, post, z);
+                        post.addText("\n");
+                        parsePage3(first, post, isGetWholeText);
                     } else if (((Element) node).tagName().equals("td")) {
-                        parsePage3(((Element) node).select("td").first(), post, z);
+                        parsePage3(((Element) node).select("td").first(), post, isGetWholeText);
                     } else if (((Element) node).tagName().equals("img")) {
-                        String r0;
-                        r0 = ((Element) node).select("img[src]").attr("src");
+                        String r0 = ((Element) node).select("img[src]").attr("src");
                         if (r0.contains(Global.URL) && r0.subSequence(0, 21).equals(Global.URL) && !r0.contains("https://vozforums.com/attachment.php?attachmentid") && !r0.contains("https://vozforums.com/customavatars/")) {
                             r0 = r0.substring(21);
                         }
@@ -603,15 +589,15 @@ public class Page3Fragment extends BaseFragment {
                         if (!r0.contains("images/buttons/viewpost.gif")) {
                             post.addText(r0);
                             if (node.hasAttr("onload")) {
-                                post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                                post.addText("\n");
                             }
                         }
                     } else if (((Element) node).tagName().equals("br")) {
-                        post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                        post.addText("\n");
                     } else if (((Element) node).tagName().equals("u")) {
                         first = ((Element) node).select("u").first();
                         length = post.getText().length();
-                        parsePage3(first, post, z);
+                        parsePage3(first, post, isGetWholeText);
                         post.typeU.add("", length, post.getText().length());
                     } else if (((Element) node).tagName().equals("font")) {
                         Element first2 = ((Element) node).select("font").first();
@@ -622,7 +608,7 @@ public class Page3Fragment extends BaseFragment {
                         }
                         String attr = ((Element) node).select("font[size]").first() != null ? ((Element) node).select("font[size]").attr("size") : r1;
                         length2 = post.getText().length();
-                        parsePage3(first2, post, z);
+                        parsePage3(first2, post, isGetWholeText);
                         post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
                     } else if (((Element) node).tagName().equals("a")) {
                         first = ((Element) node).select("a[href]").first();
@@ -650,7 +636,7 @@ public class Page3Fragment extends BaseFragment {
                     }
                 }
                 if (node instanceof TextNode) {
-                    if (z) {
+                    if (isGetWholeText) {
                         post.addText(((TextNode) node).getWholeText());
                     } else {
                         post.addText(((TextNode) node).text());

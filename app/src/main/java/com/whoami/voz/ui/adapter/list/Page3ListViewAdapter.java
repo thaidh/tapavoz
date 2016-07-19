@@ -10,7 +10,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,18 +63,18 @@ public class Page3ListViewAdapter extends BaseAdapter {
     }
 
     class CustomClickableSpan extends ClickableSpan {
-        final  String val$url;
+        final  String url;
 
         CustomClickableSpan(String str) {
-            val$url = str;
+            url = str;
         }
 
         public void onClick(View view) {
             if (mImageClickListener == null) {
                 return;
             }
-            if (val$url.contains("attachmentid") || val$url.contains("http://") || val$url.contains("https://")) {
-                mImageClickListener.onImageClick(0, val$url);
+            if (url.contains("attachmentid") || url.contains("http://") || url.contains("https://")) {
+                mImageClickListener.onImageClick(0, url);
             }
         }
     }
@@ -108,8 +107,6 @@ public class Page3ListViewAdapter extends BaseAdapter {
         drawableOffline = ContextCompat.getDrawable(context, R.drawable.user_offline);
         drawableAvatar = ContextCompat.getDrawable(context, R.drawable.menu_usercp2);
         dp32 = Util.convertDpToPx(context, 8);
-//        int i = (int) ((((float) dp32) * f) / 4.0f);
-//        int i2 = (int) ((((float) dp32) * f) / 4.0f);
         drawableOnline.setBounds(0, 0, dp32, dp32);
         drawableOffline.setBounds(0, 0, dp32, dp32);
         mPosts = arrayList;
@@ -118,32 +115,8 @@ public class Page3ListViewAdapter extends BaseAdapter {
         initUniversal();
         bmImageFailed = BitmapFactory.decodeResource(context.getResources(), R.drawable.image_for_empty_url);
         bmImageStart = bitmap;
-//        setSize(f);
     }
 
-    private String getlinkBitmapAssert(String str) {
-//        int i = 0;
-        if (str.contains("smilies")) {
-            String str2 = str.substring(0, str.length() - 3) + "gif";
-            return "assets://" + str2;
-//            try {
-//                String[] list = context.getAssets().list("images/smilies/Off");
-//                int length = list.length;
-//                while (i < length) {
-//                    if ((str.substring(0, str.length() - 3) + "png").contains(list[i])) {
-//                        str = str.substring(0, str.length() - 3) + "png";
-//                        break;
-//                    }
-//                    i++;
-//                }
-//                str = str2;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                str = str2;
-//            }
-        }
-        return "assets://" + str;
-    }
 
     private void initUniversal() {
         options = new Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE).bitmapConfig(Config.RGB_565).build();
@@ -153,15 +126,6 @@ public class Page3ListViewAdapter extends BaseAdapter {
         mImageSize = new ImageSize(Global.width - Util.convertDpToPx(context, 10), Global.width - Util.convertDpToPx(context, 10));
     }
 
-    private void log(String str) {
-        Log.d("nna", str);
-    }
-
-
-
-
-    public void destroy() {
-    }
 
     public int getCount() {
         return mPosts.size();
@@ -195,29 +159,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-//        Global.setBackgoundMain(holder.txtViewDevider);
-//        holder.txtViewDevider.setVisibility(View.VISIBLE);
         holder.txtViewDevider.setVisibility(View.VISIBLE);
-//        if (Global.bDevider) {
-//            Global.setBackgoundMain(holder.txtViewDevider);
-//        } else {
-//            holder.txtViewDevider.setVisibility(View.GONE);
-//        }
-//        Global.setTextContain(holder.contain);
-//        Global.setTextColor1(holder.time);
-//        Global.setTextColor1(holder.index);
-//        Global.setTextColor1(holder.userTitle);
-//        Global.setTextColor1(holder.jd);
-//        Global.setTextColor1(holder.user);
-//        Global.setTextColor1(holder.posts);
-//        Global.setTextColor1(holder.userTitle);
-//        holder.user.setTextSize(mTextSize3);
-//        holder.time.setTextSize(mTextSize3);
-//        holder.index.setTextSize(mTextSize3);
-//        holder.jd.setTextSize(mTextSize4);
-//        holder.posts.setTextSize(mTextSize4);
-//        holder.userTitle.setTextSize(mTextSize4);
-//        holder.contain.setTextSize(mTextSize1);
         holder.contain.setMovementMethod(CustomLinkMovementMethod.getInstance());
         holder.contain.setClickable(false);
         if (!TextUtils.isEmpty(post.getUrlAvatar()) && !isScrolling) {
