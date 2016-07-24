@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.internal.widget.ViewUtils;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
@@ -27,6 +28,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.contain.Post;
+import com.whoami.voz.ui.contain.item.ContentItem;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.utils.Util;
 
@@ -149,7 +151,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
             holder.user = (TextView) view.findViewById(R.id.list3_user);
             holder.time = (TextView) view.findViewById(R.id.list3_time);
             holder.index = (TextView) view.findViewById(R.id.list3_index);
-            holder.contain = (TextView) view.findViewById(R.id.list3_contain);
+//            holder.contain = (TextView) view.findViewById(R.id.list3_contain);
             holder.jd = (TextView) view.findViewById(R.id.list3_jd);
             holder.posts = (TextView) view.findViewById(R.id.list3_post);
             holder.userTitle = (TextView) view.findViewById(R.id.list3_usertitle);
@@ -160,8 +162,8 @@ public class Page3ListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         holder.txtViewDevider.setVisibility(View.VISIBLE);
-        holder.contain.setMovementMethod(CustomLinkMovementMethod.getInstance());
-        holder.contain.setClickable(false);
+//        holder.contain.setMovementMethod(CustomLinkMovementMethod.getInstance());
+//        holder.contain.setClickable(false);
         if (!TextUtils.isEmpty(post.getUrlAvatar()) && !isScrolling) {
 //            imageLoader.displayImage(post.getUrlAvatar(), holder.avatar, optionsEmo);
             holder.avatar.setImageURI(Uri.parse(post.getUrlAvatar()));
@@ -190,34 +192,32 @@ public class Page3ListViewAdapter extends BaseAdapter {
 //        } else {
 //            Global.setBackgroundItemThread(holder.layout);
 //        }
-        holder.contain.setText(post.getContent());
+
+
+//        holder.contain.setText(post.getContent());
         holder.mGridImage.removeAllViews();
-        for (int i = 0; i < post.image.getSize(); i++) {
-            String imageUrl = post.image.getStr(i);
-            if (imageUrl.contains("http://") || imageUrl.contains("https://")) {
-                try {
-                    SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());
-                    layoutParams.setMargins(0, 0, 0, 10);
-                    layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-
-                    simpleDraweeView.setLayoutParams(layoutParams);
-                    simpleDraweeView.setImageURI(Uri.parse(imageUrl));
-                    simpleDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER);
-//                    ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(imageUrl))
-//                            .setResizeOptions(new ResizeOptions(mImageSize.getWidth(), mImageSize.getHeight()))
-//                            .build();
-//                    DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                            .setImageRequest(request)
-//                            .build();
-//                    simpleDraweeView.setController(controller);
-
-                    holder.mGridImage.addView(simpleDraweeView);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        for (ContentItem item : post.mContentItemList) {
+            addTextContent(holder.mGridImage, item);
         }
+//        for (int i = 0; i < post.image.getSize(); i++) {
+//            String imageUrl = post.image.getStr(i);
+//            if (imageUrl.contains("http://") || imageUrl.contains("https://")) {
+//                try {
+//                    SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
+//                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());
+//                    layoutParams.setMargins(0, 0, 0, 10);
+//                    layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+//
+//                    simpleDraweeView.setLayoutParams(layoutParams);
+//                    simpleDraweeView.setImageURI(Uri.parse(imageUrl));
+//                    simpleDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER);
+//
+//                    holder.mGridImage.addView(simpleDraweeView);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
 
         return view;
@@ -226,4 +226,36 @@ public class Page3ListViewAdapter extends BaseAdapter {
     public void setOnImageClickListener(OnImageClickListestener onImageClickListestener) {
         mImageClickListener = onImageClickListestener;
     }
+
+    private void addTextContent(LinearLayout parent, ContentItem item) {
+        switch (item.type) {
+            case ContentItem.TYPE_PLAIN_TEXT:{
+                TextView textView = new TextView(context);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                textView.setText(item.mContent);
+                textView.setTextColor(ContextCompat.getColor(context, R.color.black));
+                textView.setTextSize(16);
+                textView.setPadding(Util.convertDpToPx(context, 5), 0, 0, 0);
+                textView.setLayoutParams(layoutParams);
+                parent.addView(textView);
+                break;
+            }
+
+            case ContentItem.TYPE_PHOTO: {
+                SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());
+                layoutParams.setMargins(0, 0, 0, 10);
+                layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+
+                simpleDraweeView.setLayoutParams(layoutParams);
+                simpleDraweeView.setImageURI(Uri.parse(item.mData));
+                simpleDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
+
+                parent.addView(simpleDraweeView);
+                break;
+            }
+            default:
+        }
+    }
+
 }

@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
@@ -12,6 +13,7 @@ import android.text.style.UnderlineSpan;
 
 
 import com.whoami.voz.R;
+import com.whoami.voz.ui.contain.item.ContentItem;
 import com.whoami.voz.ui.main.MainApplication;
 import com.whoami.voz.ui.utils.CustomSpanable;
 import com.whoami.voz.ui.utils.EmoLoader;
@@ -53,6 +55,7 @@ public class Post {
     public CustomSpanable typeU;
     public CustomSpanable web;
     public SpannableString mContent;
+    public ArrayList<ContentItem> mContentItemList;
 
     public class ImageSpan extends CustomSpanable {
         ArrayList<Bitmap> bitmaps;
@@ -143,6 +146,7 @@ public class Post {
         this.typeU = new CustomSpanable();
         this.quote = new CustomSpanable();
         this.isMultiQuote = false;
+        this.mContentItemList = new ArrayList<>();
     }
 
     public String Id() {
@@ -180,31 +184,34 @@ public class Post {
         return this.mUserTitle;
     }
 
-    public void addText(String str) {
-        this.mPlainText += str;
+    public ContentItem getLastTextItem() {
+        ContentItem textItem;
+        int size = mContentItemList.size();
+        if (size == 0 || mContentItemList.get(size -1).type == ContentItem.TYPE_PHOTO) {
+            textItem = new ContentItem(ContentItem.TYPE_PLAIN_TEXT, "");
+            mContentItemList.add(textItem);
+        } else {
+            textItem = mContentItemList.get(size - 1);
+        }
+        return textItem;
     }
 
-//    public void addText(Element element, boolean isGetWholeText) {
-//        for (Node node : element.childNodes()) {
-//            if (node instanceof TextNode) {
-//                if (isGetWholeText) {
-//                    addText(((TextNode) node).getWholeText());
-//                } else {
-//                    addText(((TextNode) node).text());
-//                }
-//            }
-//        }
-//    }
+    public void addText(String str) {
+        this.mPlainText += str;
+        ContentItem textItem = getLastTextItem();
+        textItem.mData += str;
+    }
 
-//    public void addText(Node node, boolean isGetWholeText) {
-//        if (node instanceof TextNode) {
-//            if (isGetWholeText) {
-//                addText(((TextNode) node).getWholeText());
-//            } else {
-//                addText(((TextNode) node).text());
-//            }
-//        }
-//    }
+    public void addEmo(String url) {
+        ContentItem textItem = getLastTextItem();
+        textItem.addEmo(url, textItem.mData.length(), textItem.mData.length() + 2);
+        textItem.mData += "  ";
+    }
+
+    public void addPhoto(String url) {
+        ContentItem photoItem = new ContentItem(ContentItem.TYPE_PHOTO, url);
+        mContentItemList.add(photoItem);
+    }
 
     public String getText() {
         return this.mPlainText;
@@ -267,8 +274,6 @@ public class Post {
         }
     }
 
-
-
     public void initContent() {
         try {
             preloadEmo();
@@ -292,14 +297,14 @@ public class Post {
                 curPos++;
             }
             curPos = 0;
-            while (curPos < quote.getSize()) {
-                start = quote.getStart(curPos).intValue();
-                end = quote.getEnd(curPos).intValue();
-                mContent.setSpan(new QuoteSpan(MainApplication.getAppContext().getResources().getColor(R.color.ics_blue_dark)), start, end, 18);
-                mContent.setSpan(new StyleSpan(2), start, end, 18);
-//                mContent.setSpan(new ForegroundColorSpan(QuickAction.WOOD_TEXT_TITLE, start, end, 18);
-                curPos++;
-            }
+//            while (curPos < quote.getSize()) {
+//                start = quote.getStart(curPos).intValue();
+//                end = quote.getEnd(curPos).intValue();
+//                mContent.setSpan(new QuoteSpan(MainApplication.getAppContext().getResources().getColor(R.color.ics_blue_dark)), start, end, 18);
+//                mContent.setSpan(new StyleSpan(2), start, end, 18);
+////                mContent.setSpan(new ForegroundColorSpan(QuickAction.WOOD_TEXT_TITLE, start, end, 18);
+//                curPos++;
+//            }
             curPos = 0;
             while (curPos < type.getSize()) {
                 start = type.getStart(curPos).intValue();
@@ -316,19 +321,22 @@ public class Post {
             }
 
             curPos = 0;
-            while (curPos < image.getSize()) {
-                    if (image.getStr(curPos).contains(EMO_PREFIX)) {
-                        BitmapDrawable bmp = EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos));
-                        if (bmp != null) {
-                            android.text.style.ImageSpan span = new android.text.style.ImageSpan(bmp, 0);
-                            start = image.getStart(curPos).intValue();
-                            end = image.getEnd(curPos).intValue();
-                            mContent.setSpan(span, start, end, 18);
-                        }
-                    }
-                curPos++;
+//            while (curPos < image.getSize()) {
+//                    if (image.getStr(curPos).contains(EMO_PREFIX)) {
+//                        BitmapDrawable bmp = EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos));
+//                        if (bmp != null) {
+//                            android.text.style.ImageSpan span = new android.text.style.ImageSpan(bmp, 0);
+//                            start = image.getStart(curPos).intValue();
+//                            end = image.getEnd(curPos).intValue();
+//                            mContent.setSpan(span, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+//                        }
+//                    }
+//                curPos++;
+//            }
+            for (ContentItem item : mContentItemList) {
+                item.initContent();
             }
-        } catch (Resources.NotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -544,13 +544,20 @@ public class Page3Fragment extends BaseFragment {
                         } else if (((Element) node).tagName().equals("pre")) {
                             Element first = ((Element) node).select("pre").first();
                             int length = post.getText().length();
+                            int startQuote = post.getLastTextItem().mData.length();
                             parseMessagePage3(first, post, isGetWholeText);
                             post.quote.add("", length, post.getText().length());
+                            int endQuote = post.getLastTextItem().mData.length();
+                            post.getLastTextItem().addQuote(startQuote, endQuote);
+
                         } else if (((Element) node).tagName().equals("table")) {
                             Element first = ((Element) node).select("table").first();
                             int length = post.getText().length();
+                            int startQuote = post.getLastTextItem().mData.length();
                             parseMessagePage3(first, post, isGetWholeText);
                             post.quote.add("", length, post.getText().length());
+                            int endQuote = post.getLastTextItem().mData.length();
+                            post.getLastTextItem().addQuote(startQuote, endQuote);
                         } else if (((Element) node).tagName().equals("ol")) {
                         } else if (((Element) node).tagName().equals("tbody")) {
                             Element first = ((Element) node).select("tbody").first();
@@ -576,8 +583,10 @@ public class Page3Fragment extends BaseFragment {
                             int messageLength = post.getText().length();
                             int imageUrlLength = imageUrl.length();
                             if (imageUrl.contains("http://") || imageUrl.contains("https://") || imageUrl.contains("attachment.php?attachmentid")) {
-                                post.image.add(imageUrl, messageLength, imageUrlLength + messageLength, null);
+//                                post.image.add(imageUrl, messageLength, imageUrlLength + messageLength, null);
+                                post.addPhoto(imageUrl);
                             } else if (imageUrl.contains(Post.EMO_PREFIX)) {
+                                post.addEmo(imageUrl);
                                 post.image.add(imageUrl, messageLength, messageLength + 2, null);
                                 imageUrl = "  ";
 //                                if (/*!imageUrl.contains("images/buttons/viewpost.gif") &&*/) {

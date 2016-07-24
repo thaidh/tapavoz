@@ -102,14 +102,14 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/list3_contain"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5.0dip"
-        android:text="text\ntext\n"
-        android:textColor="@color/black"
-        android:textSize="@dimen/xlargeTextSize1Bis" />
+    <!--<TextView-->
+        <!--android:id="@+id/list3_contain"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingLeft="5.0dip"-->
+        <!--android:text="text\ntext\n"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:textSize="@dimen/xlargeTextSize1Bis" />-->
 
     <LinearLayout
         android:id="@+id/grid_image"
