@@ -4,8 +4,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.ImageSpan;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
@@ -14,14 +12,14 @@ import android.text.style.UnderlineSpan;
 
 
 import com.whoami.voz.R;
-import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.main.MainApplication;
-import com.whoami.voz.ui.quickaction.QuickAction;
 import com.whoami.voz.ui.utils.CustomSpanable;
 import com.whoami.voz.ui.utils.EmoLoader;
 import com.whoami.voz.ui.utils.Util;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 
 import java.util.ArrayList;
 
@@ -35,20 +33,10 @@ public class Post {
 
 
     private ArrayList<Bitmap> bitmaps;
-    public CustomSpanable border;
-    public String css;
-    public fontSpan font;
-    public String html;
-    public String htmlDocType;
-    public String htmlMenu;
-    public String htmlSign;
-    public bitmapSpan image;
-    public CustomSpanable img;
+    public FontSpan font;
+    public ImageSpan image;
     private boolean isMultiQuote;
     public boolean isOnline;
-    private Bitmap mAvatar;
-    public int mCount;
-    public String mIndex;
     private String mJd;
     private String mPosts;
     public String mTime;
@@ -58,21 +46,18 @@ public class Post {
     private String mUserTitle;
     public String m_UserId;
     private String m_id;
-    private String m_postId;
     public CustomSpanable quote;
     public CustomSpanable size;
-    public int style;
-    private String tContain;
-    public String test;
-    public typeSpan type;
+    private String mPlainText;
+    public TypeSpan type;
     public CustomSpanable typeU;
     public CustomSpanable web;
     public SpannableString mContent;
 
-    public class bitmapSpan extends CustomSpanable {
+    public class ImageSpan extends CustomSpanable {
         ArrayList<Bitmap> bitmaps;
 
-        public bitmapSpan() {
+        public ImageSpan() {
             this.bitmaps = new ArrayList();
         }
 
@@ -102,11 +87,11 @@ public class Post {
         }
     }
 
-    public class fontSpan extends CustomSpanable {
+    public class FontSpan extends CustomSpanable {
         private ArrayList<String> color;
         private ArrayList<Integer> size;
 
-        public fontSpan() {
+        public FontSpan() {
             this.color = new ArrayList();
             this.size = new ArrayList();
         }
@@ -130,7 +115,7 @@ public class Post {
         }
     }
 
-    public class typeSpan extends CustomSpanable {
+    public class TypeSpan extends CustomSpanable {
         private int type;
 
         public void add(String str, int i, int i2, int i3) {
@@ -149,26 +134,15 @@ public class Post {
         this.m_UserId = "";
         this.isOnline = false;
         this.mTime = "";
-        this.mIndex = "";
-        this.htmlDocType = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML Basic 1.1//EN\"\n    \"http://www.w3.org/TR/xhtml-basic/xhtml-basic11.dtd\">";
-        this.test = "<input type=\"button\" value=\"Say hello\" onClick=\"showAndroidToast('Hello Android!')\" />\n";
-        this.htmlMenu = "<div>\n<table style=\"width:100%\">\n<tr>\n\t<td >\n                <!-- #post -->\n\t\t<div style=\"float:right\">menu_thang</div>\n                <!-- time -->\n\t\t<div class=\"normal\">menu_time</div>\n\t</td>\n</tr>\n\n<tr>\n\t<td>\n\t\t<!-- user info -->\n\t\t<table cellpadding=\"0\" cellspacing=\"6\" border=\"0\" width=\"100%\">\n\t\t<tr>\n\t\t\t<td><img src=\"menu_avatar/></td>\n\t\t\t<td nowrap=\"nowrap\">\n\t\t\t\t<div >\n                                        <!-- online -->\n\t\t\t\t\t<img src=\"menu_online/>\n                                       <!--ten user -->\n\t\t\t\t\tmenu_username\n\t\t\t\t</div>\n\t\t\t\t<div class=\"smallfont\">menu_title</div>\n\t\t\t</td>\n\t\t\t<td width=\"100%\">&nbsp;</td>\n\t\t\t<td valign=\"top\" nowrap=\"nowrap\">\n\t\t\t\t<div class=\"smallfont\">\n\t\t\t\t\t<div>J/d: menu_date</div>\n\t\t\t\t\t<div>\n\t\t\t\t\t\tmenu_posts\n\t\t\t\t\t</div>\n\t\t\t\t</div>\n\n\t\t\t</td>\n\t\t</tr>\n\t\t</table>\n\t\t<!-- / user info -->\n\t</td>\n</tr>\n\n<table>\n</div>";
-        this.tContain = new String();
-        this.img = new CustomSpanable();
+        this.mPlainText = new String();
         this.web = new CustomSpanable();
         this.bitmaps = new ArrayList();
-        this.image = new bitmapSpan();
-        this.font = new fontSpan();
-        this.type = new typeSpan();
+        this.image = new ImageSpan();
+        this.font = new FontSpan();
+        this.type = new TypeSpan();
         this.typeU = new CustomSpanable();
         this.quote = new CustomSpanable();
         this.isMultiQuote = false;
-    }
-
-
-
-    public Bitmap Avatar() {
-        return this.mAvatar;
     }
 
     public String Id() {
@@ -207,24 +181,38 @@ public class Post {
     }
 
     public void addText(String str) {
-        this.tContain += str;
+        this.mPlainText += str;
     }
 
-    public String getPost() {
-        String str = this.isMultiQuote ? "<div id=\"wrapper\" style=\"background-color:#" + Global.themeColor2[Global.iTheme][1] + "\">" : "<div id=\"wrapper\" style=\"background-color:#" + Global.themeColor2[Global.iTheme][0] + "\">";
-        String str2 = "<font color=\"#" + Global.themeColor2[Global.iTheme][5] + "\">";
-        String str3 = "<font color=\"#" + Global.themeColor2[Global.iTheme][4] + "\">";
-        this.css = "<style type=\"text/css\">\n    \thtml, body {\n    \t\tmargin:0;\n    \t}\n    \t#wrapper {\n    \t}\n.alt2\n{\n\tbackground: #" + Global.themeColor2[Global.iTheme][0] + ";\n" + "\tcolor: #888888;\n" + "\tfont-style:italic;\n" + "}\n" + "    </style>" + "<script type=\"text/javascript\">\n" + "    function showAndroidToast(toast) {\n" + "        Android.showToast(toast);\n" + "    }\n" + "</script>";
-        return this.htmlDocType + "<html><head>" + ("<meta name='viewport' content=' width=device-width, initial-scale=" + Global.iSize + ", minimum-scale=0.2, maximum-scale=2.5, user-scalable=no'/>") + this.css + "</head><body>" + str + str3 + this.htmlMenu + "</font>" + str2 + this.html + "</font></div></body></html>";
-    }
+//    public void addText(Element element, boolean isGetWholeText) {
+//        for (Node node : element.childNodes()) {
+//            if (node instanceof TextNode) {
+//                if (isGetWholeText) {
+//                    addText(((TextNode) node).getWholeText());
+//                } else {
+//                    addText(((TextNode) node).text());
+//                }
+//            }
+//        }
+//    }
+
+//    public void addText(Node node, boolean isGetWholeText) {
+//        if (node instanceof TextNode) {
+//            if (isGetWholeText) {
+//                addText(((TextNode) node).getWholeText());
+//            } else {
+//                addText(((TextNode) node).text());
+//            }
+//        }
+//    }
 
     public String getText() {
-        return this.tContain;
+        return this.mPlainText;
     }
 
     public boolean isEmpty() {
-        for (int i = 0; i < this.tContain.length(); i++) {
-            if (this.tContain.codePointAt(i) != 32) {
+        for (int i = 0; i < this.mPlainText.length(); i++) {
+            if (this.mPlainText.codePointAt(i) != 32) {
                 return false;
             }
         }
@@ -235,56 +223,11 @@ public class Post {
         return this.isMultiQuote;
     }
 
-    /* JADX WARNING: inconsistent code. */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void parserAvatar(org.jsoup.nodes.Element r5) {
 
-    }
-
-    public void parserContain(Element element) {
-        try {
-            this.html = element.toString();
-            if (this.htmlSign != null) {
-                this.html += this.htmlSign;
-            }
-            this.html = this.html.replace("<img src=\"http", "<img onClick=\"showAndroidToast(this.getAttribute('src'))\" style=\"width:95%;\" src=\"http");
-            this.html = this.html.replace("<img onClick=\"showAndroidToast(this.getAttribute('src'))\" style=\"width:95%;\" src=\"http://www.google.com/+1/button/images/icon.png", "<img src=\"http://www.google.com/+1/button/images/icon.png\"");
-            this.html = this.html.replace("style=\"margin:20px; margin-top:5px; \"", "style=\"margin-left:10px;margin-right:10px; \"");
-            this.html = this.html.replace("<a href=\"/redirect/index.php?link=", "<a href=\"");
-            this.html = this.html.replace("onload=\"NcodeImageResizer.createOn(this);\"", "");
-            this.html = this.html.replace("%3A", ":");
-            this.html = this.html.replace("%2F", "/");
-            this.html = this.html.replace("%3F", "?");
-            this.html = this.html.replace("%3D", "=");
-            this.html = this.html.replace("%26", "&");
-            if (element != null && element.attr("id").split("_").length > 2) {
-                this.m_id = element.attr("id").split("_")[2];
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void parserTime(Element element) {
-        try {
-            String text = element.text();
-            if (text != null && text.split(" ").length > 3) {
-                String[] split = text.split(" ");
-                this.mTime = split[2] + " " + split[3];
-                this.mIndex = split[0];
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public void set(String str, ArrayList<Bitmap> arrayList) {
-        this.tContain = str;
+        this.mPlainText = str;
         this.bitmaps = arrayList;
-    }
-
-    public void setAvatar(Bitmap bitmap) {
-        this.mAvatar = bitmap;
     }
 
     public void setId(String str) {
@@ -318,7 +261,7 @@ public class Post {
     public void preloadEmo() {
         for (int j = 0; j < image.getSize(); j++) {
             String url = image.getStr(j);
-            if (url.contains("images/smilies")) {
+            if (url.contains(EMO_PREFIX)) {
                 EmoLoader.getInstance().initEmoBitmapCache(url);
             }
         }
@@ -337,9 +280,6 @@ public class Post {
             while (curPos < font.getSize()) {
                 start = font.getStart(curPos).intValue();
                 end = font.getEnd(curPos).intValue();
-//                if (font.color(curPos).equals("Purple")) {
-//                    content.setSpan(new ForegroundColorSpan(-8388480), start, end, 18);
-//                }
                 mContent.setSpan(new RelativeSizeSpan((font.size(curPos) > 3 ? (float) (((double) (font.size(curPos) - 3)) / 10.0d)
                         : (float) (((double) (-(font.size(curPos) - 3))) / 10.0d)) + 1), start, end, 18);
                 curPos++;
@@ -380,7 +320,7 @@ public class Post {
                     if (image.getStr(curPos).contains(EMO_PREFIX)) {
                         BitmapDrawable bmp = EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos));
                         if (bmp != null) {
-                            ImageSpan span = new ImageSpan(bmp, 0);
+                            android.text.style.ImageSpan span = new android.text.style.ImageSpan(bmp, 0);
                             start = image.getStart(curPos).intValue();
                             end = image.getEnd(curPos).intValue();
                             mContent.setSpan(span, start, end, 18);

@@ -12,6 +12,7 @@ import android.view.WindowManager;
 
 import com.whoami.voz.R;
 import com.whoami.voz.ui.fragment.Page1Fragment;
+import com.whoami.voz.ui.fragment.Page3Fragment;
 import com.whoami.voz.ui.main.Global;
 
 public class BaseActivity extends AppCompatActivity {
@@ -33,6 +34,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
         Page1Fragment fragment = Page1Fragment.newInstance("test", "");
+//        Page3Fragment fragment = Page3Fragment.newInstance("Test", "https://vozforums.com/showthread.php?t=5156005");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.container, fragment,"AAAA");
         ft.commit();

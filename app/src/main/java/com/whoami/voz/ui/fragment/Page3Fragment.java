@@ -2,7 +2,6 @@ package com.whoami.voz.ui.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.whoami.voz.BuildConfig;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page3PagerAdapter;
@@ -30,7 +28,6 @@ import com.whoami.voz.ui.delegate.PagerListener;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.parserhtml.HtmlParser;
 import com.whoami.voz.ui.utils.HtmlLoader;
-import com.whoami.voz.ui.utils.UserInfo;
 import com.whoami.voz.ui.widget.NavigationBar;
 
 import org.apache.commons.io.IOUtils;
@@ -308,7 +305,7 @@ public class Page3Fragment extends BaseFragment {
         @Override
         public void onCallback(Document doc, int curPage) {
             try {
-                parseDataPage3(0, doc, null, true, curPage);
+                parseDataPage3(doc, true, curPage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -339,34 +336,32 @@ public class Page3Fragment extends BaseFragment {
         return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
     }
 
-    void parseDataPage3(int typeParse, Document doc, Document doc2, final boolean refresh, final int curPage) throws Exception {
+    void parseDataPage3(Document doc, final boolean refresh, final int curPage) throws Exception {
         if (doc != null) {
-            UserInfo mUser = new UserInfo();
-            String mPostId;
-            switch (typeParse) {
-                default: {
-                    Post post;
-                    ArrayList<Post> mListPost = new ArrayList<>();
-                    Element firstElement = doc.select("div[class=pagenav").first();
-                    if (firstElement !=null) {
-                        String strPage = firstElement.select("td[class=vbmenu_control]").text();
-                        mTotalPage = Integer.parseInt(strPage.split(" ")[3]);
-                    }
+//            UserInfo mUser = new UserInfo();
+//            String mPostId;
+            Post post;
+            ArrayList<Post> mListPost = new ArrayList<>();
+            Element navigationElement = doc.select("div[class=pagenav").first();
+            if (navigationElement != null) {
+                String strPage = navigationElement.select("td[class=vbmenu_control]").text();
+                mTotalPage = Integer.parseInt(strPage.split(" ")[3]);
+            }
 
-                    Element element = doc.select("div[align=center]").size() > 1 ? (Element) doc.select("div[align=center]").get(1) : doc;
-                    Element r0 = element.select("a[href=private.php]").first();
-                    mPostId = getPostIdFromUrl(url);
-                    if (r0 != null) {
-                        mUser.setUserId(((Element) element.select("td[class=alt2]").get(0)).select("a[href*=mem]").attr("href").split("=")[1]);
-                        r0 = element.select("input[name*=securitytoken]").first();
-                        if (r0 != null) {
-                            mUser.setToken(r0.attr("value"));
-                        }
-                        r0 = doc.select("div[style=margin-top:6px]:has(input[value=Post Quick Reply])").first();
-                        if (r0 != null) {
-                            String sIdThread = r0.select("input[name=t]").attr("value");
-                        }
-                        r0 = doc.select("td[class=alt1]:has(a[href *= subscription.php]").first();
+            Element contentElement = doc.select("div[align=center]").size() > 1 ? (Element) doc.select("div[align=center]").get(1) : doc;
+//                    Element r0 = element.select("a[href=private.php]").first();
+//            mPostId = getPostIdFromUrl(url);
+//                    if (r0 != null) {
+//                        mUser.setUserId(((Element) element.select("td[class=alt2]").get(0)).select("a[href*=mem]").attr("href").split("=")[1]);
+//                        r0 = element.select("input[name*=securitytoken]").first();
+//                        if (r0 != null) {
+//                            mUser.setToken(r0.attr("value"));
+//                        }
+//                        r0 = doc.select("div[style=margin-top:6px]:has(input[value=Post Quick Reply])").first();
+//                        if (r0 != null) {
+//                            String sIdThread = r0.select("input[name=t]").attr("value");
+//                        }
+//                        r0 = doc.select("td[class=alt1]:has(a[href *= subscription.php]").first();
 //                        if (r0 != null) {
 //                            if (r0.select("a[href *= subscription.php]").attr("href").contains("removesubscription")) {
 //                                this.isSubscribe = true;
@@ -378,98 +373,98 @@ public class Page3Fragment extends BaseFragment {
 //                                this.isSubscribe = false;
 //                            }
 //                        }
-                    }
-                    Elements select = element.select("td[id*=td_post]");
-                    Iterator it = select.iterator();
-                    String userTitle = null;
-                    while (it.hasNext()) {
-                        String username;
-                        String avatarUrl = null;
-                        post = new Post();
-                        String time = "";
-                        Element element2 = (Element) it.next();
-                        Element parent = element2.parent();
-                        if (select.select("div[class=smallfont]:has(strong)").first() != null) {
+//                    }
+            Elements postElementsList = contentElement.select("td[id*=td_post]");
+            Iterator it = postElementsList.iterator();
+            String userTitle = null;
+            while (it.hasNext()) {
+                String username;
+                String avatarUrl = null;
+                post = new Post();
+                String time = "";
+                Element postElement = (Element) it.next();
+                Element parent = postElement.parent();
+//                        if (select.select("div[class=smallfont]:has(strong)").first() != null) {
 //                            this.mTextTitle = select.select("div[class=smallfont]:has(strong)").first().text();
 //                            setTitle(this.mTextTitle);
-                        }
-                        Element previousElementSibling = parent.previousElementSibling();
-                        Element previousElementSibling2 = previousElementSibling.previousElementSibling();
-                        if (previousElementSibling.select("img[src*=avatars]").first() != null) {
-                            avatarUrl = previousElementSibling.select("img[src*=avatars]").attr("src");
-                            if (!avatarUrl.contains(Global.URL)) {
-                                avatarUrl = Global.URL + avatarUrl;
-                            }
-                        }
-                        if (previousElementSibling.select("div:containsOwn(Join Date)").first() != null) {
-                             username = previousElementSibling.select("div:containsOwn(Join Date)").first().text();
-                            if (username.contains("Date:")) {
-                                username = username.split("Date:")[1];
-                            }
-                            post.setJD("Jd:" + username);
-                        } else {
-                            post.setJD(BuildConfig.FLAVOR);
-                        }
-                        if (previousElementSibling.select("div:containsOwn(Posts: )").first() != null) {
-                            post.setPosts(previousElementSibling.select("div:containsOwn(Posts: )").first().text());
-                        } else {
-                            post.setPosts(BuildConfig.FLAVOR);
-                        }
-                        if (previousElementSibling.select("img[src*=line.gif").first() != null) {
-                            if (previousElementSibling.select("img[src*=line.gif").attr("src").contains("online")) {
-                                post.isOnline = true;
-                            } else {
-                                post.isOnline = false;
-                            }
-                        }
-                        if (previousElementSibling.select("a[class=bigusername]").first() != null) {
-                            username = previousElementSibling.select("a[class=bigusername]").text();
-                            post.m_UserId = previousElementSibling.select("a[class=bigusername]").first().attr("href").split("u=")[1];
-                        } else {
-                            username = userTitle;
-                        }
-                        userTitle = previousElementSibling.select("div[class=smallfont]").first() != null ? previousElementSibling.select("div[class=smallfont]").first().text() : time;
-                        time = previousElementSibling2.text();
-                        previousElementSibling = element2.select("div[id*=post_message").first();
-                        if (previousElementSibling != null) {
-                            if (previousElementSibling.attr("id").split("_").length > 2) {
-                                post.setId(previousElementSibling.attr("id").split("_")[2]);
-                            }
-                            parsePage3(previousElementSibling, post, false);
-                        }
-                        previousElementSibling = element2.select("fieldset[class=fieldset]").first();
-                        if (previousElementSibling != null) {
-                            post.addText(IOUtils.LINE_SEPARATOR_UNIX);
-                            parsePage3(previousElementSibling, post, false);
-                        }
-                        post.Info(username, userTitle, time, avatarUrl);
-                        if (Global.bSign && element2.select("div:contains(_______)").first() != null) {
-                            post.addText("\n");
-                            parsePage3(element2.select("div:contains(_______)").first(), post, false);
-                        }
-                        post.initContent();
-                        mListPost.add(post);
-                        if (post.Id().equals(mPostId)) {
-                            userTitle = username;
-                        } else {
-
-                            userTitle = username;
-                        }
+//                        }
+                //===================Parse header================
+                Element headerElement = parent.previousElementSibling();
+                Element postTimeElement = headerElement.previousElementSibling();
+                if (headerElement.select("img[src*=avatars]").first() != null) {
+                    avatarUrl = headerElement.select("img[src*=avatars]").attr("src");
+                    if (!avatarUrl.contains(Global.URL)) {
+                        avatarUrl = Global.URL + avatarUrl;
                     }
-                    mMapPostPerPage.put(Integer.valueOf(curPage), mListPost);
+                }
+                if (headerElement.select("div:containsOwn(Join Date)").first() != null) {
+                    String joinDate = headerElement.select("div:containsOwn(Join Date)").first().text();
+                    if (joinDate.contains("Date:")) {
+                        joinDate = joinDate.split("Date:")[1];
+                    }
+                    post.setJD("Jd:" + joinDate);
+                } else {
+                    post.setJD("");
+                }
+                if (headerElement.select("div:containsOwn(Posts: )").first() != null) {
+                    post.setPosts(headerElement.select("div:containsOwn(Posts: )").first().text());
+                } else {
+                    post.setPosts("");
+                }
+                if (headerElement.select("img[src*=line.gif").first() != null) {
+                    if (headerElement.select("img[src*=line.gif").attr("src").contains("online")) {
+                        post.isOnline = true;
+                    } else {
+                        post.isOnline = false;
+                    }
+                }
+                if (headerElement.select("a[class=bigusername]").first() != null) {
+                    username = headerElement.select("a[class=bigusername]").text();
+                    post.m_UserId = headerElement.select("a[class=bigusername]").first().attr("href").split("u=")[1];
+                } else {
+                    username = userTitle;
+                }
+                userTitle = headerElement.select("div[class=smallfont]").first() != null ? headerElement.select("div[class=smallfont]").first().text() : time;
+                time = postTimeElement.text();
+                post.Info(username, userTitle, time, avatarUrl);
+
+                //===================Parse body================
+                Element messageElement = postElement.select("div[id*=post_message").first();
+                if (messageElement != null) {
+                    if (messageElement.attr("id").split("_").length > 2) {
+                        post.setId(messageElement.attr("id").split("_")[2]);
+                    }
+                    parseMessagePage3(messageElement, post, false);
+                }
+                Element fieldSetElement = postElement.select("fieldset[class=fieldset]").first();
+                if (fieldSetElement != null) {
+                    post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                    parseMessagePage3(fieldSetElement, post, false);
                 }
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPage3PagerAdapter.setTotalPage(mTotalPage);
-                        refreshCurrentPage(curPage, refresh);
-                    }
-                });
-
-
+                if (Global.bSign && postElement.select("div:contains(_______)").first() != null) {
+                    post.addText("\n");
+                    parseMessagePage3(postElement.select("div:contains(_______)").first(), post, false);
+                }
+                post.initContent();
+                mListPost.add(post);
+//                        if (post.Id().equals(mPostId)) {
+//                            userTitle = username;
+//                        } else {
+//
+//                            userTitle = username;
+//                        }
             }
+            mMapPostPerPage.put(Integer.valueOf(curPage), mListPost);
         }
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mPage3PagerAdapter.setTotalPage(mTotalPage);
+                refreshCurrentPage(curPage, refresh);
+            }
+        });
     }
 
     private void refreshCurrentPage(final int curPage, boolean forceRefresh) {
@@ -504,147 +499,149 @@ public class Page3Fragment extends BaseFragment {
         }
     }
 
-    private void parsePage3(Element element, Post post, boolean isGetWholeText) {
-        if (element != null) {
-            for (Node node : element.childNodes()) {
-                if (node instanceof Element) {
-                    Element first;
-                    int length;
-                    int length2;
-                    if (((Element) node).tagName().equals("div")) {
-                        first = ((Element) node).select("div").first();
-                        if (first.attr("style").contains("padding")) {
-                            post.addText("\n");
-                        }
-                        if (first.ownText().contains("Originally Posted by")) {
-                            post.addText("Originally Posted by ");
-                            length = post.getText().length();
-                            post.addText(first.select("strong").text());
-                            length2 = post.getText().length();
-                            post.web.add(Global.URL + first.select("a").attr("href"), length, length2);
-                            post.type.add("", length, length2, 1);
-                            post.addText("\n");
-                        } else {
-                            parsePage3(first, post, isGetWholeText);
-                            post.addText("\n");
-                        }
-                    } else if (((Element) node).tagName().equals("blockquote")) {
-                        first = ((Element) node).select("blockquote").first();
-                        post.addText("\n");
-                        parsePage3(first, post, isGetWholeText);
-                        post.addText("\n");
-                    } else if (((Element) node).tagName().equals("fieldset")) {
-                        first = ((Element) node).select("fieldset").first();
-                        post.addText("\n");
-                        parsePage3(first, post, isGetWholeText);
-                        post.addText("\n");
-                    } else if (((Element) node).tagName().equals("b")) {
-                        first = ((Element) node).select("b").first();
-                        length = post.getText().length();
-                        parsePage3(first, post, isGetWholeText);
-                        post.type.add("", length, post.getText().length(), 1);
-                    } else if (((Element) node).tagName().equals("i")) {
-                        first = ((Element) node).select("i").first();
-                        length = post.getText().length();
-                        parsePage3(first, post, isGetWholeText);
-                        post.type.add("", length, post.getText().length(), 2);
-                    } else if (((Element) node).tagName().equals("pre")) {
-                        first = ((Element) node).select("pre").first();
-                        length = post.getText().length();
-                        parsePage3(first, post, isGetWholeText);
-                        post.quote.add("", length, post.getText().length());
-                    } else if (((Element) node).tagName().equals("table")) {
-                        first = ((Element) node).select("table").first();
-                        length = post.getText().length();
-                        parsePage3(first, post, isGetWholeText);
-                        post.quote.add("", length, post.getText().length());
-                    } else if (((Element) node).tagName().equals("ol")) {
-                        parsePage3(((Element) node).select("ol").first(), post, isGetWholeText);
-                    } else if (((Element) node).tagName().equals("tbody")) {
-                        parsePage3(((Element) node).select("tbody").first(), post, isGetWholeText);
-                    } else if (((Element) node).tagName().equals("li")) {
-                        parsePage3(((Element) node).select("li").first(), post, isGetWholeText);
-                    } else if (((Element) node).tagName().equals("tr")) {
-                        first = ((Element) node).select("tr").first();
-                        post.addText("\n");
-                        parsePage3(first, post, isGetWholeText);
-                    } else if (((Element) node).tagName().equals("td")) {
-                        parsePage3(((Element) node).select("td").first(), post, isGetWholeText);
-                    } else if (((Element) node).tagName().equals("img")) {
-                        String r0 = ((Element) node).select("img[src]").attr("src");
-                        if (r0.contains(Global.URL) && r0.subSequence(0, 21).equals(Global.URL) && !r0.contains("https://vozforums.com/attachment.php?attachmentid") && !r0.contains("https://vozforums.com/customavatars/")) {
-                            r0 = r0.substring(21);
-                        }
-                        if (r0.substring(0, 1).equals("/")) {
-                            r0 = r0.substring(1, r0.length());
-                        }
-                        length = post.getText().length();
-                        length2 = r0.length();
-                        if (r0.contains("http://") || r0.contains("https://") || r0.contains("attachment.php?attachmentid")) {
-                            post.image.add(r0, length, length2 + length, null);
-                        } else {
-                            post.image.add(r0, length, length + 2, null);
-                            r0 = "  ";
-                        }
-                        if (!r0.contains("images/buttons/viewpost.gif")) {
-                            post.addText(r0);
-                            if (node.hasAttr("onload")) {
+    private void parseMessagePage3(Element element, Post post, boolean isGetWholeText) {
+        try {
+            if (element != null) {
+                for (Node node : element.childNodes()) {
+                    if (node instanceof Element) {
+                        if (((Element) node).tagName().equals("div")) {
+                            Element first = ((Element) node).select("div").first();
+                            if (first.attr("style").contains("padding")) {
                                 post.addText("\n");
                             }
-                        }
-                    } else if (((Element) node).tagName().equals("br")) {
-                        post.addText("\n");
-                    } else if (((Element) node).tagName().equals("u")) {
-                        first = ((Element) node).select("u").first();
-                        length = post.getText().length();
-                        parsePage3(first, post, isGetWholeText);
-                        post.typeU.add("", length, post.getText().length());
-                    } else if (((Element) node).tagName().equals("font")) {
-                        Element first2 = ((Element) node).select("font").first();
-                        String str = "while";
-                        String r1 = "3";
-                        if (((Element) node).select("font[color]").first() != null) {
-                            str = ((Element) node).select("font[color]").attr("color");
-                        }
-                        String attr = ((Element) node).select("font[size]").first() != null ? ((Element) node).select("font[size]").attr("size") : r1;
-                        length2 = post.getText().length();
-                        parsePage3(first2, post, isGetWholeText);
-                        post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
-                    } else if (((Element) node).tagName().equals("a")) {
-                        first = ((Element) node).select("a[href]").first();
-                        if (first.select("img").first() == null) {
-                            String r0;
-                            r0 = ((Element) node).select("a[href]").attr("href").replace("%3A", ":").replace("%2F", "/").replace("%3F", "?").replace("%3D", "=").replace("%26", "&");
-                            if (r0.contains("mailto:")) {
-                                String r1 = r0.substring(7, r0.length());
-                                r0 = ((Element) node).select("a[href]").text();
-                                length2 = post.getText().length();
-                                post.web.add(r1, length2, r0.length() + length2);
-                                post.addText(r0);
-                            } else if (r0.contains("http")) {
-                                String r1 = r0.substring(r0.indexOf("http"), r0.length());
-                                r0 = ((Element) node).select("a[href]").text();
-                                length2 = post.getText().length();
-                                post.web.add(r1, length2, r0.length() + length2);
-                                post.addText(r0);
+                            if (first.ownText().contains("Originally Posted by")) {
+                                post.addText("Originally Posted by ");
+                                int length = post.getText().length();
+                                post.addText(first.select("strong").text());
+                                int length2 = post.getText().length();
+                                post.web.add(Global.URL + first.select("a").attr("href"), length, length2);
+                                post.type.add("", length, length2, 1);
+                                post.addText("\n");
+                            } else {
+                                parseMessagePage3(first, post, isGetWholeText);
+                                post.addText("\n");
+                            }
+                        } else if (((Element) node).tagName().equals("blockquote")) {
+                            Element first = ((Element) node).select("blockquote").first();
+                            post.addText("\n");
+                            parseMessagePage3(first, post, isGetWholeText);
+                            post.addText("\n");
+                        } else if (((Element) node).tagName().equals("fieldset")) {
+                            Element first = ((Element) node).select("fieldset").first();
+                            post.addText("\n");
+                            parseMessagePage3(first, post, isGetWholeText);
+                            post.addText("\n");
+                        } else if (((Element) node).tagName().equals("b")) {
+                            Element first = ((Element) node).select("b").first();
+                            int length = post.getText().length();
+                            parseMessagePage3(first, post, isGetWholeText);
+                            post.type.add("", length, post.getText().length(), 1);
+                        } else if (((Element) node).tagName().equals("i")) {
+                            Element first = ((Element) node).select("i").first();
+                            int length = post.getText().length();
+                            parseMessagePage3(first, post, isGetWholeText);
+                            post.type.add("", length, post.getText().length(), 2);
+                        } else if (((Element) node).tagName().equals("pre")) {
+                            Element first = ((Element) node).select("pre").first();
+                            int length = post.getText().length();
+                            parseMessagePage3(first, post, isGetWholeText);
+                            post.quote.add("", length, post.getText().length());
+                        } else if (((Element) node).tagName().equals("table")) {
+                            Element first = ((Element) node).select("table").first();
+                            int length = post.getText().length();
+                            parseMessagePage3(first, post, isGetWholeText);
+                            post.quote.add("", length, post.getText().length());
+                        } else if (((Element) node).tagName().equals("ol")) {
+                        } else if (((Element) node).tagName().equals("tbody")) {
+                            Element first = ((Element) node).select("tbody").first();
+                            parseMessagePage3(first, post, isGetWholeText);
+                        } else if (((Element) node).tagName().equals("li")) {
+                            Element first = ((Element) node).select("li").first();
+                            parseMessagePage3(first, post, isGetWholeText);
+                        } else if (((Element) node).tagName().equals("tr")) {
+                            Element first = ((Element) node).select("tr").first();
+                            post.addText("\n");
+                            parseMessagePage3(first, post, isGetWholeText);
+                        } else if (((Element) node).tagName().equals("td")) {
+                            Element first = ((Element) node).select("td").first();
+                            parseMessagePage3(first, post, isGetWholeText);
+                        } else if (((Element) node).tagName().equals("img")) { // parse image tag
+                            String imageUrl = ((Element) node).select("img[src]").attr("src");
+                            if (imageUrl.contains(Global.URL) && imageUrl.subSequence(0, 21).equals(Global.URL) && !imageUrl.contains("https://vozforums.com/attachment.php?attachmentid") && !imageUrl.contains("https://vozforums.com/customavatars/")) {
+                                imageUrl = imageUrl.substring(21);
+                            }
+                            if (imageUrl.substring(0, 1).equals("/")) {
+                                imageUrl = imageUrl.substring(1, imageUrl.length());
+                            }
+                            int messageLength = post.getText().length();
+                            int imageUrlLength = imageUrl.length();
+                            if (imageUrl.contains("http://") || imageUrl.contains("https://") || imageUrl.contains("attachment.php?attachmentid")) {
+                                post.image.add(imageUrl, messageLength, imageUrlLength + messageLength, null);
+                            } else if (imageUrl.contains(Post.EMO_PREFIX)) {
+                                post.image.add(imageUrl, messageLength, messageLength + 2, null);
+                                imageUrl = "  ";
+//                                if (/*!imageUrl.contains("images/buttons/viewpost.gif") &&*/) {
+//                                }
+                                post.addText(imageUrl);
+                                if (node.hasAttr("onload")) {
+                                    post.addText("\n");
+                                }
+                            }
+                        } else if (((Element) node).tagName().equals("br")) {
+                            post.addText("\n");
+                        } else if (((Element) node).tagName().equals("u")) {
+                            Element first = ((Element) node).select("u").first();
+                            int length = post.getText().length();
+                            parseMessagePage3(first, post, isGetWholeText);
+                            post.typeU.add("", length, post.getText().length());
+                        } else if (((Element) node).tagName().equals("font")) {
+                            Element first = ((Element) node).select("font").first();
+                            String str = "while";
+                            String r1 = "3";
+                            if (((Element) node).select("font[color]").first() != null) {
+                                str = ((Element) node).select("font[color]").attr("color");
+                            }
+                            String attr = ((Element) node).select("font[size]").first() != null ? ((Element) node).select("font[size]").attr("size") : r1;
+                            int length2 = post.getText().length();
+                            parseMessagePage3(first, post, isGetWholeText);
+                            post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
+                        } else if (((Element) node).tagName().equals("a")) {
+                            Element first = ((Element) node).select("a[href]").first();
+                            if (first.select("img").first() == null) {
+                                String r0;
+                                r0 = ((Element) node).select("a[href]").attr("href").replace("%3A", ":").replace("%2F", "/").replace("%3F", "?").replace("%3D", "=").replace("%26", "&");
+                                if (r0.contains("mailto:")) {
+                                    String r1 = r0.substring(7, r0.length());
+                                    r0 = ((Element) node).select("a[href]").text();
+                                    int length2 = post.getText().length();
+                                    post.web.add(r1, length2, r0.length() + length2);
+                                    post.addText(r0);
+                                } else if (r0.contains("http")) {
+                                    String r1 = r0.substring(r0.indexOf("http"), r0.length());
+                                    r0 = ((Element) node).select("a[href]").text();
+                                    int length2 = post.getText().length();
+                                    post.web.add(r1, length2, r0.length() + length2);
+                                    post.addText(r0);
+                                }
+                            } else {
+                                parseMessagePage3(first, post, true);
                             }
                         } else {
-                            parsePage3(first, post, true);
+                            post.addText(((Element) node).text());
                         }
-                    } else {
-                        post.addText(((Element) node).text());
-                    }
-                }
-                if (node instanceof TextNode) {
-                    if (isGetWholeText) {
-                        post.addText(((TextNode) node).getWholeText());
-                    } else {
-                        post.addText(((TextNode) node).text());
+                    } else if (node instanceof TextNode) {
+                        // IMPORTANT: add plain message !!!
+                        if (isGetWholeText) {
+                            post.addText(((TextNode) node).getWholeText());
+                        } else {
+                            post.addText(((TextNode) node).text());
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-//        post.addText(element.text());
     }
 
     private String getPostIdFromUrl(String str) {
