@@ -1,4 +1,4 @@
-package com.whoami.voz.ui.fragment;
+package com.whoami.voz.ui.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -10,9 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,12 +23,12 @@ import com.whoami.voz.ui.adapter.Page3PagerAdapter;
 import com.whoami.voz.ui.adapter.list.Page3ListViewAdapter;
 import com.whoami.voz.ui.contain.Post;
 import com.whoami.voz.ui.delegate.PagerListener;
+import com.whoami.voz.ui.fragment.Page3Fragment;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.parserhtml.HtmlParser;
 import com.whoami.voz.ui.utils.HtmlLoader;
 import com.whoami.voz.ui.widget.NavigationBar;
 
-import org.apache.commons.io.IOUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -42,104 +40,55 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Page3Fragment extends BaseFragment {
-    private static final String TAG = Page3Fragment.class.getSimpleName();
-    
-    public static final int REFRESH_INDEX_PAGE = 999;
-
-
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String URL_PARAM = "param2";
-
-    private String mParam1;
-    private String mParam2;
-
-    public static final int MAX_ENTRIES = 5;
-
+/**
+ * Created by thaidh on 9/3/16.
+ */
+public class Page3Activity extends BaseActivity {
+    public static final String TAG = Page3Activity.class.getSimpleName();
     private Bitmap bmImageStart;
-    private String url;
 
     // base activity
     private HtmlParser mParser;
-//    private ListView mList;
-    private View mRootView;
-    private SharedPreferences settings;
+    //    private ListView mList;
     private LinearLayout mLayoutProgress;
     private ViewPager mViewPager;
     private Page3PagerAdapter mPage3PagerAdapter;
     private PagerListener mPagerListener;
-
-    private TextView mTitleTv;
-
     private int mTotalPage = 1;
 
-    private Map<Integer, ArrayList<Post>>  mMapPostPerPage = new LinkedHashMap() {
+    private Map<Integer, ArrayList<Post>> mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
             return size() > Page3Fragment.MAX_ENTRIES;
         }
     };
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Page3Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Page3Fragment newInstance(String param1, String param2) {
-        Page3Fragment fragment = new Page3Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(URL_PARAM, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public Page3Fragment() {
-        // Required empty public constructor
-    }
+    private String mUrl;
+    private String mTitle;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            Bundle bundle = getArguments();
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            url = getArguments().getString(URL_PARAM);
-
-            if (!url.contains(Global.URL) && !url.contains(Global.URL2)) {
-                url = Global.URL + url;
-            }
-        }
+        setContentView(R.layout.fragment_page3);
+        setupToolbar();
+        initLayout();
+        initData();
+        initQuickReturn();
     }
 
-    @Override
-    public View  onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mRootView = inflater.inflate(R.layout.fragment_page3, container, false);
-        settings = getActivity().getSharedPreferences("Setting", 0);
-        Global.iTheme = this.settings.getInt("THEME", 1);
+    private void initLayout() {
 //        readSettings();
 
-        this.mLayoutProgress = (LinearLayout) mRootView.findViewById(R.id.layoutprogress);
+        this.mLayoutProgress = (LinearLayout) findViewById(R.id.layoutprogress);
         Global.iDensity = getResources().getDisplayMetrics().density;
 
         this.bmImageStart = BitmapFactory.decodeResource(getResources(), R.drawable.stub_image);
 
         this.mParser = new HtmlParser(Global.URL);
-        this.mParser.setUrl(url);
+        this.mParser.setUrl(mUrl);
 
 
-//        Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.my_awesome_toolbar);
-//        toolbar.setTitle(mParam1);
-//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        mTitleTv.setText(mParam1);
-        mViewPager = (ViewPager) mRootView.findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(1);
-        mPage3PagerAdapter = new Page3PagerAdapter(getActivity(), mTotalPage, url, bmImageStart, 1.0f, mViewPager);
+        mPage3PagerAdapter = new Page3PagerAdapter(this, mTotalPage, mUrl, bmImageStart, 1.0f, mViewPager);
         mPagerListener = new PagerListener() {
             @Override
             public View findPageView(int curPage) {
@@ -253,19 +202,23 @@ public class Page3Fragment extends BaseFragment {
             }
         });
         mViewPager.setAdapter(mPage3PagerAdapter);
-        //init page 1
-        loadPage(1, false);
-        return mRootView;
+
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    private void initData() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mUrl = Global.URL + bundle.getString(EXTRA_URL);
+            mTitle = bundle.getString(EXTRA_TITLE);
+        }
+        mToolbar.setTitle(mTitle);
+        //init page 1
+        loadPage(1, false);
     }
 
     protected void alertGoPage() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        View inflate = getActivity().getLayoutInflater().inflate(R.layout.login, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View inflate = getLayoutInflater().inflate(R.layout.login, null);
         final EditText editText = (EditText) inflate.findViewById(R.id.alert_edit1);
         TextView textView = (TextView) inflate.findViewById(R.id.alert_txt1);
         TextView textView2 = (TextView) inflate.findViewById(R.id.alert_txt2);
@@ -281,7 +234,6 @@ public class Page3Fragment extends BaseFragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "click 1111111");
                 String strPage = editText.getText().toString();
                 int page = Integer.parseInt(strPage) - 1;
                 if (page >= 0 && page < mPage3PagerAdapter.getTotalPage()) {
@@ -293,7 +245,6 @@ public class Page3Fragment extends BaseFragment {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "click 222222222");
                 dialog.dismiss();
             }
         });
@@ -328,10 +279,10 @@ public class Page3Fragment extends BaseFragment {
     }
 
     private String getUrlWithPage(int mPage) {
-        if (!url.contains("&page=")) {
-            url = url.concat("&page=1");
+        if (!mUrl.contains("&page=")) {
+            mUrl = mUrl.concat("&page=1");
         }
-        String concat = url.substring(0, url.lastIndexOf("=") + 1).concat(String.valueOf(mPage));
+        String concat = mUrl.substring(0, mUrl.lastIndexOf("=") + 1).concat(String.valueOf(mPage));
         return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
     }
 
@@ -456,8 +407,7 @@ public class Page3Fragment extends BaseFragment {
             }
             mMapPostPerPage.put(Integer.valueOf(curPage), mListPost);
         }
-
-        getActivity().runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mPage3PagerAdapter.setTotalPage(mTotalPage);
@@ -488,7 +438,7 @@ public class Page3Fragment extends BaseFragment {
                 navigationFooterBar.setPagerListener(mPagerListener);
                 (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
                 if ((forceRefresh || listView.getAdapter() == null) && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(getActivity(), mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, 1.0f);
+                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(this, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, 1.0f);
                     listView.setAdapter(adapter);
                 }
 

@@ -6,38 +6,17 @@
               android:background="#ffffff"
               android:orientation="vertical">
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/my_awesome_toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/blue"-->
-        <!--android:minHeight="?attr/actionBarSize"/>-->
-
-    <TextView
-    android:id="@+id/tv_title"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:minHeight="?attr/actionBarSize"
-    android:gravity="center_vertical"
-    android:background="@color/blue"
-    android:singleLine="true"
-    android:textColor="@color/white"
-    android:padding="16.0dp"
-    android:textSize="20.0dp"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_awesome_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:minHeight="?attr/actionBarSize"/>
 
     <RelativeLayout
         android:id="@+id/main_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-
-
-        <!--<TextView-->
-        <!--android:id="@+id/tv_title"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:minHeight="?attr/actionBarSize"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="16.0dp"/>-->
 
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"

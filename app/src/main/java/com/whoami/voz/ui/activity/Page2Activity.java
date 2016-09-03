@@ -1,18 +1,13 @@
-package com.whoami.voz.ui.fragment;
+package com.whoami.voz.ui.activity;
 
-
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -25,6 +20,7 @@ import com.whoami.voz.ui.adapter.Page2PagerAdapter;
 import com.whoami.voz.ui.adapter.list.Page2ListViewAdapter;
 import com.whoami.voz.ui.contain.Thread;
 import com.whoami.voz.ui.delegate.PagerListener;
+import com.whoami.voz.ui.fragment.Page3Fragment;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.utils.HtmlLoader;
 import com.whoami.voz.ui.utils.Util;
@@ -40,25 +36,13 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link Page2Fragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by thaidh on 9/3/16.
  */
-public class Page2Fragment extends BaseFragment {
-    public static final String TAG = Page2Fragment.class.getSimpleName();
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private ArrayList<Thread> ListContains;
-    private String mTextTitle;
-
-    // TODO: Rename and change types of parameters
+public class Page2Activity extends BaseActivity {
+    public static final String TAG = Page2Activity.class.getSimpleName();
     private String mUrl;
-    private String mParamTitle;
-//    private ListView mList;
+    private String mTitle;
     private LinearLayout mLayoutProgress;
     private ViewPager mViewPager;
     private Page2PagerAdapter mPage2PagerAdapter;
@@ -72,56 +56,35 @@ public class Page2Fragment extends BaseFragment {
     };
     private int mTotalPage = 1;
 
-    public Page2Fragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Page2Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Page2Fragment newInstance(String param1, String param2) {
-        Page2Fragment fragment = new Page2Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mUrl = Global.URL + getArguments().getString(ARG_PARAM1);
-            mParamTitle = getArguments().getString(ARG_PARAM2);
+        setContentView(R.layout.fragment_page3);
+        setupToolbar();
+        initLayout();
+        initData();
+        initQuickReturn();
+    }
+
+    private void initData() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            mUrl = Global.URL + bundle.getString(EXTRA_URL);
+            mTitle = bundle.getString(EXTRA_TITLE);
         }
+        mToolbar.setTitle(mTitle);
+
+        loadPage(1, false);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_page3, container, false);
-    }
+    private void initLayout() {
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        Toolbar toolbar = (Toolbar) view.findViewById(R.id.my_awesome_toolbar);
-//        toolbar.setTitle(mParamTitle);
-//        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
-        mLayoutProgress = (LinearLayout) view.findViewById(R.id.layoutprogress);
-        mViewPager = (ViewPager) view.findViewById(R.id.pager);
+        mLayoutProgress = (LinearLayout) findViewById(R.id.layoutprogress);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(1);
 
-        mPage2PagerAdapter = new Page2PagerAdapter(getActivity(), mUrl, 1, mViewPager);
+        mPage2PagerAdapter = new Page2PagerAdapter(this, mUrl, 1, mViewPager);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -160,7 +123,6 @@ public class Page2Fragment extends BaseFragment {
 
             }
         });
-        loadPage(1, false);
     }
 
     public void loadPage(final int curPage, boolean refres) {
@@ -324,7 +286,7 @@ public class Page2Fragment extends BaseFragment {
 //            }
 //            this.scrollIsComputed = true;
             mMapPostPerPage.put(Integer.valueOf(curPage), ListContains);
-            getActivity().runOnUiThread(new Runnable() {
+            runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     mPage2PagerAdapter.setTotalPage(mTotalPage);
@@ -345,7 +307,7 @@ public class Page2Fragment extends BaseFragment {
         if (str.contains("smilies")) {
             String str2 = str.substring(0, str.length() - 3) + "gif";
             try {
-                String[] list = getActivity().getAssets().list("images/smilies/Off");
+                String[] list = getAssets().list("images/smilies/Off");
                 int length = list.length;
                 while (i < length) {
                     if ((str.substring(0, str.length() - 3) + "png").contains(list[i])) {
@@ -361,10 +323,10 @@ public class Page2Fragment extends BaseFragment {
             }
         }
         try {
-            InputStream open = getActivity().getAssets().open(str);
+            InputStream open = getAssets().open(str);
             Bitmap decodeStream = BitmapFactory.decodeStream(open);
             if (str.contains("statusicon")) {
-                int convertDpToPx = Util.convertDpToPx(getActivity(), 24);
+                int convertDpToPx = Util.convertDpToPx(this, 24);
                 open.close();
                 return Bitmap.createScaledBitmap(decodeStream, convertDpToPx, convertDpToPx, false);
             }
@@ -407,7 +369,7 @@ public class Page2Fragment extends BaseFragment {
                 (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
                 if ((refresh || listView.getAdapter() == null) && mMapPostPerPage.containsKey(curPage)) {
                     final ArrayList<Thread> curListPost = mMapPostPerPage.get(curPage);
-                    final Page2ListViewAdapter adapter = new Page2ListViewAdapter(getActivity(), curListPost);
+                    final Page2ListViewAdapter adapter = new Page2ListViewAdapter(this, curListPost);
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -427,28 +389,23 @@ public class Page2Fragment extends BaseFragment {
             i = i - listView.getHeaderViewsCount();
             if (curListPost.get(i).isUrl() == 0) {
                 if (curListPost.get(i).UrlThread() != null) {
-                    Page2Fragment fragment = Page2Fragment.newInstance(curListPost.get(i).UrlThread(), curListPost.get(i).Thread());
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.add(R.id.container, fragment, "AAAA");
-                    ft.addToBackStack("Page2Fragment");
-                    ft.commit();
+                    Intent intent = new Intent(Page2Activity.this, Page2Activity.class);
+                    intent.putExtra(EXTRA_URL, curListPost.get(i).UrlThread());
+                    intent.putExtra(EXTRA_TITLE, curListPost.get(i).Thread());
+                    startActivity(intent);
                 }
             } else if (curListPost.get(i).isUrl() == 1) {
-                Page3Fragment fragment = null;
-
+                Intent intent = new Intent(Page2Activity.this, Page3Activity.class);
                 if (curListPost.get(i).UrlLastPosst() != null) {
                     if (curListPost.get(i).UrlLastPosst() != null) {
-                        fragment = Page3Fragment.newInstance("", curListPost.get(i).UrlLastPosst());
+                        intent.putExtra(EXTRA_URL, curListPost.get(i).UrlLastPosst());
+                        intent.putExtra(EXTRA_TITLE, "");
                     }
                 } else if (curListPost.get(i).UrlThread() != null) {
-                    fragment = Page3Fragment.newInstance(curListPost.get(i).Thread(), curListPost.get(i).UrlThread());
+                    intent.putExtra(EXTRA_URL, curListPost.get(i).UrlThread());
+                    intent.putExtra(EXTRA_TITLE, curListPost.get(i).Thread());
                 }
-                if (fragment != null) {
-                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                    ft.add(R.id.container, fragment, "AAAA");
-                    ft.addToBackStack("Page3Fragment");
-                    ft.commit();
-                }
+                startActivity(intent);
             }
         } catch (Exception e) {
             e.printStackTrace();
