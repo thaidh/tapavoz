@@ -240,7 +240,17 @@ public class Page3ListViewAdapter extends BaseAdapter {
                 parent.addView(textView);
                 break;
             }
-
+            case ContentItem.TYPE_QUOTE: {
+                TextView textView = new TextView(context);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                textView.setText(item.mContent);
+                textView.setTextColor(ContextCompat.getColor(context, R.color.grey));
+                textView.setTextSize(16);
+                textView.setPadding(Util.convertDpToPx(context, 5), 0, 0, 0);
+                textView.setLayoutParams(layoutParams);
+                parent.addView(textView);
+                break;
+            }
             case ContentItem.TYPE_PHOTO: {
                 SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());

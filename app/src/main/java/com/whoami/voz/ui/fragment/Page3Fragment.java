@@ -438,12 +438,12 @@ public class Page3Fragment extends BaseFragment {
                 }
                 Element fieldSetElement = postElement.select("fieldset[class=fieldset]").first();
                 if (fieldSetElement != null) {
-                    post.addText(IOUtils.LINE_SEPARATOR_UNIX);
+                    post.addText("\n", false);
                     parseMessagePage3(fieldSetElement, post, false);
                 }
 
                 if (Global.bSign && postElement.select("div:contains(_______)").first() != null) {
-                    post.addText("\n");
+                    post.addText("\n", false);
                     parseMessagePage3(postElement.select("div:contains(_______)").first(), post, false);
                 }
                 post.initContent();
@@ -500,6 +500,10 @@ public class Page3Fragment extends BaseFragment {
     }
 
     private void parseMessagePage3(Element element, Post post, boolean isGetWholeText) {
+        parseMessagePage3(element, post, isGetWholeText, false);
+    }
+
+    private void parseMessagePage3(Element element, Post post, boolean isGetWholeText, boolean isQuote) {
         try {
             if (element != null) {
                 for (Node node : element.childNodes()) {
@@ -507,71 +511,72 @@ public class Page3Fragment extends BaseFragment {
                         if (((Element) node).tagName().equals("div")) {
                             Element first = ((Element) node).select("div").first();
                             if (first.attr("style").contains("padding")) {
-                                post.addText("\n");
+                                post.addText("\n", isQuote);
                             }
                             if (first.ownText().contains("Originally Posted by")) {
-                                post.addText("Originally Posted by ");
+                                post.addText("Originally Posted by ", isQuote);
                                 int length = post.getText().length();
-                                post.addText(first.select("strong").text());
+                                post.addText(first.select("strong").text(), isQuote);
                                 int length2 = post.getText().length();
                                 post.web.add(Global.URL + first.select("a").attr("href"), length, length2);
                                 post.type.add("", length, length2, 1);
-                                post.addText("\n");
+                                post.addText("\n", isQuote);
                             } else {
-                                parseMessagePage3(first, post, isGetWholeText);
-                                post.addText("\n");
+                                parseMessagePage3(first, post, isGetWholeText, isQuote);
+                                post.addText("\n", isQuote);
                             }
                         } else if (((Element) node).tagName().equals("blockquote")) {
                             Element first = ((Element) node).select("blockquote").first();
-                            post.addText("\n");
-                            parseMessagePage3(first, post, isGetWholeText);
-                            post.addText("\n");
+                            post.addText("\n", isQuote);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
+                            post.addText("\n", isQuote);
                         } else if (((Element) node).tagName().equals("fieldset")) {
                             Element first = ((Element) node).select("fieldset").first();
-                            post.addText("\n");
-                            parseMessagePage3(first, post, isGetWholeText);
-                            post.addText("\n");
+                            post.addText("\n", isQuote);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
+                            post.addText("\n", isQuote);
                         } else if (((Element) node).tagName().equals("b")) {
                             Element first = ((Element) node).select("b").first();
                             int length = post.getText().length();
-                            parseMessagePage3(first, post, isGetWholeText);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                             post.type.add("", length, post.getText().length(), 1);
                         } else if (((Element) node).tagName().equals("i")) {
                             Element first = ((Element) node).select("i").first();
                             int length = post.getText().length();
-                            parseMessagePage3(first, post, isGetWholeText);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                             post.type.add("", length, post.getText().length(), 2);
-                        } else if (((Element) node).tagName().equals("pre")) {
+                        }
+                        /*else if (((Element) node).tagName().equals("pre")) {
                             Element first = ((Element) node).select("pre").first();
                             int length = post.getText().length();
                             int startQuote = post.getLastTextItem().mData.length();
-                            parseMessagePage3(first, post, isGetWholeText);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                             post.quote.add("", length, post.getText().length());
                             int endQuote = post.getLastTextItem().mData.length();
                             post.getLastTextItem().addQuote(startQuote, endQuote);
 
-                        } else if (((Element) node).tagName().equals("table")) {
+                        }*/ else if (((Element) node).tagName().equals("table")) {
                             Element first = ((Element) node).select("table").first();
-                            int length = post.getText().length();
-                            int startQuote = post.getLastTextItem().mData.length();
-                            parseMessagePage3(first, post, isGetWholeText);
-                            post.quote.add("", length, post.getText().length());
-                            int endQuote = post.getLastTextItem().mData.length();
-                            post.getLastTextItem().addQuote(startQuote, endQuote);
+//                            int length = post.getText().length();
+//                            int startQuote = post.getLastTextItem().mData.length();
+                            parseMessagePage3(first, post, isGetWholeText, true);
+//                            post.quote.add("", length, post.getText().length());
+//                            int endQuote = post.getLastTextItem().mData.length();
+//                            post.getLastTextItem().addQuote(startQuote, endQuote);
                         } else if (((Element) node).tagName().equals("ol")) {
                         } else if (((Element) node).tagName().equals("tbody")) {
                             Element first = ((Element) node).select("tbody").first();
-                            parseMessagePage3(first, post, isGetWholeText);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                         } else if (((Element) node).tagName().equals("li")) {
                             Element first = ((Element) node).select("li").first();
-                            parseMessagePage3(first, post, isGetWholeText);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                         } else if (((Element) node).tagName().equals("tr")) {
                             Element first = ((Element) node).select("tr").first();
-                            post.addText("\n");
-                            parseMessagePage3(first, post, isGetWholeText);
+                            post.addText("\n", isQuote);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                         } else if (((Element) node).tagName().equals("td")) {
                             Element first = ((Element) node).select("td").first();
-                            parseMessagePage3(first, post, isGetWholeText);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                         } else if (((Element) node).tagName().equals("img")) { // parse image tag
                             String imageUrl = ((Element) node).select("img[src]").attr("src");
                             if (imageUrl.contains(Global.URL) && imageUrl.subSequence(0, 21).equals(Global.URL) && !imageUrl.contains("https://vozforums.com/attachment.php?attachmentid") && !imageUrl.contains("https://vozforums.com/customavatars/")) {
@@ -586,22 +591,22 @@ public class Page3Fragment extends BaseFragment {
 //                                post.image.add(imageUrl, messageLength, imageUrlLength + messageLength, null);
                                 post.addPhoto(imageUrl);
                             } else if (imageUrl.contains(Post.EMO_PREFIX)) {
-                                post.addEmo(imageUrl);
+                                post.addEmo(imageUrl, isQuote);
                                 post.image.add(imageUrl, messageLength, messageLength + 2, null);
                                 imageUrl = "  ";
 //                                if (/*!imageUrl.contains("images/buttons/viewpost.gif") &&*/) {
 //                                }
-                                post.addText(imageUrl);
+                                post.addText(imageUrl, isQuote);
                                 if (node.hasAttr("onload")) {
-                                    post.addText("\n");
+                                    post.addText("\n", isQuote);
                                 }
                             }
                         } else if (((Element) node).tagName().equals("br")) {
-                            post.addText("\n");
+                            post.addText("\n", isQuote);
                         } else if (((Element) node).tagName().equals("u")) {
                             Element first = ((Element) node).select("u").first();
                             int length = post.getText().length();
-                            parseMessagePage3(first, post, isGetWholeText);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                             post.typeU.add("", length, post.getText().length());
                         } else if (((Element) node).tagName().equals("font")) {
                             Element first = ((Element) node).select("font").first();
@@ -612,7 +617,7 @@ public class Page3Fragment extends BaseFragment {
                             }
                             String attr = ((Element) node).select("font[size]").first() != null ? ((Element) node).select("font[size]").attr("size") : r1;
                             int length2 = post.getText().length();
-                            parseMessagePage3(first, post, isGetWholeText);
+                            parseMessagePage3(first, post, isGetWholeText, isQuote);
                             post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
                         } else if (((Element) node).tagName().equals("a")) {
                             Element first = ((Element) node).select("a[href]").first();
@@ -624,26 +629,26 @@ public class Page3Fragment extends BaseFragment {
                                     r0 = ((Element) node).select("a[href]").text();
                                     int length2 = post.getText().length();
                                     post.web.add(r1, length2, r0.length() + length2);
-                                    post.addText(r0);
+                                    post.addText(r0 , isQuote);
                                 } else if (r0.contains("http")) {
                                     String r1 = r0.substring(r0.indexOf("http"), r0.length());
                                     r0 = ((Element) node).select("a[href]").text();
                                     int length2 = post.getText().length();
                                     post.web.add(r1, length2, r0.length() + length2);
-                                    post.addText(r0);
+                                    post.addText(r0, isQuote);
                                 }
                             } else {
-                                parseMessagePage3(first, post, true);
+                                parseMessagePage3(first, post, true, isQuote);
                             }
                         } else {
-                            post.addText(((Element) node).text());
+                            post.addText(((Element) node).text(), isQuote);
                         }
                     } else if (node instanceof TextNode) {
                         // IMPORTANT: add plain message !!!
                         if (isGetWholeText) {
-                            post.addText(((TextNode) node).getWholeText());
+                            post.addText(((TextNode) node).getWholeText(), isQuote);
                         } else {
-                            post.addText(((TextNode) node).text());
+                            post.addText(((TextNode) node).text(), isQuote);
                         }
                     }
                 }

@@ -34,7 +34,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
         Page1Fragment fragment = Page1Fragment.newInstance("test", "");
-//        Page3Fragment fragment = Page3Fragment.newInstance("Test", "https://vozforums.com/showthread.php?t=5156005");
+//        Page3Fragment fragment = Page3Fragment.newInstance("Test", "https://vozforums.com/showthread.php?t=5232013");
 //        Page3Fragment fragment = Page3Fragment.newInstance("Test", "https://vozforums.com/showthread.php?t=5139353");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.container, fragment,"AAAA");

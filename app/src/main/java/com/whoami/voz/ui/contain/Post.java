@@ -187,7 +187,7 @@ public class Post {
     public ContentItem getLastTextItem() {
         ContentItem textItem;
         int size = mContentItemList.size();
-        if (size == 0 || mContentItemList.get(size -1).type == ContentItem.TYPE_PHOTO) {
+        if (size == 0 || mContentItemList.get(size -1).type != ContentItem.TYPE_PLAIN_TEXT) {
             textItem = new ContentItem(ContentItem.TYPE_PLAIN_TEXT, "");
             mContentItemList.add(textItem);
         } else {
@@ -196,14 +196,43 @@ public class Post {
         return textItem;
     }
 
-    public void addText(String str) {
+    public ContentItem getLastQuoteItem() {
+        ContentItem textItem;
+        int size = mContentItemList.size();
+        if (size == 0 || mContentItemList.get(size -1).type != ContentItem.TYPE_QUOTE) {
+            textItem = new ContentItem(ContentItem.TYPE_QUOTE, "");
+            mContentItemList.add(textItem);
+        } else {
+            textItem = mContentItemList.get(size - 1);
+        }
+        return textItem;
+    }
+
+    public void addText(String str, boolean isQuote) {
+
         this.mPlainText += str;
-        ContentItem textItem = getLastTextItem();
+        ContentItem textItem;
+        if (isQuote) {
+            textItem = getLastQuoteItem();
+        } else {
+            textItem = getLastTextItem();
+        }
         textItem.mData += str;
     }
 
-    public void addEmo(String url) {
-        ContentItem textItem = getLastTextItem();
+    public void addQuote(String str) {
+        this.mPlainText += str;
+        ContentItem textItem = getLastQuoteItem();
+        textItem.mData += str;
+    }
+
+    public void addEmo(String url, boolean isQuote) {
+        ContentItem textItem;
+        if (isQuote) {
+            textItem = getLastQuoteItem();
+        } else {
+            textItem = getLastTextItem();
+        }
         textItem.addEmo(url, textItem.mData.length(), textItem.mData.length() + 2);
         textItem.mData += "  ";
     }
@@ -278,25 +307,27 @@ public class Post {
         try {
             preloadEmo();
 
-            mContent = new SpannableString(getText());
-            int curPos = 0;
-            int start;
-            int end;
-            while (curPos < font.getSize()) {
-                start = font.getStart(curPos).intValue();
-                end = font.getEnd(curPos).intValue();
-                mContent.setSpan(new RelativeSizeSpan((font.size(curPos) > 3 ? (float) (((double) (font.size(curPos) - 3)) / 10.0d)
-                        : (float) (((double) (-(font.size(curPos) - 3))) / 10.0d)) + 1), start, end, 18);
-                curPos++;
-            }
-            curPos = 0;
-            while (curPos < web.getSize()) {
-                start = web.getStart(curPos).intValue();
-                end = web.getEnd(curPos).intValue();
-                mContent.setSpan(new URLSpan(web.getStr(curPos)), start, end, 18);
-                curPos++;
-            }
-            curPos = 0;
+//            mContent = new SpannableString(getText());
+
+//            int curPos = 0;
+//            int start;
+//            int end;
+//            while (curPos < font.getSize()) {
+//                start = font.getStart(curPos).intValue();
+//                end = font.getEnd(curPos).intValue();
+//                mContent.setSpan(new RelativeSizeSpan((font.size(curPos) > 3 ? (float) (((double) (font.size(curPos) - 3)) / 10.0d)
+//                        : (float) (((double) (-(font.size(curPos) - 3))) / 10.0d)) + 1), start, end, 18);
+//                curPos++;
+//            }
+//            curPos = 0;
+//            while (curPos < web.getSize()) {
+//                start = web.getStart(curPos).intValue();
+//                end = web.getEnd(curPos).intValue();
+//                mContent.setSpan(new URLSpan(web.getStr(curPos)), start, end, 18);
+//                curPos++;
+//            }
+
+//            curPos = 0;
 //            while (curPos < quote.getSize()) {
 //                start = quote.getStart(curPos).intValue();
 //                end = quote.getEnd(curPos).intValue();
@@ -305,23 +336,24 @@ public class Post {
 ////                mContent.setSpan(new ForegroundColorSpan(QuickAction.WOOD_TEXT_TITLE, start, end, 18);
 //                curPos++;
 //            }
-            curPos = 0;
-            while (curPos < type.getSize()) {
-                start = type.getStart(curPos).intValue();
-                end = type.getEnd(curPos).intValue();
-                mContent.setSpan(new StyleSpan(type.type()), start, end, 18);
-                curPos++;
-            }
-            curPos = 0;
-            while (curPos < typeU.getSize()) {
-                start = typeU.getStart(curPos).intValue();
-                end = typeU.getEnd(curPos).intValue();
-                mContent.setSpan(new UnderlineSpan(), start, end, 18);
-                curPos++;
-            }
 
-            curPos = 0;
-//            while (curPos < image.getSize()) {
+//            curPos = 0;
+//            while (curPos < type.getSize()) {
+//                start = type.getStart(curPos).intValue();
+//                end = type.getEnd(curPos).intValue();
+//                mContent.setSpan(new StyleSpan(type.type()), start, end, 18);
+//                curPos++;
+//            }
+//            curPos = 0;
+//            while (curPos < typeU.getSize()) {
+//                start = typeU.getStart(curPos).intValue();
+//                end = typeU.getEnd(curPos).intValue();
+//                mContent.setSpan(new UnderlineSpan(), start, end, 18);
+//                curPos++;
+//            }
+
+//            curPos = 0;
+//            while (curP.os < image.getSize()) {
 //                    if (image.getStr(curPos).contains(EMO_PREFIX)) {
 //                        BitmapDrawable bmp = EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos));
 //                        if (bmp != null) {
