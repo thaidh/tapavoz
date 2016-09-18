@@ -137,54 +137,6 @@ public class Page3Activity extends BaseActivity {
                 alertGoPage();
             }
         };
-//        mPage3PagerAdapter.setPagerListener(new PagerListener() {
-//            @Override
-//            public View findPageView(int curPage) {
-//                return mViewPager.findViewWithTag(curPage);
-//            }
-//
-//            @Override
-//            public void onSwipeTReresh(SwipeRefreshLayout swipeRefreshLayout) {
-//
-//            }
-//
-//            @Override
-//            public void onGoPage(int type) {
-//                try {
-//                    switch (type) {
-//                        case BasePagerAdapter.GO_FIRST: {
-//                            if (mViewPager.getCurrentItem() != 0) {
-//                                mViewPager.setCurrentItem(0);
-//                            }
-//                            break;
-//                        }
-//                        case BasePagerAdapter.GO_LAST:{
-//                            int lasItemIndex = mPage3PagerAdapter.getTotalPage() - 1;
-//                            if (mViewPager.getCurrentItem() != lasItemIndex) {
-//                                mViewPager.setCurrentItem(lasItemIndex);
-//                            }
-//                            break;
-//                        }
-//                        case BasePagerAdapter.GO_PREVIOUS:{
-//                            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-//                            break;
-//                        }
-//                        case BasePagerAdapter.GO_NEXT: {
-//                            mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
-//                            break;
-//
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void showDialogGoPage() {
-//
-//            }
-//        });
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -208,7 +160,11 @@ public class Page3Activity extends BaseActivity {
     private void initData() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            mUrl = Global.URL + bundle.getString(EXTRA_URL);
+            if (!bundle.getString(EXTRA_URL).contains(Global.URL)) {
+                mUrl = Global.URL + bundle.getString(EXTRA_URL);
+            } else {
+                mUrl = bundle.getString(EXTRA_URL);
+            }
             mTitle = bundle.getString(EXTRA_TITLE);
         }
         mToolbar.setTitle(mTitle);
@@ -334,10 +290,9 @@ public class Page3Activity extends BaseActivity {
                 String time = "";
                 Element postElement = (Element) it.next();
                 Element parent = postElement.parent();
-//                        if (select.select("div[class=smallfont]:has(strong)").first() != null) {
-//                            this.mTextTitle = select.select("div[class=smallfont]:has(strong)").first().text();
-//                            setTitle(this.mTextTitle);
-//                        }
+                        if (parent.select("div[class=smallfont]:has(strong)").first() != null) {
+                            mTitle = parent.select("div[class=smallfont]:has(strong)").first().text();
+                        }
                 //===================Parse header================
                 Element headerElement = parent.previousElementSibling();
                 Element postTimeElement = headerElement.previousElementSibling();
@@ -410,6 +365,7 @@ public class Page3Activity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mToolbar.setTitle(mTitle);
                 mPage3PagerAdapter.setTotalPage(mTotalPage);
                 refreshCurrentPage(curPage, refresh);
             }

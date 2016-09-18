@@ -1,6 +1,7 @@
 package com.whoami.voz.ui.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,7 @@ import com.whoami.voz.ui.utils.UserInfo;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -38,6 +40,7 @@ public class Page1Activity extends BaseActivity {
         setContentView(R.layout.fragment_page1);
         setupToolbar();
         initLayout();
+
         initData();
         initQuickReturn();
     }
@@ -64,16 +67,31 @@ public class Page1Activity extends BaseActivity {
     }
 
     private void initData() {
-        HtmlLoader.getInstance().fetchData("https://vozforums.com", 0, new HtmlLoader.HtmlLoaderListener() {
-            @Override
-            public void onCallback(Document doc, int page) {
-                try {
-                    parseDataPage1(doc);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            try {
+//                URL url = new URL(uri.getScheme(), uri.getHost(), uri.getPath());
+                Intent newIntent = new Intent(Page1Activity.this, Page3Activity.class);
+                newIntent.putExtra(EXTRA_URL, uri.toString());
+                newIntent.putExtra(EXTRA_TITLE, "");
+                startActivity(newIntent);
+
+                finish();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        } else {
+            HtmlLoader.getInstance().fetchData("https://vozforums.com", 0, new HtmlLoader.HtmlLoaderListener() {
+                @Override
+                public void onCallback(Document doc, int page) {
+                    try {
+                        parseDataPage1(doc);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
     }
 
     void parseDataPage1(Document doc) throws Exception {

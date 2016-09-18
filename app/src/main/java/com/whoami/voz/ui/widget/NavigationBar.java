@@ -75,11 +75,7 @@ public class NavigationBar extends LinearLayout {
                 }
             }
         });
-        butPageFooter.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-//                alertGoPage();
-            }
-        });
+
         mImg3Footer.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 try {

@@ -7,8 +7,8 @@
     <dimen name="abc_text_size_title_material_toolbar">20.0dip</dimen>
     <dimen name="abc_config_prefDialogWidth">320.0dip</dimen>
     <dimen name="abc_search_view_text_min_width">160.0dip</dimen>
-    <item type="dimen" name="dialog_fixed_height_major">79.99999%</item>
-    <item type="dimen" name="dialog_fixed_height_minor">100.0%</item>
+    <item name="dialog_fixed_height_major" type="dimen">79.99999%</item>
+    <item name="dialog_fixed_height_minor" type="dimen">100.0%</item>
     <dimen name="dialog_fixed_width_major">320.0dip</dimen>
     <dimen name="dialog_fixed_width_minor">320.0dip</dimen>
     <dimen name="abc_action_bar_icon_vertical_padding_material">16.0dip</dimen>
@@ -53,8 +53,8 @@
     <dimen name="color_wheel_thickness">8.0dip</dimen>
     <dimen name="compose_bar_text_drawable_padding">4.0dip</dimen>
     <dimen name="compose_bar_text_y_padding">0.0dip</dimen>
-    <item type="dimen" name="disabled_alpha_material_dark">0.3</item>
-    <item type="dimen" name="disabled_alpha_material_light">0.26</item>
+    <item name="disabled_alpha_material_dark" type="dimen">0.3</item>
+    <item name="disabled_alpha_material_light" type="dimen">0.26</item>
     <dimen name="shadow_width">6.0px</dimen>
     <dimen name="textSize1">10.0sp</dimen>
     <dimen name="textSize2">9.0sp</dimen>
