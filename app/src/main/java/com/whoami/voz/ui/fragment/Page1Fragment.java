@@ -113,8 +113,11 @@ public class Page1Fragment extends BaseFragment {
                 }
             }
         });
-        this.mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
+        
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int i = position - mList.getHeaderViewsCount();
                 if (forumsList.get(i).UrlForum() != null) {
                     Intent intent = new Intent(getActivity(), Page2Activity.class);
                     intent.putExtra(BaseActivity.EXTRA_URL, forumsList.get(i).UrlForum());
