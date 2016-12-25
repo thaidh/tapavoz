@@ -1,5 +1,6 @@
 package com.whoami.voz.ui.fragment;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,9 @@ import android.widget.TextView;
 
 import com.squareup.leakcanary.RefWatcher;
 import com.whoami.voz.R;
+import com.whoami.voz.ui.activity.BaseActivity;
+import com.whoami.voz.ui.activity.Page1Activity;
+import com.whoami.voz.ui.activity.Page2Activity;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.main.MainApplication;
 import com.whoami.voz.ui.utils.Util;
@@ -81,19 +85,33 @@ public class BaseFragment extends Fragment {
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+//                    if (v instanceof  TextView) {
+//                        String charSequence = ((TextView)v).getText().toString();
+//                        BaseFragment fragment = null;
+//                        if (charSequence.equals("f=0")) {
+//                            fragment = Page1Fragment.newInstance("", "");
+//                        } else {
+//                            fragment = Page2Fragment.newInstance("forumdisplay.php?" + charSequence, charSequence);
+//                        }
+//                        if (fragment != null) {
+//                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                            ft.add(R.id.container, fragment, "AAAA");
+//                            ft.addToBackStack("Page3Fragment");
+//                            ft.commit();
+//                        }
+//                    }
                     if (v instanceof  TextView) {
                         String charSequence = ((TextView)v).getText().toString();
-                        BaseFragment fragment = null;
+                        Intent intent;
                         if (charSequence.equals("f=0")) {
-                            fragment = Page1Fragment.newInstance("", "");
+                            intent = new Intent(getActivity(), Page1Activity.class);
                         } else {
-                            fragment = Page2Fragment.newInstance("forumdisplay.php?" + charSequence, charSequence);
+                            intent = new Intent(getActivity(), Page2Activity.class);
+                            intent.putExtra(BaseActivity.EXTRA_URL, "forumdisplay.php?" + charSequence);
+                            intent.putExtra(BaseActivity.EXTRA_TITLE, charSequence);
                         }
-                        if (fragment != null) {
-                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                            ft.add(R.id.container, fragment, "AAAA");
-                            ft.addToBackStack("Page3Fragment");
-                            ft.commit();
+                        if (intent != null) {
+                            startActivity(intent);
                         }
                     }
                 }

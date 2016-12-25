@@ -160,4 +160,9 @@
     <color name="vozThread">#fff7f7f7</color>
     <color name="vozUser">#ffe1e4f2</color>
     <color name="white">#ffffffff</color>
+
+    <color name="primary">#009688</color>
+    <color name="primaryDark">#00796b</color>
+    <color name="accent">#eeff41</color>
+    <color name="accentLight">#F4FF81</color>
 </resources>

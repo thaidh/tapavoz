@@ -91,16 +91,26 @@
         <!-- android:name="com.startapp.android.publish.AppWallActivity" -->
         <!-- android:configChanges="keyboardHidden|orientation|screenSize" -->
         <!-- android:theme="@android:style/Theme.Translucent" /> -->
+
         <activity
-            android:name=".ui.activity.Page1Activity"
+            android:name=".ui.activity.MainTabActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
-                x
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.Page1Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".ui.activity.IntentHandlerActivity"
