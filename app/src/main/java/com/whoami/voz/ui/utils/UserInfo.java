@@ -13,13 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserInfo {
-    static String UserId;
-    static Bitmap avatar;
-    static Map<String, String> cookies;
-    static boolean isLogin;
-    static String mPass;
-    static String mUser;
-    static String securityToken;
+    public static String UserId;
+    public static Bitmap avatar;
+    public static Map<String, String> cookies;
+    public static boolean isLogin;
+    public static String mPass;
+    public static String mUsername;
+    public static String securityToken;
 
     static {
         avatar = null;
@@ -29,9 +29,9 @@ public class UserInfo {
     public UserInfo() {
     }
 
-    public UserInfo(String str, String str2) {
-        mUser = str;
-        mPass = str2;
+    public UserInfo(String username, String pass) {
+        mUsername = username;
+        mPass = pass;
     }
 
     private String md5(String str) {
@@ -52,7 +52,7 @@ public class UserInfo {
     }
 
     public void SetUser(String str) {
-        mUser = str;
+        mUsername = str;
     }
 
     public String Token() {
@@ -60,7 +60,7 @@ public class UserInfo {
     }
 
     public String User() {
-        return mUser;
+        return mUsername;
     }
 
     public String UserId() {
@@ -68,7 +68,7 @@ public class UserInfo {
     }
 
     public void add(String str, String str2) {
-        mUser = str;
+        mUsername = str;
         mPass = str2;
     }
 
@@ -96,8 +96,8 @@ public class UserInfo {
     }
 
     public void cookies(Map<String, String> map) {
-//        cookies = map;
-//        setCookieStore(cookies);
+        cookies = map;
+        setCookieStore(cookies);
     }
 
     public Bitmap getAvatar() {
@@ -116,7 +116,7 @@ public class UserInfo {
         }
     }
 
-//    public BasicCookieStore getCookieStore() {
+    public Map<String, String> getCookieStore() {
 //        BasicCookieStore basicCookieStore = new BasicCookieStore();
 //        basicCookieStore.addCookie(new BasicClientCookie("vflastvisit", (String) cookies.get("vflastvisit")));
 //        basicCookieStore.addCookie(new BasicClientCookie("vflastactivity", (String) cookies.get("vflastactivity")));
@@ -125,7 +125,8 @@ public class UserInfo {
 //        basicCookieStore.addCookie(new BasicClientCookie("vfimloggedin", (String) cookies.get("vfimloggedin")));
 //        basicCookieStore.addCookie(new BasicClientCookie("vfsessionhash", (String) cookies.get("vfsessionhash")));
 //        return basicCookieStore;
-//    }
+        return cookies;
+    }
 
     public String getMultiquoteId() {
         try {
@@ -165,15 +166,16 @@ public class UserInfo {
         avatar = bitmap;
     }
 
-//    public void setCookieStore(Map<String, String> map) {
+    public void setCookieStore(Map<String, String> map) {
 //        mCookieStore = new BasicCookieStore();
 //        if (map != null) {
-//            mCookieStore.addCookie(new BasicClientCookie("vfuserid", (String) map.get("vfuserid")));
+//            mCookieStore.addCookie(new BasicClie("vfuserid", (String) map.get("vfuserid")));
 //            mCookieStore.addCookie(new BasicClientCookie("vfpassword", (String) map.get("vfpassword")));
 //            mCookieStore.addCookie(new BasicClientCookie("vfimloggedin", (String) map.get("vfimloggedin")));
 //            mCookieStore.addCookie(new BasicClientCookie("vfsessionhash", (String) map.get("vfsessionhash")));
 //        }
-//    }
+        cookies = map;
+    }
 
     public void setLogin(boolean z) {
         isLogin = z;
@@ -184,7 +186,7 @@ public class UserInfo {
     }
 
     public void setUser(String str) {
-        mUser = str;
+        mUsername = str;
     }
 
     public void setUserId(String str) {

@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.whoami.voz.R;
+import com.whoami.voz.ui.utils.HtmlLoader;
 
 /**
  * A login screen that offers login via email/password.
@@ -82,6 +83,7 @@ public class LoginActivity extends AppCompatActivity{
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
+        HtmlLoader.getInstance().login();
     }
 
     /**

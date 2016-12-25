@@ -1,11 +1,14 @@
 package com.whoami.voz.ui.parserhtml;
 
+import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.Log;
 
 import com.whoami.voz.BuildConfig;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.mysqlite.MySQLiteHelper;
 import com.whoami.voz.ui.utils.UserInfo;
+import com.whoami.voz.ui.utils.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +21,8 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
@@ -114,7 +119,7 @@ public class HtmlParser {
                 }
             } else {
                 try {
-                    execute = Jsoup.connect(Global.URL + str2).timeout(TIMEOUT).cookies(mUser.cookies()).data("s", BuildConfig.FLAVOR).data("securitytoken", str4).data("p", str5).data(MySQLiteHelper.COLUMN_URL, "https://vozforums.com/showthread.php?p=" + str5 + "&highlight=").data("do", "deletepost").data("deletepost", "delete").data("reason", BuildConfig.FLAVOR).method(Method.POST).execute();
+                    execute = Jsoup.connect(Global.URL + str2).timeout(TIMEOUT).cookies(mUser.cookies()).data("s", "").data("securitytoken", str4).data("p", str5).data(MySQLiteHelper.COLUMN_URL, "https://vozforums.com/showthread.php?p=" + str5 + "&highlight=").data("do", "deletepost").data("deletepost", "delete").data("reason", "").method(Method.POST).execute();
                     this.m_url = execute.url().toString();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -338,7 +343,8 @@ public class HtmlParser {
     public Document getDoc() {
         try {
             OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder().url(m_url).build();
+            Request request = new Request.Builder().url(m_url)
+                    .build();
             okhttp3.Response response = client.newCall(request).execute();
             return Jsoup.parse(response.body().string());
 
@@ -410,7 +416,23 @@ public class HtmlParser {
         return this.m_url;
     }
 
-    public Document login(UserInfo userInfo) {
+    private String md5(String str) {
+        StringBuffer stringBuffer = new StringBuffer();
+        try {
+            byte[] digest = MessageDigest.getInstance("MD5").digest(str.getBytes());
+            System.out.println(digest);
+            for (byte b : digest) {
+                stringBuffer.append(Integer.toHexString((b & MotionEventCompat.ACTION_MASK) | AccessibilityNodeInfoCompat.ACTION_NEXT_AT_MOVEMENT_GRANULARITY).substring(1, 3));
+            }
+        } catch (NoSuchAlgorithmException e) {
+        }
+        return stringBuffer.toString();
+    }
+
+    public Document login() {
+        String userName = "conhatgiay5591";
+        String pass = "maimaiyeuem";
+        mUser = new UserInfo(userName, pass);
         String capcha;
 //        Response execute;
         JSONException jSONException;
@@ -420,21 +442,30 @@ public class HtmlParser {
         JSONObject jSONObject;
         Map cookies;
         JSONException e;
-        mUser = userInfo;
-        String str3 = BuildConfig.FLAVOR;
-        String str4 = BuildConfig.FLAVOR;
+        String str3 = "";
+        String str4 = "";
         try {
-            Response execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1").data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass()).data("api_vb_login_md5password_utf", userInfo.md5Pass()).data("api_vb_login_password", userInfo.Pass()).data("api_vb_login_username", userInfo.User()).data("api_2factor", BuildConfig.FLAVOR).data("api_captcha", BuildConfig.FLAVOR).data("api_salt", BuildConfig.FLAVOR).method(Method.POST).execute();
+            Response execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").
+                    timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1")
+                    .data("securitytoken", "guest")
+                    .data("api_vb_login_md5password", mUser.md5Pass())
+                    .data("api_vb_login_md5password_utf", mUser.md5Pass())
+                    .data("api_vb_login_password", mUser.Pass())
+                    .data("api_vb_login_username", mUser.User())
+                    .data("api_2factor", "").data("api_captcha", "")
+                    .data("api_salt", "").method(Method.POST).execute();
             Document parse = execute2.parse();
             try {
                 capcha = (String) new JSONObject(parse.text()).get("captcha");
 
                 Response execute1 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php")
-                        .timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1")
-                        .data("securitytoken", "guest").data("api_vb_login_md5password", userInfo.md5Pass())
-                        .data("api_vb_login_md5password_utf", userInfo.md5Pass())
-                        .data("api_vb_login_password", userInfo.Pass())
-                        .data("api_vb_login_username", userInfo.User())
+                        .timeout(TIMEOUT).data("do", "login")
+                        .data("api_cookieuser", "1")
+                        .data("securitytoken", "guest")
+                        .data("api_vb_login_md5password", mUser.md5Pass())
+                        .data("api_vb_login_md5password_utf", mUser.md5Pass())
+                        .data("api_vb_login_password", mUser.Pass())
+                        .data("api_vb_login_username", mUser.User())
                         .data("api_2factor", "")
                         .data("api_captcha", capcha).data("api_salt", "").method(Method.POST).execute();
                 document = execute1.parse();
@@ -445,15 +476,16 @@ public class HtmlParser {
                 if (document.select("div:contains(You have entered an invalid username or password)").first() == null) {
                     cookies = execute2.cookies();
                     cookies.put("vfuserid", uid);
-                    userInfo.cookies(cookies);
-                    userInfo.setLogin(true);
+                    mUser.cookies(cookies);
+                    mUser.setLogin(true);
+                    Util.showMess( mUser.User() + "login success!X");
                     return getDoc();
                 }
                 this.sNotif = null;
                 return null;
             } catch (JSONException e4) {
             }
-        } catch (IOException e1) {
+        } catch (Exception e1) {
             e1.printStackTrace();
         }
         return getDoc();

@@ -39,6 +39,15 @@ public class HtmlLoader {
         });
     }
 
+    public void login() {
+        FetchHtmlWorker.queueTask(new FetchHtmlTask() {
+            @Override
+            public void doTask() {
+                Document doc = mParser.login();
+            }
+        });
+    }
+
     public interface HtmlLoaderListener {
         void onCallback(Document doc, int curPage);
     }

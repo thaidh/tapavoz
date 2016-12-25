@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
@@ -18,8 +19,16 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
+import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.image.ImageInfo;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.DisplayImageOptions.Builder;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -251,14 +260,33 @@ public class Page3ListViewAdapter extends BaseAdapter {
                 break;
             }
             case ContentItem.TYPE_PHOTO: {
-                SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());
+                final SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 0, 10);
-                layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+//                layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+                ControllerListener controllerListener = new BaseControllerListener() {
+                    @Override
+                    public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
+                        if (imageInfo != null && imageInfo instanceof ImageInfo) {
+                            float ratio = ((ImageInfo) imageInfo).getWidth() * 1.0f / ((ImageInfo) imageInfo).getHeight();
+                            simpleDraweeView.setAspectRatio(ratio);
+                        }
+                        super.onFinalImageSet(id, imageInfo, animatable);
 
+                    }
+                };
+                ImageRequest request = ImageRequestBuilder.newBuilderWithSource((Uri.parse(item.mData))).setResizeOptions(new ResizeOptions(mImageSize.getWidth(), mImageSize.getHeight()))
+                        .build();
+                PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                        .setOldController(simpleDraweeView.getController())
+                        .setControllerListener(controllerListener)
+                        .setImageRequest(request)
+                        .build();
                 simpleDraweeView.setLayoutParams(layoutParams);
-                simpleDraweeView.setImageURI(Uri.parse(item.mData));
-                simpleDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
+                simpleDraweeView.setController(controller);
+
+//                simpleDraweeView.setImageURI(Uri.parse(item.mData));
+//                simpleDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.CENTER_INSIDE);
 
                 parent.addView(simpleDraweeView);
                 break;
