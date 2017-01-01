@@ -2,7 +2,7 @@ package com.whoami.voz.ui.contain;
 
 import android.graphics.Bitmap;
 
-public class Thread {
+public class VozThread {
     private Bitmap bitmap;
     public boolean isBookmark;
     private boolean isStar;
@@ -11,42 +11,32 @@ public class Thread {
     private String mLastPost;
     public String mPrefixLink;
     private String mReply;
-    private String mThread;
+    private String mTitle;
     private String mUrlLasrPost;
     private String mUrlLastLast;
     private String mUrlThread;
     private String mView;
 
-    public Thread(String str, String str2, String str3, String str4, Bitmap bitmap, String str5, String str6) {
+    public VozThread(String title, String lastPost, String reply, String view, Bitmap bitmap, String url, String lastPostUrl) {
         this.mUrlLastLast = null;
         this.isBookmark = false;
         this.mIdThread = null;
         this.mPrefixLink = null;
-        this.mReply = str3;
-        this.mLastPost = str2;
-        this.mView = str4;
-        this.mThread = str;
+        this.mReply = reply;
+        this.mLastPost = lastPost;
+        this.mView = view;
+        this.mTitle = title;
         this.bitmap = bitmap;
-        this.mUrlThread = str5;
-        this.mUrlLasrPost = str6;
+        this.mUrlThread = url;
+        this.mUrlLasrPost = lastPostUrl;
         this.isSticky = false;
         this.isStar = false;
     }
 
-    public Thread(String str, String str2, String str3, String str4, Bitmap bitmap, String str5, String str6, Boolean bool) {
-        this.mUrlLastLast = null;
-        this.isBookmark = false;
-        this.mIdThread = null;
-        this.mPrefixLink = null;
-        this.mReply = str3;
-        this.mLastPost = str2;
-        this.mView = str4;
-        this.mThread = str;
-        this.bitmap = bitmap;
-        this.mUrlThread = str5;
-        this.mUrlLasrPost = str6;
-        this.isSticky = false;
-        this.isStar = bool.booleanValue();
+    public VozThread(String mTitle, String mUrlThread, String mIdThread) {
+        this.mIdThread = mIdThread;
+        this.mTitle = mTitle;
+        this.mUrlThread = mUrlThread;
     }
 
     public Bitmap Image() {
@@ -62,7 +52,7 @@ public class Thread {
     }
 
     public String Thread() {
-        return this.mThread;
+        return this.mTitle;
     }
 
     public String UrlLastPosst() {

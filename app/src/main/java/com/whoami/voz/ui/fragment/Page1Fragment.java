@@ -177,7 +177,6 @@ public class Page1Fragment extends BaseFragment {
                         }
                     });
                 }
-             this.adapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
             e.printStackTrace();

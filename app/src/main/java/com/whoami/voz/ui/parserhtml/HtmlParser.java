@@ -4,9 +4,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.Log;
 
-import com.whoami.voz.BuildConfig;
 import com.whoami.voz.ui.main.Global;
-import com.whoami.voz.ui.mysqlite.MySQLiteHelper;
 import com.whoami.voz.ui.utils.UserInfo;
 import com.whoami.voz.ui.utils.Util;
 
@@ -51,26 +49,6 @@ public class HtmlParser {
         Log.d("nna", str);
     }
 
-    public Document AdvanceSearch(String str, String str2, String str3, String str4) {
-        Map cookies = mUser.cookies();
-        if (cookies == null || str == null) {
-            return null;
-        }
-        try {
-            Document parse = Jsoup.connect("https://vozforums.com/search.php?do=process").timeout(TIMEOUT).cookies(cookies).data("s", " ").data("securitytoken", str).data("do", "process").data("searchthreadid", " ").data("query", str2).data("titleonly", "0").data("searchuser", " ").data("starteronly", " ").data("exactname", "1").data("prefixchoice[]", " ").data("replyless", "0").data("replylimit", "0").data("searchdate", "0").data("beforeafter", "after").data("sortby", MySQLiteHelper.COLUMN_LASTPOST).data("order", "descending").data("showposts", str4).data("forumchoice[]", str3).data("childforums", "1").data("dosearch", "Search Now").data("saveprefs", "1").execute().parse();
-            this.m_url = parse.baseUri();
-            return parse;
-        } catch (Exception e) {
-            this.sNotif = "Cannot access vozForums\n";
-            this.sNotif = e.getLocalizedMessage();
-            if (e instanceof HttpStatusException) {
-                this.sNotif += "\nStatus: " + ((HttpStatusException) e).getStatusCode();
-            }
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public Document Logout() {
         try {
             mUser.cookies(Jsoup.connect("https://vozforums.com/login.php?do=logout&logouthash=" + mUser.Token()).timeout(TIMEOUT).method(Method.POST).execute().cookies());
@@ -102,78 +80,6 @@ public class HtmlParser {
         }
     }
 
-    public Document PostEditReply(int i, String str, String str2, String str3, String str4, String str5, String str6, String str7) {
-        Response execute = null;
-        try {
-            if (i == 0) {
-                try {
-                    execute = Jsoup.connect(Global.URL + str2).timeout(TIMEOUT).cookies(mUser.cookies()).data(MySQLiteHelper.COLUMN_TITLE, str3).data("message", str).data("wysiwyg", "0").data("s", " ").data("securitytoken", str4).data("do", "updatepost").data("p", str5).data("posthash", str6).data("poststarttime", str7).data("sbutton", "Save Changes").data("parseurl", "1").data("signature", "1").method(Method.POST).execute();
-                } catch (Exception e) {
-                    this.sNotif = "Cannot access vozForums\n";
-                    this.sNotif = e.getLocalizedMessage();
-                    if (e instanceof HttpStatusException) {
-                        this.sNotif += "\nStatus: " + ((HttpStatusException) e).getStatusCode();
-                    }
-                    e.printStackTrace();
-                    return null;
-                }
-            } else {
-                try {
-                    execute = Jsoup.connect(Global.URL + str2).timeout(TIMEOUT).cookies(mUser.cookies()).data("s", "").data("securitytoken", str4).data("p", str5).data(MySQLiteHelper.COLUMN_URL, "https://vozforums.com/showthread.php?p=" + str5 + "&highlight=").data("do", "deletepost").data("deletepost", "delete").data("reason", "").method(Method.POST).execute();
-                    this.m_url = execute.url().toString();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            return execute.parse();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public Document PostPMNew(String str, String str2, String str3, String str4) {
-        if (mUser.cookies() == null) {
-            return null;
-        }
-        try {
-            Response execute = Jsoup.connect("https://vozforums.com/private.php?do=insertpm&pmid=").timeout(TIMEOUT).cookies(mUser.cookies()).data("message", str3).data("wysiwyg", "0").data("styleid", "0").data("fromquickreply", "1").data("s", " ").data("securitytoken", str4).data("do", "insertpm").data("iconid", "0").data("parseurl", "1").data(MySQLiteHelper.COLUMN_TITLE, str2).data("recipients", str).data("forward", "0").data("savecopy", "1").data("sbutton", "Submit Message").method(Method.POST).execute();
-            this.m_url = execute.url().toString();
-            return execute.parse();
-        } catch (Exception e) {
-            this.sNotif = "Cannot access vozForums\n";
-            this.sNotif = e.getLocalizedMessage();
-            if (e instanceof HttpStatusException) {
-                this.sNotif += "\nStatus: " + ((HttpStatusException) e).getStatusCode();
-            }
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public Document PostPMReply(String str, String str2, String str3, String str4, String str5, String str6) {
-        String str7 = "https://vozforums.com/private.php?do=insertpm&pmid=" + str5;
-        if (mUser.cookies() == null) {
-            return null;
-        }
-        if (str6 == null) {
-            return null;
-        }
-        try {
-            Response execute = Jsoup.connect(str7).timeout(TIMEOUT).cookies(mUser.cookies()).data("message", str4).data("wysiwyg", "0").data("styleid", "0").data("fromquickreply", "1").data("s", " ").data("securitytoken", str6).data("do", "insertpm").data("pmid", str5).data("loggedinuser", str).data("parseurl", "1").data(MySQLiteHelper.COLUMN_TITLE, str3).data("recipients", str2).data("forward", "0").data("savecopy", "1").data("sbutton", "Post Message").method(Method.POST).execute();
-            this.m_url = execute.url().toString();
-            return execute.parse();
-        } catch (Exception e) {
-            this.sNotif = "Cannot access vozForums\n";
-            this.sNotif = e.getLocalizedMessage();
-            if (e instanceof HttpStatusException) {
-                this.sNotif += "\nStatus: " + ((HttpStatusException) e).getStatusCode();
-            }
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public Document PostQuickReply(String str, String str2, String str3) {
         try {
@@ -301,30 +207,6 @@ public class HtmlParser {
         }
     }
 
-    public Document Subscribe(String str, String str2) {
-        try {
-            if (mUser.cookies() == null) {
-                return null;
-            }
-            if (str2 == null) {
-                return null;
-            }
-            if (str == null) {
-                return null;
-            }
-            Jsoup.connect("https://vozforums.com/subscription.php?do=doaddsubscription&threadid=" + str).timeout(TIMEOUT).cookies(mUser.cookies()).data("do", "doaddsubscription").data("threadid", str).data("s", " ").data(MySQLiteHelper.COLUMN_URL, "index.php").data("emailupdate", "0").data("folderid", "0").data("securitytoken", str2).method(Method.POST).execute();
-            return getDoc();
-        } catch (Exception e) {
-            this.sNotif = "Cannot access vozForums\n";
-            this.sNotif = e.getLocalizedMessage();
-            if (e instanceof HttpStatusException) {
-                this.sNotif += "\nStatus: " + ((HttpStatusException) e).getStatusCode();
-            }
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public Document UnSubscribe(String str) {
         try {
             Jsoup.connect("https://vozforums.com/subscription.php?do=removesubscription&t=" + str).timeout(TIMEOUT).cookies(mUser.cookies()).method(Method.GET).execute();
@@ -430,8 +312,8 @@ public class HtmlParser {
     }
 
     public Document login() {
-        String userName = "conhatgiay5591";
-        String pass = "maimaiyeuem";
+        String userName = "";
+        String pass = "";
         mUser = new UserInfo(userName, pass);
         String capcha;
 //        Response execute;

@@ -23,7 +23,7 @@ import com.whoami.voz.R;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page2PagerAdapter;
 import com.whoami.voz.ui.adapter.list.Page2ListViewAdapter;
-import com.whoami.voz.ui.contain.Thread;
+import com.whoami.voz.ui.contain.VozThread;
 import com.whoami.voz.ui.delegate.PagerListener;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.utils.HtmlLoader;
@@ -52,7 +52,7 @@ public class Page2Fragment extends BaseFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private ArrayList<Thread> ListContains;
+    private ArrayList<VozThread> ListContains;
     private String mTextTitle;
 
     // TODO: Rename and change types of parameters
@@ -65,7 +65,7 @@ public class Page2Fragment extends BaseFragment {
     private TextView mTitleTv;
 
 
-    private Map<Integer, ArrayList<Thread>> mMapPostPerPage = new LinkedHashMap() {
+    private Map<Integer, ArrayList<VozThread>> mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
             return size() > Page3Fragment.MAX_ENTRIES;
         }
@@ -189,7 +189,7 @@ public class Page2Fragment extends BaseFragment {
 
     void parseDataPage2(Document doc, final int curPage) throws Exception {
         if (doc != null) {
-            ArrayList<Thread> ListContains = new ArrayList<>();
+            ArrayList<VozThread> ListContains = new ArrayList<>();
             ListContains.clear();
             Element first = doc.select("a[href=private.php]").first();
             //todo set page
@@ -231,7 +231,7 @@ public class Page2Fragment extends BaseFragment {
             Iterator it = select.iterator();
             Iterator it2 = select2.iterator();
             if (it2.hasNext()) {
-                ListContains.add(new Thread("Sub-Forum", null, null, null, null, null, null));
+                ListContains.add(new VozThread("Sub-Forum", null, null, null, null, null, null));
             }
             String str = null;
             String str2 = null;
@@ -258,12 +258,12 @@ public class Page2Fragment extends BaseFragment {
                 if (!(nextElementSibling2 == null || nextElementSibling3 == null)) {
                     text = text + "\nReplie:" + nextElementSibling2.text() + " - View:" + nextElementSibling3.text();
                 }
-                ListContains.add(new Thread(str2, text, null, null, loadBitmapAssert, attr, str));
+                ListContains.add(new VozThread(str2, text, null, null, loadBitmapAssert, attr, str));
                 bitmap = loadBitmapAssert;
                 str3 = attr;
                 str4 = text;
             }
-            ListContains.add(new Thread("Thread", null, null, null, null, null, null));
+            ListContains.add(new VozThread("Thread", null, null, null, null, null, null));
             text = null;
             loadBitmapAssert = bitmap;
             attr = str3;
@@ -298,22 +298,22 @@ public class Page2Fragment extends BaseFragment {
                 if (element.select("a[id*=thread_gotonew]").first() != null) {
                     str = element.select("a[id*=thread_gotonew]").first().attr("href");
                 }
-                Thread thread = new Thread(str2, text, null, null, loadBitmapAssert, attr, str);
-                thread.mPrefixLink = str3;
-                thread.mIdThread = attr.split("t=")[1];
+                VozThread vozThread = new VozThread(str2, text, null, null, loadBitmapAssert, attr, str);
+                vozThread.mPrefixLink = str3;
+                vozThread.mIdThread = attr.split("t=")[1];
                 if (element.select("a:has(img[src*=lastpost])").first() != null) {
-                    thread.setUrlLastPost(element.select("a:has(img[src*=lastpost])").first().attr("href"));
+                    vozThread.setUrlLastPost(element.select("a:has(img[src*=lastpost])").first().attr("href"));
                 }
                 if (first4.hasClass("vozsticky")) {
-                    thread.setSticky(true);
+                    vozThread.setSticky(true);
                 } else {
-                    thread.setSticky(false);
+                    vozThread.setSticky(false);
                 }
 //                if (checkBookmark(thread.mIdThread)) {
 //                    thread.isBookmark = true;
 //                    this.mDataBookmark.updateBookmark(thread);
 //                }
-                ListContains.add(thread);
+                ListContains.add(vozThread);
                 str5 = text;
                 text = str3;
             }
@@ -406,7 +406,7 @@ public class Page2Fragment extends BaseFragment {
                 navigationFooterBar.refresh(curPage, mTotalPage);
                 (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
                 if ((refresh || listView.getAdapter() == null) && mMapPostPerPage.containsKey(curPage)) {
-                    final ArrayList<Thread> curListPost = mMapPostPerPage.get(curPage);
+                    final ArrayList<VozThread> curListPost = mMapPostPerPage.get(curPage);
                     final Page2ListViewAdapter adapter = new Page2ListViewAdapter(getActivity(), curListPost);
                     listView.setAdapter(adapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -422,7 +422,7 @@ public class Page2Fragment extends BaseFragment {
         }
     }
 
-    private void handleThreadClicked(int i, ListView listView, ArrayList<Thread> curListPost) {
+    private void handleThreadClicked(int i, ListView listView, ArrayList<VozThread> curListPost) {
         try {
             i = i - listView.getHeaderViewsCount();
             if (curListPost.get(i).isUrl() == 0) {

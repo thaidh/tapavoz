@@ -2,6 +2,7 @@ package com.whoami.voz.ui.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +11,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,11 +25,14 @@ import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page3PagerAdapter;
 import com.whoami.voz.ui.adapter.list.Page3ListViewAdapter;
 import com.whoami.voz.ui.contain.Post;
+import com.whoami.voz.ui.contain.VozThread;
 import com.whoami.voz.ui.delegate.PagerListener;
 import com.whoami.voz.ui.fragment.Page3Fragment;
 import com.whoami.voz.ui.main.Global;
+import com.whoami.voz.ui.mysqlite.DatabaseHelper;
 import com.whoami.voz.ui.parserhtml.HtmlParser;
 import com.whoami.voz.ui.utils.HtmlLoader;
+import com.whoami.voz.ui.utils.Util;
 import com.whoami.voz.ui.widget.NavigationBar;
 
 import org.jsoup.nodes.Document;
@@ -573,5 +579,26 @@ public class Page3Activity extends BaseActivity {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_bookmark, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_bookmark) {
+            VozThread thread = new VozThread(mTitle, mUrl, "");
+            DatabaseHelper.getInstance(this).insertBookmark(thread);
+            Util.showMess("Bookmark : " + mUrl);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
