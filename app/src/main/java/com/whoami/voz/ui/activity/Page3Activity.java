@@ -2,8 +2,6 @@ package com.whoami.voz.ui.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -27,10 +25,8 @@ import com.whoami.voz.ui.adapter.list.Page3ListViewAdapter;
 import com.whoami.voz.ui.contain.Post;
 import com.whoami.voz.ui.contain.VozThread;
 import com.whoami.voz.ui.delegate.PagerListener;
-import com.whoami.voz.ui.fragment.Page3Fragment;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.mysqlite.DatabaseHelper;
-import com.whoami.voz.ui.parserhtml.HtmlParser;
 import com.whoami.voz.ui.utils.HtmlLoader;
 import com.whoami.voz.ui.utils.Util;
 import com.whoami.voz.ui.widget.NavigationBar;
@@ -63,7 +59,7 @@ public class Page3Activity extends BaseActivity {
 
     private Map<Integer, ArrayList<Post>> mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
-            return size() > Page3Fragment.MAX_ENTRIES;
+            return size() > MAX_ENTRIES;
         }
     };
     private String mUrl;

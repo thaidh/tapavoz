@@ -11,12 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.activity.BaseActivity;
 import com.whoami.voz.ui.activity.Page2Activity;
@@ -34,10 +31,10 @@ import java.util.Iterator;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Page1Fragment#newInstance} factory method to
+ * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Page1Fragment extends BaseFragment {
+public class HomeFragment extends BaseFragment {
     private UserInfo mUser;
     private ObservableListView mList;
     private ArrayList<Forum> forumsList;
@@ -46,13 +43,13 @@ public class Page1Fragment extends BaseFragment {
     private LinearLayout mLayoutProgress;
 
 
-    public Page1Fragment() {
+    public HomeFragment() {
         // Required empty public constructor
         this.sForum = new StringBuilder();
     }
 
-    public static Page1Fragment newInstance(String param1, String param2) {
-        Page1Fragment fragment = new Page1Fragment();
+    public static HomeFragment newInstance(String param1, String param2) {
+        HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

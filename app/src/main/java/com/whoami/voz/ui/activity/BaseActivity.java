@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
@@ -20,8 +19,6 @@ import android.widget.TextView;
 
 import com.squareup.leakcanary.RefWatcher;
 import com.whoami.voz.R;
-import com.whoami.voz.ui.fragment.Page1Fragment;
-import com.whoami.voz.ui.fragment.Page2Fragment;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.main.MainApplication;
 import com.whoami.voz.ui.utils.Util;
@@ -29,6 +26,9 @@ import com.whoami.voz.ui.utils.Util;
 public class BaseActivity extends AppCompatActivity {
     public static final String EXTRA_URL = "extra_url";
     public static final String EXTRA_TITLE = "extra_title";
+
+    public static final int MAX_ENTRIES = 5;
+
 
     protected Toolbar mToolbar;
     private LinearLayout mQuickReturnLayout;

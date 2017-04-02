@@ -21,7 +21,7 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.fragment.BookmarkFragment;
-import com.whoami.voz.ui.fragment.Page1Fragment;
+import com.whoami.voz.ui.fragment.HomeFragment;
 import com.whoami.voz.ui.widget.SlidingTabLayout;
 
 /**
@@ -247,7 +247,7 @@ public class MainTabActivity extends BaseActivity implements ObservableScrollVie
             Fragment f;
             switch (position) {
                 case 0:
-                    f = new Page1Fragment();
+                    f = new HomeFragment();
                     break;
                 case 1:
                 default:

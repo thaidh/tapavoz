@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.whoami.voz.R;
+import com.whoami.voz.ui.activity.BaseActivity;
 import com.whoami.voz.ui.contain.Post;
-import com.whoami.voz.ui.fragment.Page3Fragment;
 import com.whoami.voz.ui.widget.NavigationBar;
 
 import java.lang.ref.WeakReference;
@@ -29,7 +29,7 @@ public class Page3PagerAdapter extends BasePagerAdapter {
     private float mTextSize;
     private Map<Integer, ArrayList<Post>>  mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
-            return size() > Page3Fragment.MAX_ENTRIES;
+            return size() > BaseActivity.MAX_ENTRIES;
         }
     };
 

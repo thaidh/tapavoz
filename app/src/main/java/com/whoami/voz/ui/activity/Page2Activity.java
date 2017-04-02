@@ -20,7 +20,6 @@ import com.whoami.voz.ui.adapter.Page2PagerAdapter;
 import com.whoami.voz.ui.adapter.list.Page2ListViewAdapter;
 import com.whoami.voz.ui.contain.VozThread;
 import com.whoami.voz.ui.delegate.PagerListener;
-import com.whoami.voz.ui.fragment.Page3Fragment;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.utils.HtmlLoader;
 import com.whoami.voz.ui.utils.Util;
@@ -51,7 +50,7 @@ public class Page2Activity extends BaseActivity {
 
     private Map<Integer, ArrayList<VozThread>> mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
-            return size() > Page3Fragment.MAX_ENTRIES;
+            return size() > MAX_ENTRIES;
         }
     };
     private int mTotalPage = 1;
