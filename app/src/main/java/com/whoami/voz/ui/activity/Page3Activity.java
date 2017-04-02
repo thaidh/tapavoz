@@ -54,7 +54,6 @@ public class Page3Activity extends BaseActivity {
     private Bitmap bmImageStart;
 
     // base activity
-    private HtmlParser mParser;
     //    private ListView mList;
     private LinearLayout mLayoutProgress;
     private ViewPager mViewPager;
@@ -87,10 +86,6 @@ public class Page3Activity extends BaseActivity {
         Global.iDensity = getResources().getDisplayMetrics().density;
 
         this.bmImageStart = BitmapFactory.decodeResource(getResources(), R.drawable.stub_image);
-
-        this.mParser = new HtmlParser(Global.URL);
-        this.mParser.setUrl(mUrl);
-
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setOffscreenPageLimit(1);

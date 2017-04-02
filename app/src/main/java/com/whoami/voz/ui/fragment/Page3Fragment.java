@@ -61,7 +61,6 @@ public class Page3Fragment extends BaseFragment {
     private String url;
 
     // base activity
-    private HtmlParser mParser;
 //    private ListView mList;
     private View mRootView;
     private SharedPreferences settings;
@@ -128,10 +127,6 @@ public class Page3Fragment extends BaseFragment {
         Global.iDensity = getResources().getDisplayMetrics().density;
 
         this.bmImageStart = BitmapFactory.decodeResource(getResources(), R.drawable.stub_image);
-
-        this.mParser = new HtmlParser(Global.URL);
-        this.mParser.setUrl(url);
-
 
 //        Toolbar toolbar = (Toolbar) mRootView.findViewById(R.id.my_awesome_toolbar);
 //        toolbar.setTitle(mParam1);

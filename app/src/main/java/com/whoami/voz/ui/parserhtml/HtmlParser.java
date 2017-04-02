@@ -18,7 +18,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
@@ -29,9 +28,8 @@ import okhttp3.Request;
 public class HtmlParser {
     public static final int TIMEOUT = 20000;
     static UserInfo mUser;
-    Document doc;
     private String mUserIdRecentPost;
-    String m_url;
+    private String m_url;
     public String sNotif;
 
     static {
@@ -264,20 +262,9 @@ public class HtmlParser {
 //            defaultHttpClient.getConnectionManager().shutdown();
 //            return Jsoup.parse(entityUtils);
         } catch (IOException e) {
-            try {
                 e.printStackTrace();
-                return null;
-            } catch (Exception e2) {
-                this.sNotif = "Cannot access vozForums\n";
-                if (e2 instanceof HttpStatusException) {
-                    this.sNotif += "\nStatus: " + ((HttpStatusException) e2).getStatusCode();
-                } else if (e2 instanceof SocketTimeoutException) {
-                    this.sNotif += "\nTimeout";
-                }
-                e2.printStackTrace();
-                return null;
-            }
         }
+        return null;
     }
 
     public Document getPM() {
@@ -328,7 +315,8 @@ public class HtmlParser {
         String str4 = "";
         try {
             Response execute2 = Jsoup.connect("https://vozforums.com/vbdev/login_api.php").
-                    timeout(TIMEOUT).data("do", "login").data("api_cookieuser", "1")
+                    timeout(TIMEOUT).data("do", "login")
+                    .data("api_cookieuser", "1")
                     .data("securitytoken", "guest")
                     .data("api_vb_login_md5password", mUser.md5Pass())
                     .data("api_vb_login_md5password_utf", mUser.md5Pass())

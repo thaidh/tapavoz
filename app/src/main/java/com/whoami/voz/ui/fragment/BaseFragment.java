@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.squareup.leakcanary.RefWatcher;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.activity.BaseActivity;
+import com.whoami.voz.ui.activity.MainTabActivity;
 import com.whoami.voz.ui.activity.Page1Activity;
 import com.whoami.voz.ui.activity.Page2Activity;
 import com.whoami.voz.ui.main.Global;
@@ -104,7 +105,7 @@ public class BaseFragment extends Fragment {
                         String charSequence = ((TextView)v).getText().toString();
                         Intent intent;
                         if (charSequence.equals("f=0")) {
-                            intent = new Intent(getActivity(), Page1Activity.class);
+                            intent = new Intent(getActivity(), MainTabActivity.class);
                         } else {
                             intent = new Intent(getActivity(), Page2Activity.class);
                             intent.putExtra(BaseActivity.EXTRA_URL, "forumdisplay.php?" + charSequence);

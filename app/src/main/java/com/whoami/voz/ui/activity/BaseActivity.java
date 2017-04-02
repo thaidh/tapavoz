@@ -49,8 +49,10 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void setupToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        mToolbar.setTitle(getString(R.string.app_name));
-        setSupportActionBar(mToolbar);
+        if (mToolbar != null) {
+            mToolbar.setTitle(getString(R.string.app_name));
+            setSupportActionBar(mToolbar);
+        }
     }
 
 
@@ -140,7 +142,7 @@ public class BaseActivity extends AppCompatActivity {
                         String charSequence = ((TextView)v).getText().toString();
                         Intent intent;
                         if (charSequence.equals("f=0")) {
-                            intent = new Intent(BaseActivity.this, Page1Activity.class);
+                            intent = new Intent(BaseActivity.this, MainTabActivity.class);
                         } else {
                             intent = new Intent(BaseActivity.this, Page2Activity.class);
                             intent.putExtra(EXTRA_URL, "forumdisplay.php?" + charSequence);

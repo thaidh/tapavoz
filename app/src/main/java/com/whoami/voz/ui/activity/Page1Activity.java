@@ -37,12 +37,16 @@ public class Page1Activity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_page1);
-        setupToolbar();
-        initLayout();
+        try {
+            setContentView(R.layout.fragment_page1);
+            setupToolbar();
+            initLayout();
 
-        initData();
-        initQuickReturn();
+            initData();
+            initQuickReturn();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initLayout() {

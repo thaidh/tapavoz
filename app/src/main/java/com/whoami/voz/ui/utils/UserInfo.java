@@ -4,13 +4,11 @@ import android.graphics.Bitmap;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 
-
-import com.whoami.voz.BuildConfig;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class UserInfo {
     public static String UserId;
@@ -20,6 +18,7 @@ public class UserInfo {
     public static String mPass;
     public static String mUsername;
     public static String securityToken;
+//    BasicCookieStore mCookieStore;
 
     static {
         avatar = null;
@@ -83,7 +82,7 @@ public class UserInfo {
     public Map<String, String> cookies() {
         Map<String, String> hashMap = new HashMap();
         try {
-//            for (Cookie cookie : mCookieStore.getCookies()) {
+//            for (org.apache.http.cookie.Cookie cookie : mCookieStore.getCookies()) {
 //                hashMap.put(cookie.getName(), cookie.getValue());
 //            }
             hashMap.put("vflastactivity", "0");
@@ -105,7 +104,7 @@ public class UserInfo {
     }
 
     public String getCookiStore() {
-        String str = BuildConfig.FLAVOR;
+        String str = "";
         try {
 //            for (Cookie cookie : mCookieStore.getCookies()) {
 //                str = str + cookie.getName() + "=" + cookie.getValue() + ";";
@@ -116,7 +115,7 @@ public class UserInfo {
         }
     }
 
-    public Map<String, String> getCookieStore() {
+//    public Map<String, String> getCookieStore() {
 //        BasicCookieStore basicCookieStore = new BasicCookieStore();
 //        basicCookieStore.addCookie(new BasicClientCookie("vflastvisit", (String) cookies.get("vflastvisit")));
 //        basicCookieStore.addCookie(new BasicClientCookie("vflastactivity", (String) cookies.get("vflastactivity")));
@@ -124,38 +123,12 @@ public class UserInfo {
 //        basicCookieStore.addCookie(new BasicClientCookie("vfpassword", (String) cookies.get("vfpassword")));
 //        basicCookieStore.addCookie(new BasicClientCookie("vfimloggedin", (String) cookies.get("vfimloggedin")));
 //        basicCookieStore.addCookie(new BasicClientCookie("vfsessionhash", (String) cookies.get("vfsessionhash")));
-//        return basicCookieStore;
-        return cookies;
-    }
-
-    public String getMultiquoteId() {
-        try {
-//            for (Cookie cookie : mCookieStore.getCookies()) {
-//                if (cookie.getName().equals("vbulletin_multiquote")) {
-//                    return cookie.getValue();
-//                }
-//            }
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
+////        return basicCookieStore;
+//        return cookies;
+//    }
 
     public boolean isLogin() {
         return isLogin;
-    }
-
-    public boolean isMultiquote() {
-        try {
-//            for (Cookie name : mCookieStore.getCookies()) {
-//                if (name.getName().equals("vbulletin_multiquote")) {
-//                    return true;
-//                }
-//            }
-            return false;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     public String md5Pass() {
@@ -169,12 +142,11 @@ public class UserInfo {
     public void setCookieStore(Map<String, String> map) {
 //        mCookieStore = new BasicCookieStore();
 //        if (map != null) {
-//            mCookieStore.addCookie(new BasicClie("vfuserid", (String) map.get("vfuserid")));
+//            mCookieStore.addCookie(new BasicClientCookie("vfuserid", (String) map.get("vfuserid")));
 //            mCookieStore.addCookie(new BasicClientCookie("vfpassword", (String) map.get("vfpassword")));
 //            mCookieStore.addCookie(new BasicClientCookie("vfimloggedin", (String) map.get("vfimloggedin")));
 //            mCookieStore.addCookie(new BasicClientCookie("vfsessionhash", (String) map.get("vfsessionhash")));
 //        }
-        cookies = map;
     }
 
     public void setLogin(boolean z) {

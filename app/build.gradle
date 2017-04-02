@@ -1,8 +1,31 @@
+buildscript {
+    repositories {
+//        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
+        // can be removed with android-gradle plugin is upgraded to 2.2
+        // https://twitter.com/JakeWharton/status/760836175586267136
+        classpath 'me.tatarka.retrolambda.projectlombok:lombok.ast:0.2.3.a2'
+    }
+
+    // Exclude the lombok version that the android plugin depends on.
+    configurations.classpath.exclude group: 'com.android.tools.external.lombok'
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
+// Load keystore
+def keystorePropertiesFile = file("keystore.properties");
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.1'
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "com.whoami.voz.main"
@@ -10,24 +33,50 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
     }
+
+    signingConfigs {
+        release {
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro','proguard-fresco.pro'
         }
     }
 //    useLibrary 'org.apache.http.legacy'
 }
 
+ext {
+    okhttpVersion = "3.3.1"
+    retrofitVersion = "2.0.0"
+    sdkVersion = 24
+    supportLibVersion = "24.2.1"
+}
+
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':observablescroll')
     // or 1.4-beta1
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.facebook.fresco:fresco:0.9.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.squareup.okhttp3:okhttp:3.3.1'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    //    compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    compile "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+    compile "com.squareup.okhttp3:okhttp:${okhttpVersion}"
+    compile "com.squareup.okhttp3:okhttp-urlconnection:${okhttpVersion}"
+    compile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
 }
+
+
