@@ -92,16 +92,11 @@ public class Page3ListViewAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        SimpleDraweeView avatar;
-        TextView contain;
-        TextView index;
-        TextView jd;
-        LinearLayout layout;
-        TextView posts;
-        TextView time;
-        View txtViewDevider;
-        TextView user;
-        TextView userTitle;
+        SimpleDraweeView avatarView;
+        TextView indexTv;
+        LinearLayout mainLayout;
+        View dividerView;
+        TextView usernameTv;
         LinearLayout mGridImage;
 
         ViewHolder() {
@@ -151,81 +146,36 @@ public class Page3ListViewAdapter extends BaseAdapter {
         VozPost post = mPosts.get(position);
         if (view == null) {
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.list_item3, null);
-            holder.layout = (LinearLayout) view.findViewById(R.id.listLayout);
-            holder.avatar = (SimpleDraweeView) view.findViewById(R.id.list3_avatar);
-            holder.user = (TextView) view.findViewById(R.id.list3_user);
-            holder.time = (TextView) view.findViewById(R.id.list3_time);
-            holder.index = (TextView) view.findViewById(R.id.list3_index);
-//            holder.contain = (TextView) view.findViewById(R.id.list3_contain);
-            holder.jd = (TextView) view.findViewById(R.id.list3_jd);
-            holder.posts = (TextView) view.findViewById(R.id.list3_post);
-            holder.userTitle = (TextView) view.findViewById(R.id.list3_usertitle);
-            holder.txtViewDevider =  view.findViewById(R.id.textDevider);
+            view = inflater.inflate(R.layout.post_item_layout, null);
+            holder.mainLayout = (LinearLayout) view.findViewById(R.id.main_layout);
+            holder.avatarView = (SimpleDraweeView) view.findViewById(R.id.post_avatar_imv);
+            holder.usernameTv = (TextView) view.findViewById(R.id.post_username_tv);
+            holder.indexTv = (TextView) view.findViewById(R.id.post_index_tv);
+            holder.dividerView =  view.findViewById(R.id.post_divider);
             holder.mGridImage = (LinearLayout) view.findViewById(R.id.grid_image);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        holder.txtViewDevider.setVisibility(View.VISIBLE);
-//        holder.contain.setMovementMethod(CustomLinkMovementMethod.getInstance());
-//        holder.contain.setClickable(false);
         if (!TextUtils.isEmpty(post.getUrlAvatar()) && !isScrolling) {
 //            imageLoader.displayImage(post.getUrlAvatar(), holder.avatar, optionsEmo);
-            holder.avatar.setImageURI(Uri.parse(post.getUrlAvatar()));
+            holder.avatarView.setImageURI(Uri.parse(post.getUrlAvatar()));
         } else {
-            holder.avatar.setImageDrawable(drawableAvatar);
+            holder.avatarView.setImageDrawable(drawableAvatar);
         }
 
-        holder.user.setText(post.User());
+        holder.usernameTv.setText(post.User());
 
         if (post.Time() != null && post.Time().split(" ").length > 3) {
-            holder.time.setText(post.Time().split(" ")[3] + " " + post.Time().split(" ")[4]);
-            holder.index.setText(post.Time().split(" ")[1]);
+            StringBuilder indexTimeStr = new StringBuilder();
+            indexTimeStr.append(post.Time().split(" ")[1] + "  ");
+            indexTimeStr.append(post.Time().split(" ")[3] + " " + post.Time().split(" ")[4]);
+            holder.indexTv.setText(indexTimeStr.toString());
         }
-        holder.userTitle.setText(post.UserTitle());
-        holder.jd.setText(post.JD());
-        holder.posts.setText(post.Posts());
-        if (post.isOnline) {
-            holder.user.setCompoundDrawables(drawableOnline, null, null, null);
-        } else {
-            holder.user.setCompoundDrawables(drawableOffline, null, null, null);
-        }
-
-//        addImage(holder.contain, post);
-//        if (post.isMultiQuote()) {
-//            Global.setBackgroundItemThreadMultiQuote(holder.layout);
-//        } else {
-//            Global.setBackgroundItemThread(holder.layout);
-//        }
-
-
-//        holder.contain.setText(post.getContent());
         holder.mGridImage.removeAllViews();
         for (ContentItem item : post.mContentItemList) {
             addTextContent(holder.mGridImage, item);
         }
-//        for (int i = 0; i < post.image.getSize(); i++) {
-//            String imageUrl = post.image.getStr(i);
-//            if (imageUrl.contains("http://") || imageUrl.contains("https://")) {
-//                try {
-//                    SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
-//                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mImageSize.getWidth(), mImageSize.getHeight());
-//                    layoutParams.setMargins(0, 0, 0, 10);
-//                    layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-//
-//                    simpleDraweeView.setLayoutParams(layoutParams);
-//                    simpleDraweeView.setImageURI(Uri.parse(imageUrl));
-//                    simpleDraweeView.getHierarchy().setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER);
-//
-//                    holder.mGridImage.addView(simpleDraweeView);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-
-
         return view;
     }
 
