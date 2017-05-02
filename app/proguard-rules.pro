@@ -17,3 +17,30 @@
 #}
 
 -keep public class com.github.ksoichiro.android.observablescrollview.**
+
+-dontnote sun.misc.Unsafe
+-keep class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef** {
+    *;
+}
+
+-keep class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef** {
+    *;
+}
+
+-dontnote rx.internal.util.PlatformDependent
+
+-keep class com.google.**
+-dontnote com.android.**
+-dontnote org.apache.**
+-dontnote sun.security.**
+-dontnote java.util.**
+-dontnote org.robovm.**
+-dontnote com.google.gson.**
+-keep class com.facebook.drawee.**
+-keep class com.whoami.voz.ui.delegate.PagerListener
+-keep class com.whoami.voz.ui.widget.SlidingTabLayout** {
+ *;
+  }
+  -dontnote android.net.http.**
+  -dontwarn org.apache.http.**
+  -dontwarn retrofit2.**
