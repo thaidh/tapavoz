@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,8 +15,7 @@ import com.squareup.leakcanary.RefWatcher;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.activity.BaseActivity;
 import com.whoami.voz.ui.activity.MainTabActivity;
-import com.whoami.voz.ui.activity.Page1Activity;
-import com.whoami.voz.ui.activity.Page2Activity;
+import com.whoami.voz.ui.pagethreads.PageThreadsActivity;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.main.MainApplication;
 import com.whoami.voz.ui.utils.Util;
@@ -107,7 +105,7 @@ public class BaseFragment extends Fragment {
                         if (charSequence.equals("f=0")) {
                             intent = new Intent(getActivity(), MainTabActivity.class);
                         } else {
-                            intent = new Intent(getActivity(), Page2Activity.class);
+                            intent = new Intent(getActivity(), PageThreadsActivity.class);
                             intent.putExtra(BaseActivity.EXTRA_URL, "forumdisplay.php?" + charSequence);
                             intent.putExtra(BaseActivity.EXTRA_TITLE, charSequence);
                         }

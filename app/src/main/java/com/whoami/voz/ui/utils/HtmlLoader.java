@@ -4,8 +4,6 @@ import android.util.Log;
 
 import com.whoami.voz.retrofit.VozApi;
 import com.whoami.voz.retrofit.VozService;
-import com.whoami.voz.ui.main.Global;
-import com.whoami.voz.ui.parserhtml.HtmlParser;
 import com.whoami.voz.ui.worker.FetchHtmlTask;
 import com.whoami.voz.ui.worker.FetchHtmlWorker;
 

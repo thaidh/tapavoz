@@ -104,16 +104,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.Page1Activity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity
             android:name=".ui.activity.IntentHandlerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">
@@ -133,13 +123,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.Page2Activity"
+            android:name=".ui.pagethreads.PageThreadsActivity"
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">
         </activity>
         <activity
-            android:name=".ui.activity.Page3Activity"
+            android:name=".ui.pageposts.PagePostActivity"
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">

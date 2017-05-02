@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.image.ImageInfo;
@@ -35,7 +33,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.whoami.voz.R;
-import com.whoami.voz.ui.contain.Post;
+import com.whoami.voz.ui.contain.VozPost;
 import com.whoami.voz.ui.contain.item.ContentItem;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.utils.Util;
@@ -62,7 +60,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
 //    private float mTextSize1;
 //    private float mTextSize3;
 //    private float mTextSize4;
-    private ArrayList<Post> mPosts;
+    private ArrayList<VozPost> mPosts;
     private DisplayImageOptions options;
     private DisplayImageOptions optionsEmo;
     private ImageSpan span;
@@ -110,7 +108,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
         }
     }
 
-    public Page3ListViewAdapter(Context context, ArrayList<Post> arrayList, ImageLoader imageLoader, Bitmap bitmap, float size) {
+    public Page3ListViewAdapter(Context context, ArrayList<VozPost> arrayList, ImageLoader imageLoader, Bitmap bitmap, float size) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         drawableOnline = ContextCompat.getDrawable(context, R.drawable.user_online);
@@ -150,7 +148,7 @@ public class Page3ListViewAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View view, ViewGroup viewGroup) {
-        Post post = mPosts.get(position);
+        VozPost post = mPosts.get(position);
         if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.list_item3, null);

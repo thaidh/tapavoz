@@ -16,7 +16,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.activity.BaseActivity;
-import com.whoami.voz.ui.activity.Page2Activity;
+import com.whoami.voz.ui.pagethreads.PageThreadsActivity;
 import com.whoami.voz.ui.adapter.list.Page1ListViewAdapter;
 import com.whoami.voz.ui.contain.Forum;
 import com.whoami.voz.ui.utils.HtmlLoader;
@@ -116,7 +116,7 @@ public class HomeFragment extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int i = position - mList.getHeaderViewsCount();
                 if (forumsList.get(i).UrlForum() != null) {
-                    Intent intent = new Intent(getActivity(), Page2Activity.class);
+                    Intent intent = new Intent(getActivity(), PageThreadsActivity.class);
                     intent.putExtra(BaseActivity.EXTRA_URL, forumsList.get(i).UrlForum());
                     intent.putExtra(BaseActivity.EXTRA_TITLE, forumsList.get(i).Forum());
                     startActivity(intent);

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.whoami.voz.ui.pageposts.PagePostActivity;
+
 /**
  * Created by thaidh on 9/18/16.
  */
@@ -17,7 +19,7 @@ public class IntentHandlerActivity extends Activity {
         if (uri != null) {
             try {
 //                URL url = new URL(uri.getScheme(), uri.getHost(), uri.getPath());
-                Intent newIntent = new Intent(this, Page3Activity.class);
+                Intent newIntent = new Intent(this, PagePostActivity.class);
                 newIntent.putExtra(BaseActivity.EXTRA_URL, uri.toString());
                 newIntent.putExtra(BaseActivity.EXTRA_TITLE, "");
                 startActivity(newIntent);

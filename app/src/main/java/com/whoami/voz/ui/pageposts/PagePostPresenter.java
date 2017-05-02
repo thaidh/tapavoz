@@ -1,35 +1,9 @@
-package com.whoami.voz.ui.activity;
+package com.whoami.voz.ui.pageposts;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.InputType;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.whoami.voz.R;
-import com.whoami.voz.ui.adapter.BasePagerAdapter;
-import com.whoami.voz.ui.adapter.Page3PagerAdapter;
-import com.whoami.voz.ui.adapter.list.Page3ListViewAdapter;
-import com.whoami.voz.ui.contain.Post;
-import com.whoami.voz.ui.contain.VozThread;
-import com.whoami.voz.ui.delegate.PagerListener;
+import com.whoami.voz.ui.activity.BaseActivity;
+import com.whoami.voz.ui.contain.VozPost;
 import com.whoami.voz.ui.main.Global;
-import com.whoami.voz.ui.mysqlite.DatabaseHelper;
 import com.whoami.voz.ui.utils.HtmlLoader;
-import com.whoami.voz.ui.utils.Util;
-import com.whoami.voz.ui.widget.NavigationBar;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -43,188 +17,46 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Created by thaidh on 9/3/16.
+ * Created by thaidh on 5/2/17.
  */
-public class Page3Activity extends BaseActivity {
-    public static final String TAG = Page3Activity.class.getSimpleName();
-    private Bitmap bmImageStart;
 
-    // base activity
-    //    private ListView mList;
-    private LinearLayout mLayoutProgress;
-    private ViewPager mViewPager;
-    private Page3PagerAdapter mPage3PagerAdapter;
-    private PagerListener mPagerListener;
-    private int mTotalPage = 1;
+public class PagePostPresenter implements PagePostContract.Presenter {
 
-    private Map<Integer, ArrayList<Post>> mMapPostPerPage = new LinkedHashMap() {
+    private PagePostContract.View mPagePostView;
+
+    private Map<Integer, ArrayList<VozPost>> mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
-            return size() > MAX_ENTRIES;
+            return size() > BaseActivity.MAX_ENTRIES;
         }
     };
     private String mUrl;
+    private int mTotalPage;
     private String mTitle;
 
+    public PagePostPresenter(PagePostContract.View mPagePostView, String mUrl) {
+        this.mPagePostView = mPagePostView;
+        this.mUrl = mUrl;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_page3);
-        setupToolbar();
-        initLayout();
-        initData();
-        initQuickReturn();
-    }
-
-    private void initLayout() {
-//        readSettings();
-
-        this.mLayoutProgress = (LinearLayout) findViewById(R.id.layoutprogress);
-        Global.iDensity = getResources().getDisplayMetrics().density;
-
-        this.bmImageStart = BitmapFactory.decodeResource(getResources(), R.drawable.stub_image);
-
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setOffscreenPageLimit(1);
-        mPage3PagerAdapter = new Page3PagerAdapter(this, mTotalPage, mUrl, bmImageStart, 1.0f, mViewPager);
-        mPagerListener = new PagerListener() {
-            @Override
-            public View findPageView(int curPage) {
-                return mViewPager.findViewWithTag(curPage);
-            }
-
-            @Override
-            public void onSwipeTReresh(SwipeRefreshLayout swipeRefreshLayout) {
-
-            }
-
-            @Override
-            public void onGoPage(int type) {
-                try {
-                    switch (type) {
-                        case BasePagerAdapter.GO_FIRST: {
-                            if (mViewPager.getCurrentItem() != 0) {
-                                mViewPager.setCurrentItem(0);
-                            }
-                            break;
-                        }
-                        case BasePagerAdapter.GO_LAST:{
-                            int lasItemIndex = mPage3PagerAdapter.getTotalPage() - 1;
-                            if (mViewPager.getCurrentItem() != lasItemIndex) {
-                                mViewPager.setCurrentItem(lasItemIndex);
-                            }
-                            break;
-                        }
-                        case BasePagerAdapter.GO_PREVIOUS:{
-                            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-                            break;
-                        }
-                        case BasePagerAdapter.GO_NEXT: {
-                            mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
-                            break;
-
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void showDialogGoPage() {
-                alertGoPage();
-            }
-        };
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                loadPage(position + 1, false);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-        mViewPager.setAdapter(mPage3PagerAdapter);
+    public void start() {
 
     }
 
-    private void initData() {
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            if (!bundle.getString(EXTRA_URL).contains(Global.URL)) {
-                mUrl = Global.URL + bundle.getString(EXTRA_URL);
-            } else {
-                mUrl = bundle.getString(EXTRA_URL);
-            }
-            mTitle = bundle.getString(EXTRA_TITLE);
-        }
-        mToolbar.setTitle(mTitle);
-        //init page 1
-        loadPage(1, false);
-    }
-
-    protected void alertGoPage() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View inflate = getLayoutInflater().inflate(R.layout.login, null);
-        final EditText editText = (EditText) inflate.findViewById(R.id.alert_edit1);
-        TextView textView = (TextView) inflate.findViewById(R.id.alert_txt1);
-        TextView textView2 = (TextView) inflate.findViewById(R.id.alert_txt2);
-        Button button = (Button) inflate.findViewById(R.id.alert_ok);
-        Button button2 = (Button) inflate.findViewById(R.id.alert_cancle);
-        ((EditText) inflate.findViewById(R.id.alert_edit2)).setVisibility(View.GONE);
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        textView.setVisibility(View.GONE);
-        textView2.setVisibility(View.GONE);
-        builder.setTitle("Page").setView(inflate);
-        final Dialog dialog = builder.create();
-        dialog.show();
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String strPage = editText.getText().toString();
-                int page = Integer.parseInt(strPage) - 1;
-                if (page >= 0 && page < mPage3PagerAdapter.getTotalPage()) {
-                    mViewPager.setCurrentItem(page);
-                }
-                dialog.dismiss();
-            }
-        });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-    }
-
-
-    private HtmlLoader.HtmlLoaderListener htmlLoaderListener = new HtmlLoader.HtmlLoaderListener() {
-        @Override
-        public void onCallback(Document doc, int curPage) {
-            try {
-                parseDataPage3(doc, true, curPage);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    public void loadPage(final int curPage, boolean refres) {
+    public void loadPage(final int curPage, final boolean refres) {
         try {
             if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                Log.i(TAG, "Load page : " + curPage);
                 final String url = getUrlWithPage(curPage);
                 if (url != null) {
-                    HtmlLoader.getInstance().fetchData(url, curPage, htmlLoaderListener);
+                    HtmlLoader.getInstance().fetchData(url, curPage, new HtmlLoader.HtmlLoaderListener() {
+                        @Override
+                        public void onCallback(Document doc, int curPage) {
+                            parseDataPage3(doc, refres, curPage);
+                        }
+                    });
                 }
             } else {
-                refreshCurrentPage(curPage, false);
+                mPagePostView.refreshCurrentPage(mTotalPage, curPage, false, mMapPostPerPage.get(curPage));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -239,12 +71,12 @@ public class Page3Activity extends BaseActivity {
         return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
     }
 
-    void parseDataPage3(Document doc, final boolean refresh, final int curPage) throws Exception {
+    void parseDataPage3(Document doc, final boolean refresh, final int curPage) {
         if (doc != null) {
 //            UserInfo mUser = new UserInfo();
 //            String mPostId;
-            Post post;
-            ArrayList<Post> mListPost = new ArrayList<>();
+            VozPost post;
+            ArrayList<VozPost> mListPost = new ArrayList<>();
             Element navigationElement = doc.select("div[class=pagenav").first();
             if (navigationElement != null) {
                 String strPage = navigationElement.select("td[class=vbmenu_control]").text();
@@ -283,13 +115,13 @@ public class Page3Activity extends BaseActivity {
             while (it.hasNext()) {
                 String username;
                 String avatarUrl = null;
-                post = new Post();
+                post = new VozPost();
                 String time = "";
                 Element postElement = (Element) it.next();
                 Element parent = postElement.parent();
-                        if (parent.select("div[class=smallfont]:has(strong)").first() != null) {
-                            mTitle = parent.select("div[class=smallfont]:has(strong)").first().text();
-                        }
+                if (parent.select("div[class=smallfont]:has(strong)").first() != null) {
+                    mTitle = parent.select("div[class=smallfont]:has(strong)").first().text();
+                }
                 //===================Parse header================
                 Element headerElement = parent.previousElementSibling();
                 Element postTimeElement = headerElement.previousElementSibling();
@@ -358,54 +190,15 @@ public class Page3Activity extends BaseActivity {
 //                        }
             }
             mMapPostPerPage.put(Integer.valueOf(curPage), mListPost);
-        }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mToolbar.setTitle(mTitle);
-                mPage3PagerAdapter.setTotalPage(mTotalPage);
-                refreshCurrentPage(curPage, refresh);
-            }
-        });
-    }
-
-    private void refreshCurrentPage(final int curPage, boolean forceRefresh) {
-        try {
-            Log.i(TAG, "Refresh page :  " + curPage);
-            View page = mViewPager.findViewWithTag(curPage);
-            if (page != null) {
-                ListView listView = (ListView) page.findViewById(R.id.content_frame);
-                final SwipeRefreshLayout refreshLayout = (SwipeRefreshLayout) page.findViewById(R.id.swipe_refresh_layout);
-                refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        loadPage(curPage, true);
-                        refreshLayout.setRefreshing(false);
-                    }
-                });
-                NavigationBar navigationHeaderBar = (NavigationBar) page.findViewWithTag(BasePagerAdapter.TAG_NAVIGATION_HEADER);
-                navigationHeaderBar.refresh(curPage, mTotalPage);
-                navigationHeaderBar.setPagerListener(mPagerListener);
-                NavigationBar navigationFooterBar = (NavigationBar) page.findViewWithTag(BasePagerAdapter.TAG_NAVIGATION_FOOTER);
-                navigationFooterBar.refresh(curPage, mTotalPage);
-                navigationFooterBar.setPagerListener(mPagerListener);
-                (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
-                if ((forceRefresh || listView.getAdapter() == null) && mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
-                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(this, mMapPostPerPage.get(Integer.valueOf(curPage)), null, null, 1.0f);
-                    listView.setAdapter(adapter);
-                }
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            mPagePostView.refreshCurrentPage(mTotalPage, curPage, refresh, mListPost);
         }
     }
 
-    private void parseMessagePage3(Element element, Post post, boolean isGetWholeText) {
+    private void parseMessagePage3(Element element, VozPost post, boolean isGetWholeText) {
         parseMessagePage3(element, post, isGetWholeText, false);
     }
 
-    private void parseMessagePage3(Element element, Post post, boolean isGetWholeText, boolean isQuote) {
+    private void parseMessagePage3(Element element, VozPost post, boolean isGetWholeText, boolean isQuote) {
         try {
             if (element != null) {
                 for (Node node : element.childNodes()) {
@@ -492,7 +285,7 @@ public class Page3Activity extends BaseActivity {
                             if (imageUrl.contains("http://") || imageUrl.contains("https://") || imageUrl.contains("attachment.php?attachmentid")) {
 //                                post.image.add(imageUrl, messageLength, imageUrlLength + messageLength, null);
                                 post.addPhoto(imageUrl);
-                            } else if (imageUrl.contains(Post.EMO_PREFIX)) {
+                            } else if (imageUrl.contains(VozPost.EMO_PREFIX)) {
                                 post.addEmo(imageUrl, isQuote);
                                 post.image.add(imageUrl, messageLength, messageLength + 2, null);
                                 imageUrl = "  ";
@@ -558,38 +351,5 @@ public class Page3Activity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private String getPostIdFromUrl(String str) {
-        String str2 = null;
-        try {
-            if (str.contains("p=")) {
-                str2 = str.split("p=")[1];
-            }
-            return str2.contains("#post") ? str2.split("#post")[1] : str2;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_bookmark, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_bookmark) {
-            VozThread thread = new VozThread(mTitle, mUrl, "");
-            DatabaseHelper.getInstance(this).insertBookmark(thread);
-            Util.showMess("Bookmark : " + mUrl);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

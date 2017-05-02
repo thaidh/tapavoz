@@ -21,6 +21,7 @@ import com.squareup.leakcanary.RefWatcher;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.main.MainApplication;
+import com.whoami.voz.ui.pagethreads.PageThreadsActivity;
 import com.whoami.voz.ui.utils.Util;
 
 public class BaseActivity extends AppCompatActivity {
@@ -144,7 +145,7 @@ public class BaseActivity extends AppCompatActivity {
                         if (charSequence.equals("f=0")) {
                             intent = new Intent(BaseActivity.this, MainTabActivity.class);
                         } else {
-                            intent = new Intent(BaseActivity.this, Page2Activity.class);
+                            intent = new Intent(BaseActivity.this, PageThreadsActivity.class);
                             intent.putExtra(EXTRA_URL, "forumdisplay.php?" + charSequence);
                             intent.putExtra(EXTRA_TITLE, charSequence);
                         }

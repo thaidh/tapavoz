@@ -1,31 +1,17 @@
 package com.whoami.voz.ui.contain;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.QuoteSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.text.style.URLSpan;
-import android.text.style.UnderlineSpan;
 
-
-import com.whoami.voz.R;
 import com.whoami.voz.ui.contain.item.ContentItem;
 import com.whoami.voz.ui.main.MainApplication;
 import com.whoami.voz.ui.utils.CustomSpanable;
 import com.whoami.voz.ui.utils.EmoLoader;
 import com.whoami.voz.ui.utils.Util;
 
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-
 import java.util.ArrayList;
 
-public class Post {
+public class VozPost {
     public static final String urlAvatar = "http://pik.vn/2014277c7c6c-57e7-4a12-bb2a-c83315886870.png";
     public static final String urlOffline = "http://pik.vn/2014672b230d-420c-4855-adc8-bb370d696e37.png";
     public static final String urlOnline = "http://pik.vn/2014e76c1d82-9947-4362-991c-c29457164f29.png";
@@ -131,7 +117,7 @@ public class Post {
         }
     }
 
-    public Post() {
+    public VozPost() {
         this.mJd = "";
         this.mPosts = "0";
         this.m_UserId = "";

@@ -7,7 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 
-import com.whoami.voz.ui.contain.Post;
+import com.whoami.voz.ui.contain.VozPost;
 import com.whoami.voz.ui.main.MainApplication;
 
 import java.io.IOException;
@@ -73,7 +73,7 @@ public class EmoLoader {
             }
             Bitmap bitmap = BitmapFactory.decodeStream(istr);
             bitmapDrawable = new BitmapDrawable(MainApplication.getAppContext().getResources(), bitmap);
-            bitmapDrawable.setBounds(0, 0, (int) (((float) Post.DP32) * Post.TEXT_SIZE), (int) (((float) Post.DP32) * Post.TEXT_SIZE));
+            bitmapDrawable.setBounds(0, 0, (int) (((float) VozPost.DP32) * VozPost.TEXT_SIZE), (int) (((float) VozPost.DP32) * VozPost.TEXT_SIZE));
             mEmoCache.put(strName, bitmapDrawable);
         }
     }

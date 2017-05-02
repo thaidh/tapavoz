@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.whoami.voz.R;
 import com.whoami.voz.ui.activity.BaseActivity;
-import com.whoami.voz.ui.contain.Post;
+import com.whoami.voz.ui.contain.VozPost;
 import com.whoami.voz.ui.widget.NavigationBar;
 
 import java.lang.ref.WeakReference;
@@ -27,7 +27,7 @@ public class Page3PagerAdapter extends BasePagerAdapter {
     private Activity mContext;
     private Bitmap mImageStart;
     private float mTextSize;
-    private Map<Integer, ArrayList<Post>>  mMapPostPerPage = new LinkedHashMap() {
+    private Map<Integer, ArrayList<VozPost>>  mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
             return size() > BaseActivity.MAX_ENTRIES;
         }

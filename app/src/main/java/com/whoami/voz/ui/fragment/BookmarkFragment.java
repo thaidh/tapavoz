@@ -9,14 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.activity.BaseActivity;
-import com.whoami.voz.ui.activity.Page2Activity;
-import com.whoami.voz.ui.activity.Page3Activity;
+import com.whoami.voz.ui.pageposts.PagePostActivity;
 import com.whoami.voz.ui.adapter.list.Page2ListViewAdapter;
 import com.whoami.voz.ui.contain.VozThread;
 import com.whoami.voz.ui.main.MainApplication;
@@ -56,7 +54,7 @@ public class BookmarkFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), Page3Activity.class);
+                Intent intent = new Intent(getActivity(), PagePostActivity.class);
                 VozThread vozThread = mBookmarkList.get(position - mListView.getHeaderViewsCount());
                 intent.putExtra(BaseActivity.EXTRA_URL, vozThread.UrlThread());
                 intent.putExtra(BaseActivity.EXTRA_TITLE, vozThread.Thread());
