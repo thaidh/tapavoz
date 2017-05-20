@@ -12,7 +12,7 @@ public class VozThread {
     public String mPrefixLink;
     private String mReply;
     private String mTitle;
-    private String mUrlLasrPost;
+    private String mUrlLastPost;
     private String mUrlLastLast;
     private String mUrlThread;
     private String mView;
@@ -28,7 +28,7 @@ public class VozThread {
         this.mTitle = title;
         this.bitmap = bitmap;
         this.mUrlThread = url;
-        this.mUrlLasrPost = lastPostUrl;
+        this.mUrlLastPost = lastPostUrl;
         this.isSticky = false;
         this.isStar = false;
     }
@@ -56,7 +56,7 @@ public class VozThread {
     }
 
     public String UrlLastPosst() {
-        return this.mUrlLasrPost;
+        return this.mUrlLastPost;
     }
 
     public String UrlThread() {

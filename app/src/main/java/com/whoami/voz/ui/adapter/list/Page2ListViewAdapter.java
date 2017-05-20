@@ -1,6 +1,7 @@
 package com.whoami.voz.ui.adapter.list;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,20 +77,18 @@ public class Page2ListViewAdapter extends BaseAdapter {
             holder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.vozTcat));
             this.holder.txtView1.setText(vozThread.Thread());
             this.holder.txtView2.setVisibility(View.VISIBLE);
-//            if (thread.isSticky()) {
-//                Global.setTextSticky(this.holder.txtView1);
-//            } else {
-//                Global.setTextColor1(this.holder.txtView1);
-//            }
+            if (vozThread.isSticky()) {
+                holder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.red));
+            }
             if (vozThread.Reply() == null) {
                 this.holder.txtView2.setText(vozThread.LastPost());
             } else {
                 this.holder.txtView2.setText(vozThread.LastPost() + "- Replie:" + ((VozThread) this.mVozThreads.get(i)).Reply() + " - View:" + ((VozThread) this.mVozThreads.get(i)).View());
             }
             if (vozThread.UrlLastPosst() != null) {
-                this.holder.txtView1.setTypeface(null, 1);
+                this.holder.txtView1.setTypeface(Typeface.DEFAULT_BOLD, 1);
             } else {
-                this.holder.txtView1.setTypeface(null, 0);
+                this.holder.txtView1.setTypeface(Typeface.DEFAULT, 0);
             }
         }
         if (Global.bTopicHeader) {

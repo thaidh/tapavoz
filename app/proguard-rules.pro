@@ -41,6 +41,6 @@
 -keep class com.whoami.voz.ui.widget.SlidingTabLayout** {
  *;
   }
-  -dontnote android.net.http.**
-  -dontwarn org.apache.http.**
-  -dontwarn retrofit2.**
+-dontnote android.net.http.**
+-dontwarn org.apache.http.**
+-dontwarn retrofit2.**

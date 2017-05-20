@@ -8,8 +8,6 @@ import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.widget.TextView;
 
-import com.whoami.voz.ui.quickaction.QuickAction;
-
 public class Global {
     public static int ADS_ADMOD = 0;
     public static int ADS_ADMOD_AIRPUSH = 0;
@@ -140,7 +138,7 @@ public class Global {
         iArr[txColor2] = new int[]{ViewCompat.MEASURED_STATE_MASK, -14653571, -4593875, ViewCompat.MEASURED_STATE_MASK, -4593875, -1118482, -872415232, SupportMenu.CATEGORY_MASK, -10066330};
         iArr[quicklink] = new int[]{-526345, -14653571, -4593875, ViewCompat.MEASURED_STATE_MASK, -4593875, ViewCompat.MEASURED_STATE_MASK, -872415232, SupportMenu.CATEGORY_MASK, -2302758};
         iArr[stick] = new int[]{ViewCompat.MEASURED_STATE_MASK, -13057804, -9467737, -1, -16735512, -1118482, -872415232, SupportMenu.CATEGORY_MASK, -10066330};
-        iArr[bgmain] = new int[]{-1300, -3921, -2336226, -1, QuickAction.WOOD_TEXT_TITLE, QuickAction.WOOD_TEXT_TITLE, -872415232, SupportMenu.CATEGORY_MASK, -2302758};
+//        iArr[bgmain] = new int[]{-1300, -3921, -2336226, -1, QuickAction.WOOD_TEXT_TITLE, QuickAction.WOOD_TEXT_TITLE, -872415232, SupportMenu.CATEGORY_MASK, -2302758};
         themeColor = iArr;
         String[] strArr = new String[TASK_NEWTHREAD];
         strArr[bg] = "000000";
