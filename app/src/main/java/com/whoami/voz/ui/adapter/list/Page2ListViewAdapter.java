@@ -3,6 +3,8 @@ package com.whoami.voz.ui.adapter.list;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.text.TextUtilsCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +21,16 @@ import java.util.ArrayList;
 
 public class Page2ListViewAdapter extends BaseAdapter {
     private ArrayList<VozThread> mVozThreads;
-    private ViewHolder holder;
     private LayoutInflater inflater;
     private Context mContext;
 
     public static class ViewHolder {
-        ImageView imgView;
         RelativeLayout relativelayout;
         TextView txtView1;
         TextView txtView2;
+        TextView replyTv;
+        TextView viewTv;
+        View replyLayout;
     }
 
     public Page2ListViewAdapter(Context context, ArrayList<VozThread> arrayList) {
@@ -54,54 +57,45 @@ public class Page2ListViewAdapter extends BaseAdapter {
 
     public View getView(int i, View view, ViewGroup viewGroup) {
         VozThread vozThread = this.mVozThreads.get(i);
+        ViewHolder holder;
         if (view == null) {
-            this.holder = new ViewHolder();
+            holder = new ViewHolder();
             view = this.inflater.inflate(R.layout.list_item2, null);
-            this.holder.relativelayout = (RelativeLayout) view.findViewById(R.id.relativelayout);
-            this.holder.imgView = (ImageView) view.findViewById(R.id.image);
-            this.holder.txtView1 = (TextView) view.findViewById(R.id.text1);
-            this.holder.txtView2 = (TextView) view.findViewById(R.id.text2);
-            view.setTag(this.holder);
+            holder.relativelayout = (RelativeLayout) view.findViewById(R.id.relativelayout);
+            holder.txtView1 = (TextView) view.findViewById(R.id.text1);
+            holder.txtView2 = (TextView) view.findViewById(R.id.text2);
+            holder.replyLayout = view.findViewById(R.id.reply_view_layout);
+            holder.replyTv = (TextView) view.findViewById(R.id.reply_tv);
+            holder.viewTv = (TextView) view.findViewById(R.id.view_tv);
+            view.setTag(holder);
         } else {
-            this.holder = (ViewHolder) view.getTag();
+            holder = (ViewHolder) view.getTag();
         }
-//        Global.setBackgroundItemThread(this.holder.relativelayout);
+        holder.replyLayout.setVisibility(View.GONE);
         if (vozThread.UrlThread() == null) {
-//            Global.setTextColor2(this.holder.txtView1);
             holder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.red));
-            this.holder.txtView1.setText(vozThread.Thread());
-            this.holder.txtView2.setText(null);
-            this.holder.txtView2.setVisibility(View.GONE);
+            holder.txtView1.setText(vozThread.Thread());
+            holder.txtView2.setText(null);
+            holder.txtView2.setVisibility(View.GONE);
         } else {
-//            Global.setTextColor2(this.holder.txtView2);
             holder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.vozTcat));
-            this.holder.txtView1.setText(vozThread.Thread());
-            this.holder.txtView2.setVisibility(View.VISIBLE);
+            holder.txtView1.setText(vozThread.Thread());
+            holder.txtView2.setVisibility(View.VISIBLE);
             if (vozThread.isSticky()) {
                 holder.txtView1.setTextColor(ContextCompat.getColor(mContext, R.color.red));
             }
-            if (vozThread.Reply() == null) {
-                this.holder.txtView2.setText(vozThread.LastPost());
-            } else {
-                this.holder.txtView2.setText(vozThread.LastPost() + "- Replie:" + ((VozThread) this.mVozThreads.get(i)).Reply() + " - View:" + ((VozThread) this.mVozThreads.get(i)).View());
-            }
+            holder.txtView2.setText(vozThread.LastPost());
             if (vozThread.UrlLastPosst() != null) {
-                this.holder.txtView1.setTypeface(Typeface.DEFAULT_BOLD, 1);
+                holder.txtView1.setTypeface(Typeface.DEFAULT_BOLD, 1);
             } else {
-                this.holder.txtView1.setTypeface(Typeface.DEFAULT, 0);
+                holder.txtView1.setTypeface(Typeface.DEFAULT, 0);
+            }
+            if (!TextUtils.isEmpty(vozThread.Reply())) {
+                holder.replyLayout.setVisibility(View.VISIBLE);
+                holder.replyTv.setText(vozThread.Reply());
+                holder.viewTv.setText(vozThread.View());
             }
         }
-        if (Global.bTopicHeader) {
-            try {
-                this.holder.imgView.setImageBitmap(vozThread.Image());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            this.holder.imgView.setVisibility(View.GONE);
-        }
-        this.holder.relativelayout.setClickable(false);
-        this.holder.relativelayout.setFocusable(false);
         return view;
     }
 

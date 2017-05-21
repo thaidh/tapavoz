@@ -4,8 +4,10 @@
     android:id="@+id/listitem1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10.0dip"
-    android:background="@color/white"
+    android:background="@drawable/ripple_bg"
+    android:paddingTop="8.0dip"
+    android:paddingLeft="16.0dip"
+    android:paddingRight="16.0dip"
     >
 
     <LinearLayout
@@ -13,8 +15,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="8.0dip"
-        android:background="?android:attr/selectableItemBackground">
+
+        >
 
         <TextView
             android:id="@+id/text1"
@@ -38,6 +40,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1.0dip"
-            android:background="@color/colorBackground2"/>
+            android:layout_marginTop="8.0dp"
+            android:background="@color/cLine1"/>
     </LinearLayout>
 </RelativeLayout>

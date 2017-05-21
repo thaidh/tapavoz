@@ -114,7 +114,7 @@ public class PageThreadsPresenter implements PageThreadsContract.Presenter {
             }
             Bitmap loadBitmapAssert;
             String attr;
-            String text;
+            String lastPostInfo;
             Elements select = first2.select("tr:has(td[id*=td_threads])");
             Elements select2 = first.select("tr > td[class=alt1Active]");
             Iterator it = select.iterator();
@@ -139,21 +139,22 @@ public class PageThreadsPresenter implements PageThreadsContract.Presenter {
                 }
                 attr = first.select("div > a").first() != null ? first.select("div > a").first().attr("href") : str3;
                 if (nextElementSibling.select("span > a").first() != null) {
-                    text = nextElementSibling.select("span > a").first().text();
+                    lastPostInfo = nextElementSibling.select("span > a").first().text();
                     str = nextElementSibling.select("span > a").first().attr("href");
                 } else {
-                    text = str4;
+                    lastPostInfo = str4;
                 }
+
                 if (!(nextElementSibling2 == null || nextElementSibling3 == null)) {
-                    text = text + "\nReplie:" + nextElementSibling2.text() + " - View:" + nextElementSibling3.text();
+                    lastPostInfo = lastPostInfo + "\nReplie:" + nextElementSibling2.text() + " - View:" + nextElementSibling3.text();
                 }
-                vozThreads.add(new VozThread(str2, text, null, null, loadBitmapAssert, attr, str));
+                vozThreads.add(new VozThread(str2, lastPostInfo, null, null, loadBitmapAssert, attr, str));
                 bitmap = loadBitmapAssert;
                 str3 = attr;
-                str4 = text;
+                str4 = lastPostInfo;
             }
             vozThreads.add(new VozThread("Thread", null, null, null, null, null, null));
-            text = null;
+            lastPostInfo = null;
             loadBitmapAssert = bitmap;
             attr = str3;
             String str5 = str4;
@@ -168,26 +169,30 @@ public class PageThreadsPresenter implements PageThreadsContract.Presenter {
                         str2 = element.select("a[href*=prefixid]").first().text() + "-";
                         attr2 = element.select("a[href*=prefixid]").attr("href");
                     } else {
-                        attr2 = text;
+                        attr2 = lastPostInfo;
                     }
                     str2 = str2 + element.select("a[id*=thread_title").first().text();
                     attr = element.select("a[id*=thread_title").first().attr("href");
                     str3 = attr2;
                 } else {
-                    str3 = text;
+                    str3 = lastPostInfo;
                 }
                 attr2 = element.select("td[class=alt2]:has(span)").first() != null ? element.select("td[class=alt2]:has(span)").first().text() : str5;
+                String replyCount = "";
+                String viewCount = "";
                 if (element.select("td[align=center]").first() != null) {
-                    attr2 = attr2 + "\nReplies:" + ((Element) element.select("td[align=center]").get(0)).text() + " - Views:" + ((Element) element.select("td[align=center]").get(1)).text();
+                    replyCount = ((Element) element.select("td[align=center]").get(0)).text();
+                    viewCount = ((Element) element.select("td[align=center]").get(1)).text();
+//                    attr2 = attr2 + "\nReplies:" + ((Element) element.select("td[align=center]").get(0)).text() + " - Views:" + ((Element) element.select("td[align=center]").get(1)).text();
                 }
-                text = element.select("div:has(span[onclick*=member.php])").first() != null ? element.select("div:has(span[onclick*=member.php])").first().text() + " - " + attr2 : attr2;
+                lastPostInfo = element.select("div:has(span[onclick*=member.php])").first() != null ? element.select("div:has(span[onclick*=member.php])").first().text() + " - " + attr2 : attr2;
                 if (Global.bTopicHeader && element.select("img[id*=thread_statusicon]").first() != null) {
                     loadBitmapAssert = mPageThreadsView.loadBitmapAssert(element.select("img[id*=thread_statusicon]").first().attr("src"));
                 }
                 if (element.select("a[id*=thread_gotonew]").first() != null) {
                     str = element.select("a[id*=thread_gotonew]").first().attr("href");
                 }
-                VozThread vozThread = new VozThread(str2, text, null, null, loadBitmapAssert, attr, str);
+                VozThread vozThread = new VozThread(str2, lastPostInfo, replyCount, viewCount, loadBitmapAssert, attr, str);
                 vozThread.mPrefixLink = str3;
                 vozThread.mIdThread = attr.split("t=")[1];
                 if (element.select("a:has(img[src*=lastpost])").first() != null) {
@@ -203,8 +208,8 @@ public class PageThreadsPresenter implements PageThreadsContract.Presenter {
 //                    this.mDataBookmark.updateBookmark(thread);
 //                }
                 vozThreads.add(vozThread);
-                str5 = text;
-                text = str3;
+                str5 = lastPostInfo;
+                lastPostInfo = str3;
             }
             mMapPostPerPage.put(Integer.valueOf(curPage), vozThreads);
             mPageThreadsView.refreshCurrentPage(mTotalPage, curPage, true, vozThreads);

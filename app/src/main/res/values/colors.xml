@@ -166,4 +166,9 @@
     <color name="accent">#eeff41</color>
     <color name="accentLight">#F4FF81</color>
     <color name="bg_gray">#ffe1e4f2</color>
+    <color name="cTime1">#9ea7ac</color>
+    <color name="cTime1_alpha70">#b29ea7ac</color>
+    <color name="cLike1">#6d7b7e</color>
+    <color name="cLine1">#e8e8e8</color>
+    <color name="cLine2">#d8d8d8</color>
 </resources>
