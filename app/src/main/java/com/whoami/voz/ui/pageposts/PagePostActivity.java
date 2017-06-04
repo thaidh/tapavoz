@@ -22,7 +22,7 @@ import com.whoami.voz.R;
 import com.whoami.voz.ui.activity.BaseActivity;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page3PagerAdapter;
-import com.whoami.voz.ui.adapter.list.Page3ListViewAdapter;
+import com.whoami.voz.ui.adapter.list.PostListViewAdapter;
 import com.whoami.voz.ui.contain.VozPost;
 import com.whoami.voz.ui.contain.VozThread;
 import com.whoami.voz.ui.delegate.PagerListener;
@@ -214,7 +214,7 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
                 navigationFooterBar.setPagerListener(mPagerListener);
                 (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
                 if ((forceRefresh || listView.getAdapter() == null)) {
-                    final Page3ListViewAdapter adapter = new Page3ListViewAdapter(this, posts, null, null, 1.0f);
+                    final PostListViewAdapter adapter = new PostListViewAdapter(this, posts, null, null, 1.0f);
                     listView.setAdapter(adapter);
                 }
 

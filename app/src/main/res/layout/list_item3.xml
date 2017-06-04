@@ -112,7 +112,7 @@
         <!--android:textSize="@dimen/xlargeTextSize1Bis" />-->
 
     <LinearLayout
-        android:id="@+id/grid_image"
+        android:id="@+id/content_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
