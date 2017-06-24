@@ -21,6 +21,7 @@ import com.whoami.voz.ui.main.MainApplication;
 import com.whoami.voz.ui.mysqlite.DatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,6 +70,7 @@ public class BookmarkFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mBookmarkList = DatabaseHelper.getInstance(MainApplication.getAppContext()).getAllBookmarkThread();
+        Collections.reverse(mBookmarkList);
         mAdapter.setData(mBookmarkList);
         mAdapter.notifyDataSetChanged();
     }

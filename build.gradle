@@ -17,3 +17,16 @@ allprojects {
         jcenter()
     }
 }
+
+project.ext {
+    compileSdkVersion = 25
+    buildToolsVersion = '25.0.0'
+    minSdkVersion = 21;
+    targetSdkVersion = 25;
+
+    okhttpVersion = "3.3.1"
+    retrofitVersion = "2.0.0"
+    supportLibVersion = "25.1.1"
+    frescoVersion = "1.3.0"
+    preDexLibs = !project.hasProperty('disablePreDex');
+}

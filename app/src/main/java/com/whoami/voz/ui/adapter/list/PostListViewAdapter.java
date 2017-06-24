@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.ActionBarOverlayLayout;
 import android.support.v7.widget.ViewUtils;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions.Builder;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.contain.VozPost;
 import com.whoami.voz.ui.contain.item.ContentItem;
@@ -44,27 +46,18 @@ import java.util.ArrayList;
 
 public class PostListViewAdapter extends BaseAdapter {
     private static final int PADDING = Util.convertDpToPx(MainApplication.getAppContext(), 15);
+    private static final int CONTENT_PHOTO_DEFAULT_SIZE = Util.convertDpToPx(MainApplication.getAppContext(), 100);
+    LayoutInflater inflater;
 
-    private Context context;
-    private int dp32;
-    private Drawable drawableAvatar;
-    private Drawable drawableOffline;
-    private Drawable drawableOnline;
-    private ViewHolder holder;
-    protected ImageLoader imageLoader;
-    private LayoutInflater inflater;
-    private ArrayList<String> lEmoImage;
-    private ArrayList<String> lImage;
-    private OnImageClickListestener mImageClickListener;
-    private ImageSize mImageSize;
-    private ArrayList<VozPost> mPosts;
-    private DisplayImageOptions options;
-    private DisplayImageOptions optionsEmo;
-    private boolean isScrolling = false;
-
-    public interface OnImageClickListestener {
-        void onImageClick(int i, String str);
-    }
+    Context context;
+    int dp32;
+    Drawable drawableAvatar;
+    Drawable drawableOffline;
+    Drawable drawableOnline;
+    ImageSize mImageSize;
+    ArrayList<VozPost> mPosts;
+    boolean isScrolling = false;
+    Drawable presetDrawable ;
 
     static class ViewHolder {
         SimpleDraweeView avatarView;
@@ -88,18 +81,13 @@ public class PostListViewAdapter extends BaseAdapter {
         drawableOnline.setBounds(0, 0, dp32, dp32);
         drawableOffline.setBounds(0, 0, dp32, dp32);
         mPosts = arrayList;
-        lImage = new ArrayList();
-        this.imageLoader = imageLoader;
-        initUniversal();
+        presetDrawable = ContextCompat.getDrawable(context, R.drawable.image_for_empty_url);
+        mImageSize = new ImageSize(Global.width - Util.convertDpToPx(context, 10), Global.width - Util.convertDpToPx(context, 10));
     }
 
 
     private void initUniversal() {
-        options = new Builder().cacheInMemory(true).imageScaleType(ImageScaleType.NONE).bitmapConfig(Config.RGB_565).build();
-        optionsEmo = new Builder().cacheInMemory(true).cacheOnDisc(true)
-                .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2)
-                .bitmapConfig(Config.ARGB_8888).delayBeforeLoading(0).build();
-        mImageSize = new ImageSize(Global.width - Util.convertDpToPx(context, 10), Global.width - Util.convertDpToPx(context, 10));
+
     }
 
 
@@ -117,6 +105,7 @@ public class PostListViewAdapter extends BaseAdapter {
 
     public View getView(int position, View view, ViewGroup viewGroup) {
         VozPost post = mPosts.get(position);
+        ViewHolder holder;
         if (view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.post_item_layout, null);
@@ -151,11 +140,7 @@ public class PostListViewAdapter extends BaseAdapter {
         return view;
     }
 
-    public void setOnImageClickListener(OnImageClickListestener onImageClickListestener) {
-        mImageClickListener = onImageClickListestener;
-    }
-
-    private void addDynamicContent(LinearLayout parent, ContentItem item) {
+    private void addDynamicContent(LinearLayout parent, final ContentItem item) {
         switch (item.type) {
             case ContentItem.TYPE_PLAIN_TEXT:{
                 TextView textView = new TextView(context);
@@ -163,6 +148,7 @@ public class PostListViewAdapter extends BaseAdapter {
                 textView.setText(item.mContent);
                 textView.setTextColor(ContextCompat.getColor(context, R.color.black));
                 textView.setTextSize(16);
+                textView.setAutoLinkMask(Linkify.ALL);
                 textView.setPadding(PADDING, 0, PADDING, 0);
                 textView.setLayoutParams(layoutParams);
                 parent.addView(textView);
@@ -174,6 +160,7 @@ public class PostListViewAdapter extends BaseAdapter {
                 textView.setText(item.mContent);
                 textView.setTextColor(ContextCompat.getColor(context, R.color.grey));
                 textView.setTextSize(16);
+                textView.setAutoLinkMask(Linkify.ALL);
                 textView.setPadding(PADDING, 0, PADDING, 0);
                 textView.setLayoutParams(layoutParams);
                 parent.addView(textView);
@@ -181,8 +168,7 @@ public class PostListViewAdapter extends BaseAdapter {
             }
             case ContentItem.TYPE_PHOTO: {
                 final SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Util.convertDpToPx(context, 100), Util.convertDpToPx(context, 100));
-                layoutParams.setMargins(0, 0, 0, 0);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CONTENT_PHOTO_DEFAULT_SIZE, CONTENT_PHOTO_DEFAULT_SIZE);
                 ControllerListener controllerListener = new BaseControllerListener() {
                     @Override
                     public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
@@ -210,12 +196,28 @@ public class PostListViewAdapter extends BaseAdapter {
                         .build();
 //
 //                GenericDraweeHierarchyBuilder genericDraweeHierarchyBuilder = new GenericDraweeHierarchyBuilder(context.getResources());
+//                genericDraweeHierarchyBuilder.setFadeDuration(300).setPlaceholderImage(presetDrawable).set;
+//                simpleDraweeView.setHierarchy(genericDraweeHierarchyBuilder.build());
+
                 GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
                 hierarchy.setPlaceholderImage(R.drawable.image_for_empty_url);
                 hierarchy.setFadeDuration(300);
+
                 simpleDraweeView.setLayoutParams(layoutParams);
                 simpleDraweeView.setController(controller);
                 parent.addView(simpleDraweeView);
+
+
+                simpleDraweeView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ArrayList<String> urls = new ArrayList<>();
+                        urls.add(item.mData);
+                        new ImageViewer.Builder<>(context, urls)
+                                .setStartPosition(0)
+                                .show();
+                    }
+                });
                 break;
             }
             default:

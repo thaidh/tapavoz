@@ -4,21 +4,23 @@ package com.whoami.voz.ui.activity;
  * Created by thaidh on 12/25/16.
  */
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 
 import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePagerAdapter;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ksoichiro.android.observablescrollview.Scrollable;
-import com.nineoldandroids.view.ViewHelper;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.fragment.BookmarkFragment;
 import com.whoami.voz.ui.fragment.HomeFragment;
@@ -83,15 +85,15 @@ public class MainTabActivity extends BaseActivity implements ObservableScrollVie
     public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
         if (dragging) {
             int toolbarHeight = mToolbarView.getHeight();
-            float currentHeaderTranslationY = ViewHelper.getTranslationY(mHeaderView);
+            float currentHeaderTranslationY = mHeaderView.getTranslationY();
             if (firstScroll) {
                 if (-toolbarHeight < currentHeaderTranslationY) {
                     mBaseTranslationY = scrollY;
                 }
             }
             float headerTranslationY = ScrollUtils.getFloat(-(scrollY - mBaseTranslationY), -toolbarHeight, 0);
-            ViewPropertyAnimator.animate(mHeaderView).cancel();
-            ViewHelper.setTranslationY(mHeaderView, headerTranslationY);
+            mHeaderView.animate().cancel();
+            mHeaderView.setTranslationY(headerTranslationY);
         }
     }
 
@@ -196,28 +198,28 @@ public class MainTabActivity extends BaseActivity implements ObservableScrollVie
     }
 
     private boolean toolbarIsShown() {
-        return ViewHelper.getTranslationY(mHeaderView) == 0;
+        return mHeaderView.getTranslationY() == 0;
     }
 
     private boolean toolbarIsHidden() {
-        return ViewHelper.getTranslationY(mHeaderView) == -mToolbarView.getHeight();
+        return mHeaderView.getTranslationY() == -mToolbarView.getHeight();
     }
 
     private void showToolbar() {
-        float headerTranslationY = ViewHelper.getTranslationY(mHeaderView);
+        float headerTranslationY = mHeaderView.getTranslationY();
         if (headerTranslationY != 0) {
-            ViewPropertyAnimator.animate(mHeaderView).cancel();
-            ViewPropertyAnimator.animate(mHeaderView).translationY(0).setDuration(200).start();
+            mHeaderView.animate().cancel();
+            mHeaderView.animate().translationY(0).setDuration(200).start();
         }
         propagateToolbarState(true);
     }
 
     private void hideToolbar() {
-        float headerTranslationY = ViewHelper.getTranslationY(mHeaderView);
+        float headerTranslationY = mHeaderView.getTranslationY();
         int toolbarHeight = mToolbarView.getHeight();
         if (headerTranslationY != -toolbarHeight) {
-            ViewPropertyAnimator.animate(mHeaderView).cancel();
-            ViewPropertyAnimator.animate(mHeaderView).translationY(-toolbarHeight).setDuration(200).start();
+            mHeaderView.animate().cancel();
+            mHeaderView.animate().translationY(-toolbarHeight).setDuration(200).start();
         }
         propagateToolbarState(false);
     }
