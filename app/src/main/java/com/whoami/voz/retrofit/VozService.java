@@ -9,7 +9,7 @@ public class VozService {
     private VozService() {
     }
 
-    public static VozApi createGithubService(final String githubToken) {
+    public static VozApi createVozService() {
         Retrofit.Builder builder = new Retrofit.Builder()
 //                .addCallAdapterFactory(new ToStringConverterFactory())
               .addConverterFactory(new ToStringConverterFactory())

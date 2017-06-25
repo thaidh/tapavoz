@@ -1,15 +1,9 @@
 package com.whoami.voz.ui.contain.item;
 
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.QuoteSpan;
-import android.text.style.StyleSpan;
 
-import com.whoami.voz.R;
-import com.whoami.voz.ui.main.MainApplication;
 import com.whoami.voz.ui.utils.CustomSpanable;
 import com.whoami.voz.ui.utils.EmoLoader;
 
@@ -74,11 +68,12 @@ public class ContentItem {
                     mContent.setSpan(span, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 }
             }
-            int start = 0;
-            int end = mContent.length();
-            mContent.setSpan(new QuoteSpan(ContextCompat.getColor(MainApplication.getAppContext(), R.color.ics_blue_dark)), 0, mContent.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            mContent.setSpan(new StyleSpan(2), start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-            mContent.setSpan(new ForegroundColorSpan(ContextCompat.getColor(MainApplication.getAppContext(), R.color.primary_material_light)), 0, mContent.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+//            int start = 0;
+//            int end = mContent.length();
+//            mContent.setSpan(new QuoteSpan(ContextCompat.getColor(MainApplication.getAppContext(), R.color.ics_blue_dark)), 0, mContent.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+//            mContent.setSpan(new StyleSpan(2), start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+//            mContent.setSpan(new ForegroundColorSpan(ContextCompat.getColor(MainApplication.getAppContext(), R.color.primary_material_light)), start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+//            mContent.setSpan(new BackgroundColorSpan(ContextCompat.getColor(MainApplication.getAppContext(), R.color.bg_gray)),start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         }
 
     }

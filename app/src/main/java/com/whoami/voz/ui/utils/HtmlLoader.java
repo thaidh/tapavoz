@@ -28,7 +28,7 @@ public class HtmlLoader {
 
     private HtmlLoader() {
 //        mParser = new HtmlParser(Global.URL);
-        mVozService = VozService.createGithubService("");
+        mVozService = VozService.createVozService();
     }
 
     public void fetchData(final String url, final int curPage, final HtmlLoaderListener listener) {

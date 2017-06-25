@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="abc_input_method_navigation_guard">@android:color/black</color>
-    <color name="abc_search_url_text_normal">#ff7fa87f</color>
-    <color name="abc_search_url_text_pressed">@android:color/black</color>
-    <color name="abc_search_url_text_selected">@android:color/black</color>
-    <color name="accent_material_dark">@color/material_deep_teal_200</color>
-    <color name="accent_material_light">@color/material_deep_teal_500</color>
-    <color name="background_floating_material_dark">#ff424242</color>
-    <color name="background_floating_material_light">#ffeeeeee</color>
-    <color name="background_material_dark">#ff303030</color>
-    <color name="background_material_light">#ffeeeeee</color>
     <color name="black">#ff000000</color>
     <color name="blue">#ff3f9bbf</color>
-    <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
-    <color name="bright_foreground_disabled_material_light">#80000000</color>
-    <color name="bright_foreground_inverse_material_dark">@color/bright_foreground_material_light</color>
-    <color name="bright_foreground_inverse_material_light">@color/bright_foreground_material_dark</color>
-    <color name="bright_foreground_material_dark">@android:color/white</color>
-    <color name="bright_foreground_material_light">@android:color/black</color>
-    <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
     <color name="buttonscreen">#cc000000</color>
     <color name="colorBackground1">#ffdcdcda</color>
@@ -31,15 +14,6 @@
     <color name="colorquiclink3">#fff4b400</color>
     <color name="colorquiclink4">#ff3e802f</color>
     <color name="common_action_bar_splitter">#ffd2d2d2</color>
-    <color name="common_signin_btn_dark_text_default">@android:color/white</color>
-    <color name="common_signin_btn_dark_text_disabled">#ffaaaaaa</color>
-    <color name="common_signin_btn_dark_text_focused">@android:color/white</color>
-    <color name="common_signin_btn_dark_text_pressed">@android:color/white</color>
-    <color name="common_signin_btn_default_background">#ffdd4b39</color>
-    <color name="common_signin_btn_light_text_default">#ff737373</color>
-    <color name="common_signin_btn_light_text_disabled">#ffaaaaaa</color>
-    <color name="common_signin_btn_light_text_focused">#ff737373</color>
-    <color name="common_signin_btn_light_text_pressed">@android:color/white</color>
     <color name="dark_divider_color">#ff171717</color>
     <color name="dark_list_high_light">#ff0a5d84</color>
     <color name="default_bg">#ffffffff</color>
@@ -52,8 +26,6 @@
     <color name="grey">#ff404040</color>
     <color name="highlighted_text_material_dark">#6680cbc4</color>
     <color name="highlighted_text_material_light">#66009688</color>
-    <color name="hint_foreground_material_dark">@color/bright_foreground_disabled_material_dark</color>
-    <color name="hint_foreground_material_light">@color/bright_foreground_disabled_material_light</color>
     <color name="ics_blue_bright">#ff38c0f4</color>
     <color name="ics_blue_dark">#ff0099cc</color>
     <color name="ics_blue_light">#ff33b5e5</color>
@@ -123,8 +95,6 @@
     <color name="ics_swatch_red14">#ffcc0000</color>
     <color name="image_full_background">#80000000</color>
     <color name="light_divider_color">#ffe1e1e1</color>
-    <color name="link_text_material_dark">@color/material_deep_teal_200</color>
-    <color name="link_text_material_light">@color/material_deep_teal_500</color>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
     <color name="material_blue_grey_950">#ff21272b</color>

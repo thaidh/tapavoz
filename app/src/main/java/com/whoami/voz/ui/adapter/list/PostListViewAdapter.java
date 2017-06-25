@@ -2,13 +2,10 @@ package com.whoami.voz.ui.adapter.list;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.ActionBarOverlayLayout;
-import android.support.v7.widget.ViewUtils;
 import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
@@ -23,16 +20,12 @@ import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.DisplayImageOptions.Builder;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 import com.whoami.voz.R;
@@ -46,6 +39,7 @@ import java.util.ArrayList;
 
 public class PostListViewAdapter extends BaseAdapter {
     private static final int PADDING = Util.convertDpToPx(MainApplication.getAppContext(), 15);
+    private static final int MARGIN = Util.convertDpToPx(MainApplication.getAppContext(), 8);
     private static final int CONTENT_PHOTO_DEFAULT_SIZE = Util.convertDpToPx(MainApplication.getAppContext(), 100);
     LayoutInflater inflater;
 
@@ -125,12 +119,12 @@ public class PostListViewAdapter extends BaseAdapter {
             holder.avatarView.setImageDrawable(drawableAvatar);
         }
 
-        holder.usernameTv.setText(post.User());
+        holder.usernameTv.setText(post.getUserName());
 
-        if (post.Time() != null && post.Time().split(" ").length > 3) {
+        if (post.getTime() != null && post.getTime().split(" ").length > 3) {
             StringBuilder indexTimeStr = new StringBuilder();
-            indexTimeStr.append(post.Time().split(" ")[1] + "  ");
-            indexTimeStr.append(post.Time().split(" ")[3] + " " + post.Time().split(" ")[4]);
+            indexTimeStr.append(post.getTime().split(" ")[1] + "  ");
+            indexTimeStr.append(post.getTime().split(" ")[3] + " " + post.getTime().split(" ")[4]);
             holder.indexTv.setText(indexTimeStr.toString());
         }
         holder.mContentLayout.removeAllViews();
@@ -148,20 +142,23 @@ public class PostListViewAdapter extends BaseAdapter {
                 textView.setText(item.mContent);
                 textView.setTextColor(ContextCompat.getColor(context, R.color.black));
                 textView.setTextSize(16);
-                textView.setAutoLinkMask(Linkify.ALL);
                 textView.setPadding(PADDING, 0, PADDING, 0);
                 textView.setLayoutParams(layoutParams);
+                textView.setAutoLinkMask(Linkify.WEB_URLS);
+                textView.setLinkTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_light));
                 parent.addView(textView);
                 break;
             }
             case ContentItem.TYPE_QUOTE: {
                 TextView textView = new TextView(context);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(MARGIN, 0, MARGIN, 0);
                 textView.setText(item.mContent);
-                textView.setTextColor(ContextCompat.getColor(context, R.color.grey));
+                textView.setTextColor(ContextCompat.getColor(context, R.color.black));
                 textView.setTextSize(16);
                 textView.setAutoLinkMask(Linkify.ALL);
-                textView.setPadding(PADDING, 0, PADDING, 0);
+                textView.setPadding(PADDING, PADDING, PADDING, PADDING);
+                textView.setBackgroundColor(ContextCompat.getColor(context, R.color.button_material_light));
                 textView.setLayoutParams(layoutParams);
                 parent.addView(textView);
                 break;

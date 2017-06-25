@@ -1,11 +1,9 @@
 package com.whoami.voz.ui.contain;
 
-import android.graphics.Bitmap;
-import android.text.SpannableString;
+import android.text.TextUtils;
 
 import com.whoami.voz.ui.contain.item.ContentItem;
 import com.whoami.voz.ui.main.MainApplication;
-import com.whoami.voz.ui.utils.CustomSpanable;
 import com.whoami.voz.ui.utils.EmoLoader;
 import com.whoami.voz.ui.utils.Util;
 
@@ -20,30 +18,185 @@ public class VozPost {
     public static final int TEXT_SIZE = 1;
 
 
-    private ArrayList<Bitmap> bitmaps;
-    public FontSpan font;
-    public ImageSpan image;
+    public ArrayList<String> imageUrls;
     private boolean isMultiQuote;
-    public boolean isOnline;
+    private boolean isOnline;
     private String mJd;
-    private String mPosts;
-    public String mTime;
-    private String mTitle;
+    private String mPostCount;
+    private String mTime;
     private String mUrlAvatar;
     private String mUser;
     private String mUserTitle;
-    public String m_UserId;
-    private String m_id;
-    public CustomSpanable quote;
-    public CustomSpanable size;
+    private String mUid;
+    private String mPostId;
     private String mPlainText;
-    public TypeSpan type;
-    public CustomSpanable typeU;
-    public CustomSpanable web;
-    public SpannableString mContent;
     public ArrayList<ContentItem> mContentItemList;
 
-    public class ImageSpan extends CustomSpanable {
+    public VozPost() {
+        this.mJd = "";
+        this.mPostCount = "0";
+        this.mUid = "";
+        this.isOnline = false;
+        this.mTime = "";
+        this.mPlainText = new String();
+        this.isMultiQuote = false;
+        this.mContentItemList = new ArrayList<>();
+    }
+
+    public String getPostId() {
+        return this.mPostId;
+    }
+
+    public void setInfo(String str, String str2, String str3, String str4) {
+        this.mUser = str;
+        this.mUserTitle = str2;
+        this.mTime = str3;
+        this.mUrlAvatar = str4;
+    }
+
+    public String getJD() {
+        return this.mJd;
+    }
+
+    public String getPostCount() {
+        return this.mPostCount;
+    }
+
+    public String getTime() {
+        return this.mTime;
+    }
+
+    public String getUrlAvatar() {
+        return this.mUrlAvatar;
+    }
+
+    public String getUserName() {
+        return this.mUser;
+    }
+
+    public String getUserTitle() {
+        return this.mUserTitle;
+    }
+
+    public ContentItem getLastTextItem() {
+        ContentItem textItem;
+        int size = mContentItemList.size();
+        if (size == 0 || mContentItemList.get(size -1).type != ContentItem.TYPE_PLAIN_TEXT) {
+            textItem = new ContentItem(ContentItem.TYPE_PLAIN_TEXT, "");
+            mContentItemList.add(textItem);
+        } else {
+            textItem = mContentItemList.get(size - 1);
+        }
+        return textItem;
+    }
+
+    public ContentItem getLastQuoteItem() {
+        ContentItem textItem;
+        int size = mContentItemList.size();
+        if (size == 0 || mContentItemList.get(size -1).type != ContentItem.TYPE_QUOTE) {
+            textItem = new ContentItem(ContentItem.TYPE_QUOTE, "");
+            mContentItemList.add(textItem);
+        } else {
+            textItem = mContentItemList.get(size - 1);
+        }
+        return textItem;
+    }
+
+    public void addText(String str) {
+        if (!TextUtils.isEmpty(str)) {
+            this.mPlainText += str;
+            ContentItem textItem;
+            textItem = getLastTextItem();
+            textItem.mData += str;
+        }
+    }
+
+    public void addQuote(String str) {
+        if (!TextUtils.isEmpty(str)) {
+            this.mPlainText += str;
+            ContentItem textItem = getLastQuoteItem();
+            textItem.mData += str;
+        }
+    }
+
+    public void addEmo(String url, boolean isQuote) {
+        ContentItem textItem;
+        if (isQuote) {
+            textItem = getLastQuoteItem();
+        } else {
+            textItem = getLastTextItem();
+        }
+        textItem.addEmo(url, textItem.mData.length(), textItem.mData.length() + 2);
+        textItem.mData += "  ";
+    }
+
+    public void addPhoto(String url) {
+        ContentItem photoItem = new ContentItem(ContentItem.TYPE_PHOTO, url);
+        mContentItemList.add(photoItem);
+    }
+
+    public String getText() {
+        return this.mPlainText;
+    }
+
+    public boolean isMultiQuote() {
+        return this.isMultiQuote;
+    }
+
+    public void setId(String str) {
+        this.mPostId = str;
+    }
+
+    public void setJD(String str) {
+        this.mJd = str;
+    }
+
+    public void setMultiQuote(boolean z) {
+        this.isMultiQuote = z;
+    }
+
+    public void setPosts(String str) {
+        this.mPostCount = str;
+    }
+
+    public void preloadEmo() {
+        if (imageUrls != null) {
+            for (int j = 0; j < imageUrls.size(); j++) {
+                String url = imageUrls.get(j);
+                if (url.contains(EMO_PREFIX)) {
+                    EmoLoader.getInstance().initEmoBitmapCache(url);
+                }
+            }
+        }
+    }
+
+    public void initContent() {
+        try {
+            preloadEmo();
+            for (ContentItem item : mContentItemList) {
+                item.initContent();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+    public void addImageUrl(String url) {
+        if (imageUrls == null) {
+            imageUrls = new ArrayList<>();
+        }
+        imageUrls.add(url);
+    }
+
+    public void setUid(String mUid) {
+        this.mUid = mUid;
+    }
+
+    /*public class ImageSpan extends CustomSpanable {
         ArrayList<Bitmap> bitmaps;
 
         public ImageSpan() {
@@ -115,247 +268,5 @@ public class VozPost {
         public int type() {
             return this.type;
         }
-    }
-
-    public VozPost() {
-        this.mJd = "";
-        this.mPosts = "0";
-        this.m_UserId = "";
-        this.isOnline = false;
-        this.mTime = "";
-        this.mPlainText = new String();
-        this.web = new CustomSpanable();
-        this.bitmaps = new ArrayList();
-        this.image = new ImageSpan();
-        this.font = new FontSpan();
-        this.type = new TypeSpan();
-        this.typeU = new CustomSpanable();
-        this.quote = new CustomSpanable();
-        this.isMultiQuote = false;
-        this.mContentItemList = new ArrayList<>();
-    }
-
-    public String Id() {
-        return this.m_id;
-    }
-
-    public void Info(String str, String str2, String str3, String str4) {
-        this.mUser = str;
-        this.mUserTitle = str2;
-        this.mTime = str3;
-        this.mUrlAvatar = str4;
-    }
-
-    public String JD() {
-        return this.mJd;
-    }
-
-    public String Posts() {
-        return this.mPosts;
-    }
-
-    public String Time() {
-        return this.mTime;
-    }
-
-    public String getUrlAvatar() {
-        return this.mUrlAvatar;
-    }
-
-    public String User() {
-        return this.mUser;
-    }
-
-    public String UserTitle() {
-        return this.mUserTitle;
-    }
-
-    public ContentItem getLastTextItem() {
-        ContentItem textItem;
-        int size = mContentItemList.size();
-        if (size == 0 || mContentItemList.get(size -1).type != ContentItem.TYPE_PLAIN_TEXT) {
-            textItem = new ContentItem(ContentItem.TYPE_PLAIN_TEXT, "");
-            mContentItemList.add(textItem);
-        } else {
-            textItem = mContentItemList.get(size - 1);
-        }
-        return textItem;
-    }
-
-    public ContentItem getLastQuoteItem() {
-        ContentItem textItem;
-        int size = mContentItemList.size();
-        if (size == 0 || mContentItemList.get(size -1).type != ContentItem.TYPE_QUOTE) {
-            textItem = new ContentItem(ContentItem.TYPE_QUOTE, "");
-            mContentItemList.add(textItem);
-        } else {
-            textItem = mContentItemList.get(size - 1);
-        }
-        return textItem;
-    }
-
-    public void addText(String str, boolean isQuote) {
-
-        this.mPlainText += str;
-        ContentItem textItem;
-        if (isQuote) {
-            textItem = getLastQuoteItem();
-        } else {
-            textItem = getLastTextItem();
-        }
-        textItem.mData += str;
-    }
-
-    public void addQuote(String str) {
-        this.mPlainText += str;
-        ContentItem textItem = getLastQuoteItem();
-        textItem.mData += str;
-    }
-
-    public void addEmo(String url, boolean isQuote) {
-        ContentItem textItem;
-        if (isQuote) {
-            textItem = getLastQuoteItem();
-        } else {
-            textItem = getLastTextItem();
-        }
-        textItem.addEmo(url, textItem.mData.length(), textItem.mData.length() + 2);
-        textItem.mData += "  ";
-    }
-
-    public void addPhoto(String url) {
-        ContentItem photoItem = new ContentItem(ContentItem.TYPE_PHOTO, url);
-        mContentItemList.add(photoItem);
-    }
-
-    public String getText() {
-        return this.mPlainText;
-    }
-
-    public boolean isEmpty() {
-        for (int i = 0; i < this.mPlainText.length(); i++) {
-            if (this.mPlainText.codePointAt(i) != 32) {
-                return false;
-            }
-        }
-        return this.bitmaps.size() == 0;
-    }
-
-    public boolean isMultiQuote() {
-        return this.isMultiQuote;
-    }
-
-
-
-    public void set(String str, ArrayList<Bitmap> arrayList) {
-        this.mPlainText = str;
-        this.bitmaps = arrayList;
-    }
-
-    public void setId(String str) {
-        this.m_id = str;
-    }
-
-    public void setJD(String str) {
-        this.mJd = str;
-    }
-
-    public void setMultiQuote(boolean z) {
-        this.isMultiQuote = z;
-    }
-
-    public void setPosts(String str) {
-        this.mPosts = str;
-    }
-
-    public void setTitle(String str) {
-        this.mTitle = str;
-    }
-
-    public String title() {
-        return this.mTitle;
-    }
-
-    public SpannableString getContent() {
-        return mContent;
-    }
-
-    public void preloadEmo() {
-        for (int j = 0; j < image.getSize(); j++) {
-            String url = image.getStr(j);
-            if (url.contains(EMO_PREFIX)) {
-                EmoLoader.getInstance().initEmoBitmapCache(url);
-            }
-        }
-    }
-
-    public void initContent() {
-        try {
-            preloadEmo();
-
-//            mContent = new SpannableString(getText());
-
-//            int curPos = 0;
-//            int start;
-//            int end;
-//            while (curPos < font.getSize()) {
-//                start = font.getStart(curPos).intValue();
-//                end = font.getEnd(curPos).intValue();
-//                mContent.setSpan(new RelativeSizeSpan((font.size(curPos) > 3 ? (float) (((double) (font.size(curPos) - 3)) / 10.0d)
-//                        : (float) (((double) (-(font.size(curPos) - 3))) / 10.0d)) + 1), start, end, 18);
-//                curPos++;
-//            }
-//            curPos = 0;
-//            while (curPos < web.getSize()) {
-//                start = web.getStart(curPos).intValue();
-//                end = web.getEnd(curPos).intValue();
-//                mContent.setSpan(new URLSpan(web.getStr(curPos)), start, end, 18);
-//                curPos++;
-//            }
-
-//            curPos = 0;
-//            while (curPos < quote.getSize()) {
-//                start = quote.getStart(curPos).intValue();
-//                end = quote.getEnd(curPos).intValue();
-//                mContent.setSpan(new QuoteSpan(MainApplication.getAppContext().getResources().getColor(R.color.ics_blue_dark)), start, end, 18);
-//                mContent.setSpan(new StyleSpan(2), start, end, 18);
-////                mContent.setSpan(new ForegroundColorSpan(QuickAction.WOOD_TEXT_TITLE, start, end, 18);
-//                curPos++;
-//            }
-
-//            curPos = 0;
-//            while (curPos < type.getSize()) {
-//                start = type.getStart(curPos).intValue();
-//                end = type.getEnd(curPos).intValue();
-//                mContent.setSpan(new StyleSpan(type.type()), start, end, 18);
-//                curPos++;
-//            }
-//            curPos = 0;
-//            while (curPos < typeU.getSize()) {
-//                start = typeU.getStart(curPos).intValue();
-//                end = typeU.getEnd(curPos).intValue();
-//                mContent.setSpan(new UnderlineSpan(), start, end, 18);
-//                curPos++;
-//            }
-
-//            curPos = 0;
-//            while (curP.os < image.getSize()) {
-//                    if (image.getStr(curPos).contains(EMO_PREFIX)) {
-//                        BitmapDrawable bmp = EmoLoader.getInstance().getBitmapFromMemCache(image.getStr(curPos));
-//                        if (bmp != null) {
-//                            android.text.style.ImageSpan span = new android.text.style.ImageSpan(bmp, 0);
-//                            start = image.getStart(curPos).intValue();
-//                            end = image.getEnd(curPos).intValue();
-//                            mContent.setSpan(span, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-//                        }
-//                    }
-//                curPos++;
-//            }
-            for (ContentItem item : mContentItemList) {
-                item.initContent();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    }*/
 }
