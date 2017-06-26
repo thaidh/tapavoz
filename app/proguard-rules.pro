@@ -41,6 +41,27 @@
 -keep class com.whoami.voz.ui.widget.SlidingTabLayout** {
  *;
   }
--dontnote android.net.http.**
--dontwarn org.apache.http.**
--dontwarn retrofit2.**
+#-keep android.net.http.**
+#-dontwarn org.apache.http.**
+-keep class org.apache.** {*;}
+-keep class org.apache.http.**
+-keep interface org.apache.http.**
+-keep class me.relex.photodraweeview**
+-keep class com.facebook.imagepipeline.bitmaps.PlatformBitmapFactory
+-keep class com.facebook.imagepipeline.core.ExecutorSupplier
+-keep class com.facebook.imagepipeline.animated.factory.AnimatedFactoryImplSupport
+-dontnote okhttp3.internal.platform.**
+-dontnote com.facebook.imagepipeline.animated.factory.**
+
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+#-keepattributes *Annotation*,Signature
+-keep class com.facebook.imagepipeline.animated.factory.AnimatedFactoryImplSupport

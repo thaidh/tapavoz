@@ -15,18 +15,19 @@ import android.widget.LinearLayout;
 import com.github.ksoichiro.android.observablescrollview.ObservableListView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.whoami.voz.R;
+import com.whoami.voz.retrofit.VozService;
+import com.whoami.voz.retrofit.data.ForumData;
 import com.whoami.voz.ui.activity.BaseActivity;
-import com.whoami.voz.ui.pagethreads.PageThreadsActivity;
 import com.whoami.voz.ui.adapter.list.Page1ListViewAdapter;
 import com.whoami.voz.ui.contain.Forum;
-import com.whoami.voz.ui.utils.HtmlLoader;
+import com.whoami.voz.ui.pagethreads.PageThreadsActivity;
 import com.whoami.voz.ui.utils.UserInfo;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-
 import java.util.ArrayList;
-import java.util.Iterator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -100,14 +101,21 @@ public class HomeFragment extends BaseFragment {
         this.adapter = new Page1ListViewAdapter(getContext(), this.forumsList);
         this.mList.setAdapter(this.adapter);
         showLoadingView(true);
-        HtmlLoader.getInstance().fetchData("https://vozforums.com", 0, new HtmlLoader.HtmlLoaderListener() {
+        VozService.getInstance().getForums("https://vozforums.com").enqueue(new Callback<ForumData>() {
             @Override
-            public void onCallback(Document doc, int page) {
-                try {
-                    parseDataPage1(doc);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            public void onResponse(Call<ForumData> call, Response<ForumData> response) {
+                if (response.isSuccessful()) {
+                    ForumData forumData = response.body();
+                    forumsList = forumData.forumList;
+                    showLoadingView(false);
+                    adapter.setData(forumsList);
+                    adapter.notifyDataSetChanged();
                 }
+            }
+
+            @Override
+            public void onFailure(Call<ForumData> call, Throwable t) {
+
             }
         });
         
@@ -123,61 +131,6 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
-    }
-
-    void parseDataPage1(Document doc) throws Exception {
-        try {
-            if (doc != null) {
-                Element first;
-                forumsList.clear();
-                //                if (this.doc.select("a[href=private.php]").first() != null) {
-                //                    this.mUser.setUserId(((Element) this.doc.select("td[class=alt2]").get(0)).select("a[href*=mem]").attr("href").split("=")[1]);
-                //                    first = this.doc.select("input[name*=securitytoken]").first();
-                //                    if (first != null) {
-                //                        this.mUser.setToken(first.attr("value"));
-                //                    }
-                //                }
-                Iterator it = doc.select("td[class*=tcat]").iterator();
-                String str = null;
-                String str2 = null;
-                String str3 = null;
-                while (it.hasNext()) {
-                    first = (Element) it.next();
-                    if (!first.text().contains("Welcome to the vozForums")) {
-                        forumsList.add(new Forum(first.text(), first.select("[href~=forum]").attr("href"), null));
-                        first = first.parent().parent().nextElementSibling();
-                        if (first != null) {
-                            Iterator it2 = first.select("tr").iterator();
-                            while (it2.hasNext()) {
-                                first = ((Element) it2.next()).select("div:has(a[href*=forumdisplay]").first();
-                                if (first != null) {
-                                    str = first.select("a").text();
-                                    str3 = first.select("a").attr("href");
-                                    str2 = first.select("span").text();
-                                }
-                                forumsList.add(new Forum(str, str3, str2));
-                                //                                this.sForum.append(str).append(",").append(str3).append(";");
-                            }
-                        }
-                    }
-                }
-                if (forumsList.size() < 2) {
-                    //                    parserNotification();
-                    return;
-                } else {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showLoadingView(false);
-                            adapter.setData(forumsList);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void showLoadingView(boolean isShow) {

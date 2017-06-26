@@ -1,33 +1,24 @@
 package com.whoami.voz.retrofit;
 
-import retrofit2.Retrofit;
+import com.whoami.voz.ui.mysqlite.DatabaseHelper;
 
-import static java.lang.String.format;
+import retrofit2.Retrofit;
 
 public class VozService {
 
-    private VozService() {
-    }
+    private volatile static VozApi instance;
 
-    public static VozApi createVozService() {
-        Retrofit.Builder builder = new Retrofit.Builder()
-//                .addCallAdapterFactory(new ToStringConverterFactory())
-              .addConverterFactory(new ToStringConverterFactory())
-              .baseUrl("https://vozforums.com");
-
-//        if (!TextUtils.isEmpty(githubToken)) {
-//
-//            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(chain -> {
-//                Request request = chain.request();
-//                Request newReq = request.newBuilder()
-//                      .addHeader("Authorization", format("token %s", githubToken))
-//                      .build();
-//                return chain.proceed(newReq);
-//            }).build();
-//
-//            builder.client(client);
-//        }
-
-        return builder.build().create(VozApi.class);
+    public static VozApi getInstance() {
+        if (instance == null) {
+            synchronized (DatabaseHelper.class) {
+                if (instance == null) {
+                    Retrofit.Builder builder = new Retrofit.Builder()
+                            .addConverterFactory(new VozConverterFactory())
+                            .baseUrl("https://vozforums.com");
+                    instance = builder.build().create(VozApi.class);
+                }
+            }
+        }
+        return instance;
     }
 }

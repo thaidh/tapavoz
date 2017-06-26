@@ -65,6 +65,8 @@ dependencies {
 
     //fresco
     compile "com.facebook.fresco:fresco:${rootProject.ext.frescoVersion}"
+    compile "com.facebook.fresco:webpsupport:${rootProject.ext.frescoVersion}"
+//    compile "com.facebook.fresco:animated-webp:${rootProject.ext.frescoVersion}"
     compile 'com.github.stfalcon:frescoimageviewer:0.5.0'
 
 
