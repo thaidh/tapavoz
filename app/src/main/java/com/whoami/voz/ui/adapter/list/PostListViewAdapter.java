@@ -41,6 +41,7 @@ public class PostListViewAdapter extends BaseAdapter {
     private static final int PADDING = Util.convertDpToPx(MainApplication.getAppContext(), 15);
     private static final int MARGIN = Util.convertDpToPx(MainApplication.getAppContext(), 8);
     private static final int CONTENT_PHOTO_DEFAULT_SIZE = Util.convertDpToPx(MainApplication.getAppContext(), 100);
+    private static final int IMAGE_WITDH = Global.width - Util.convertDpToPx(MainApplication.getAppContext(), 10);
     LayoutInflater inflater;
 
     Context context;
@@ -78,12 +79,6 @@ public class PostListViewAdapter extends BaseAdapter {
         presetDrawable = ContextCompat.getDrawable(context, R.drawable.image_for_empty_url);
         mImageSize = new ImageSize(Global.width - Util.convertDpToPx(context, 10), Global.width - Util.convertDpToPx(context, 10));
     }
-
-
-    private void initUniversal() {
-
-    }
-
 
     public int getCount() {
         return mPosts.size();
@@ -127,98 +122,112 @@ public class PostListViewAdapter extends BaseAdapter {
             indexTimeStr.append(post.getTime().split(" ")[3] + " " + post.getTime().split(" ")[4]);
             holder.indexTv.setText(indexTimeStr.toString());
         }
-        holder.mContentLayout.removeAllViews();
-        for (ContentItem item : post.mContentItemList) {
-            addDynamicContent(holder.mContentLayout, item);
-        }
+        initDynamicContent(holder, context, post);
+
         return view;
     }
 
-    private void addDynamicContent(LinearLayout parent, final ContentItem item) {
-        switch (item.type) {
-            case ContentItem.TYPE_PLAIN_TEXT:{
-                TextView textView = new TextView(context);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                textView.setText(item.mContent);
-                textView.setTextColor(ContextCompat.getColor(context, R.color.black));
-                textView.setTextSize(16);
-                textView.setPadding(PADDING, 0, PADDING, 0);
-                textView.setLayoutParams(layoutParams);
-                textView.setAutoLinkMask(Linkify.WEB_URLS);
-                textView.setLinkTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_light));
-                parent.addView(textView);
-                break;
-            }
-            case ContentItem.TYPE_QUOTE: {
-                TextView textView = new TextView(context);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(MARGIN, 0, MARGIN, 0);
-                textView.setText(item.mContent);
-                textView.setTextColor(ContextCompat.getColor(context, R.color.black));
-                textView.setTextSize(16);
-                textView.setAutoLinkMask(Linkify.ALL);
-                textView.setPadding(PADDING, PADDING, PADDING, PADDING);
-                textView.setBackgroundColor(ContextCompat.getColor(context, R.color.button_material_light));
-                textView.setLayoutParams(layoutParams);
-                parent.addView(textView);
-                break;
-            }
-            case ContentItem.TYPE_PHOTO: {
-                final SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CONTENT_PHOTO_DEFAULT_SIZE, CONTENT_PHOTO_DEFAULT_SIZE);
-                ControllerListener controllerListener = new BaseControllerListener() {
-                    @Override
-                    public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
-                        if (imageInfo != null && imageInfo instanceof ImageInfo) {
-                            float ratio = ((ImageInfo) imageInfo).getWidth() * 1.0f / ((ImageInfo) imageInfo).getHeight();
-                            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) simpleDraweeView.getLayoutParams();
-                            layoutParams.width = Global.width;
-                            layoutParams.height = (int) (Global.width / ratio);
-                            simpleDraweeView.setLayoutParams(layoutParams);
-//                            simpleDraweeView.requestLayout();
-                            simpleDraweeView.setAspectRatio(ratio);
-                        }
-                        super.onFinalImageSet(id, imageInfo, animatable);
 
+    public void initDynamicContent(ViewHolder holder, final Context context, VozPost vozPost) {
+        if (vozPost.mContentLayout == null) {
+            vozPost.mContentLayout = new LinearLayout(context);
+            vozPost.mContentLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            vozPost.mContentLayout.setOrientation(LinearLayout.VERTICAL);
+            for (final ContentItem item : vozPost.mContentItemList) {
+                switch (item.type) {
+                    case ContentItem.TYPE_PLAIN_TEXT:{
+                        TextView textView = new TextView(context);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        textView.setText(item.mContent);
+                        textView.setTextColor(ContextCompat.getColor(context, R.color.black));
+                        textView.setTextSize(16);
+                        textView.setPadding(PADDING, 0, PADDING, 0);
+                        textView.setLayoutParams(layoutParams);
+                        textView.setAutoLinkMask(Linkify.WEB_URLS);
+                        textView.setLinkTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_light));
+                        vozPost.mContentLayout.addView(textView);
+                        break;
                     }
-                };
-                ImageRequest request = ImageRequestBuilder
-                        .newBuilderWithSource((Uri.parse(item.mData)))
-                        .setResizeOptions(new ResizeOptions(mImageSize.getWidth(), mImageSize.getHeight()))
-                        .build();
-                PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
-                        .setOldController(simpleDraweeView.getController())
-                        .setControllerListener(controllerListener)
-                        .setImageRequest(request)
-                        .build();
+                    case ContentItem.TYPE_QUOTE: {
+                        TextView textView = new TextView(context);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        layoutParams.setMargins(MARGIN, 0, MARGIN, 0);
+                        textView.setText(item.mContent);
+                        textView.setTextColor(ContextCompat.getColor(context, R.color.black));
+                        textView.setTextSize(16);
+                        textView.setAutoLinkMask(Linkify.ALL);
+                        textView.setPadding(PADDING, PADDING, PADDING, PADDING);
+//                textView.setBackgroundColor(ContextCompat.getColor(context, R.color.button_material_light));
+                        textView.setBackground(ContextCompat.getDrawable(context, R.drawable.quote_background));
+                        textView.setLayoutParams(layoutParams);
+                        vozPost.mContentLayout.addView(textView);
+                        break;
+                    }
+                    case ContentItem.TYPE_PHOTO: {
+                        final SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(CONTENT_PHOTO_DEFAULT_SIZE, CONTENT_PHOTO_DEFAULT_SIZE);
+                        ControllerListener controllerListener = new BaseControllerListener() {
+                            @Override
+                            public void onFinalImageSet(String id, Object imageInfo, Animatable animatable) {
+                                if (imageInfo != null && imageInfo instanceof ImageInfo) {
+                                    float ratio = ((ImageInfo) imageInfo).getWidth() * 1.0f / ((ImageInfo) imageInfo).getHeight();
+                                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) simpleDraweeView.getLayoutParams();
+                                    layoutParams.width = Global.width;
+                                    layoutParams.height = (int) (Global.width / ratio);
+                                    simpleDraweeView.setLayoutParams(layoutParams);
+//                            simpleDraweeView.requestLayout();
+                                    simpleDraweeView.setAspectRatio(ratio);
+                                }
+                                super.onFinalImageSet(id, imageInfo, animatable);
+
+                            }
+                        };
+                        ImageRequest request = ImageRequestBuilder
+                                .newBuilderWithSource((Uri.parse(item.mData)))
+                                .setResizeOptions(new ResizeOptions(IMAGE_WITDH, IMAGE_WITDH))
+                                .build();
+                        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                                .setOldController(simpleDraweeView.getController())
+                                .setControllerListener(controllerListener)
+                                .setImageRequest(request)
+                                .build();
 //
 //                GenericDraweeHierarchyBuilder genericDraweeHierarchyBuilder = new GenericDraweeHierarchyBuilder(context.getResources());
 //                genericDraweeHierarchyBuilder.setFadeDuration(300).setPlaceholderImage(presetDrawable).set;
 //                simpleDraweeView.setHierarchy(genericDraweeHierarchyBuilder.build());
 
-                GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
-                hierarchy.setPlaceholderImage(R.drawable.image_for_empty_url);
-                hierarchy.setFadeDuration(300);
+                        GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
+                        hierarchy.setPlaceholderImage(R.drawable.image_for_empty_url);
+                        hierarchy.setFadeDuration(300);
 
-                simpleDraweeView.setLayoutParams(layoutParams);
-                simpleDraweeView.setController(controller);
-                parent.addView(simpleDraweeView);
+                        simpleDraweeView.setLayoutParams(layoutParams);
+                        simpleDraweeView.setController(controller);
+                        vozPost.mContentLayout.addView(simpleDraweeView);
 
 
-                simpleDraweeView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ArrayList<String> urls = new ArrayList<>();
-                        urls.add(item.mData);
-                        new ImageViewer.Builder<>(context, urls)
-                                .setStartPosition(0)
-                                .show();
+                        simpleDraweeView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                ArrayList<String> urls = new ArrayList<>();
+                                urls.add(item.mData);
+                                new ImageViewer.Builder<>(context, urls)
+                                        .setStartPosition(0)
+                                        .show();
+                            }
+                        });
+                        break;
                     }
-                });
-                break;
+                    default:
+                }
             }
-            default:
         }
+        if (vozPost.mContentLayout != null &&  vozPost.mContentLayout.getParent() != null) {
+            ((LinearLayout) vozPost.mContentLayout.getParent()).removeView(vozPost.mContentLayout);
+        }
+        if (holder.mContentLayout.getChildCount() > 0 && !holder.mContentLayout.equals(vozPost.mContentLayout)) {
+            holder.mContentLayout.removeAllViews();
+        }
+        holder.mContentLayout.addView(vozPost.mContentLayout);
     }
 
 }

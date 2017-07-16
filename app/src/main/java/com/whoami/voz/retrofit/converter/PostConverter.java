@@ -178,21 +178,22 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                         } else if (curElement.tagName().equals("br")) {
                             post.addText("\n");
                         } else if (curElement.tagName().equals("u")) {
-                            Element first = curElement.select("u").first();
-                            int length = post.getText().length();
+//                            Element first = curElement.select("u").first();
+//                            int length = post.getText().length();
                             //todo typeU
 //                            post.typeU.add("", length, post.getText().length());
+                            parseMessagePage3(curElement, post, true);
                         } else if (curElement.tagName().equals("font")) {
-                            Element first = curElement.select("font").first();
-                            String str = "while";
-                            String r1 = "3";
-                            if (curElement.select("font[color]").first() != null) {
-                                str = curElement.select("font[color]").attr("color");
-                            }
-                            String attr = curElement.select("font[size]").first() != null ? curElement.select("font[size]").attr("size") : r1;
-                            int length2 = post.getText().length();
+//                            Element first = curElement.select("font").first();
+//                            String color = "while";
+//                            String r1 = "3";
+//                            if (curElement.select("font[color]").first() != null) {
+//                                color = curElement.select("font[color]").attr("color");
+//                            }
+//                            String attr = curElement.select("font[size]").first() != null ? curElement.select("font[size]").attr("size") : r1;
                             //todo type font
 //                            post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
+                            parseMessagePage3(curElement, post,true);
                         } else if (curElement.tagName().equals("a")) {
                             Element first = curElement.select("a[href]").first();
                             if (first.select("img").first() == null) {
@@ -285,6 +286,7 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                             } else if (curElement.tagName().equals("font")) {
                                 //todo type font
 //                            post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
+                                parseQuote(curElement, post);
                             } else {
                                 post.addQuote(curElement.text());
                             }

@@ -10,6 +10,6 @@ import java.util.ArrayList;
 
 public class PostData {
     public ArrayList<VozPost> vozPostList = new ArrayList<>();
-    public int totalPage = 0;
+    public int totalPage = 1;
     public String title = "";
 }

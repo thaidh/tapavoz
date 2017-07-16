@@ -1,6 +1,7 @@
 package com.whoami.voz.ui.contain;
 
 import android.text.TextUtils;
+import android.widget.LinearLayout;
 
 import com.whoami.voz.ui.contain.item.ContentItem;
 import com.whoami.voz.ui.main.MainApplication;
@@ -31,6 +32,7 @@ public class VozPost {
     private String mPostId;
     private String mPlainText;
     public ArrayList<ContentItem> mContentItemList;
+    public LinearLayout mContentLayout;
 
     public VozPost() {
         this.mJd = "";
@@ -196,77 +198,5 @@ public class VozPost {
         this.mUid = mUid;
     }
 
-    /*public class ImageSpan extends CustomSpanable {
-        ArrayList<Bitmap> bitmaps;
 
-        public ImageSpan() {
-            this.bitmaps = new ArrayList();
-        }
-
-        public void SetBitmap(int i, Bitmap bitmap) {
-            this.bitmaps.set(i, bitmap);
-        }
-
-        public void add(String str, int i, int i2, Bitmap bitmap) {
-            super.add(str, i, i2);
-            this.bitmaps.add(bitmap);
-        }
-
-        public void addBitmap(Bitmap bitmap) {
-            this.bitmaps.add(bitmap);
-        }
-
-        public Bitmap getBitmap(int i) {
-            return (Bitmap) this.bitmaps.get(i);
-        }
-
-        public ArrayList<Bitmap> getBitmap() {
-            return this.bitmaps;
-        }
-
-        public int sizeBitmap() {
-            return this.bitmaps.size();
-        }
-    }
-
-    public class FontSpan extends CustomSpanable {
-        private ArrayList<String> color;
-        private ArrayList<Integer> size;
-
-        public FontSpan() {
-            this.color = new ArrayList();
-            this.size = new ArrayList();
-        }
-
-        public void add(String str, int i, int i2) {
-            super.add(str, i, i2);
-        }
-
-        public void add(String str, int i, int i2, String str2, int i3) {
-            super.add(str, i, i2);
-            this.color.add(str2);
-            this.size.add(Integer.valueOf(i3));
-        }
-
-        public String color(int i) {
-            return (String) this.color.get(i);
-        }
-
-        public int size(int i) {
-            return ((Integer) this.size.get(i)).intValue();
-        }
-    }
-
-    public class TypeSpan extends CustomSpanable {
-        private int type;
-
-        public void add(String str, int i, int i2, int i3) {
-            super.add(str, i, i2);
-            this.type = i3;
-        }
-
-        public int type() {
-            return this.type;
-        }
-    }*/
 }
