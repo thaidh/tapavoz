@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -139,12 +140,13 @@ public class PostListViewAdapter extends BaseAdapter {
                         TextView textView = new TextView(context);
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         textView.setText(item.mContent);
-                        textView.setTextColor(ContextCompat.getColor(context, R.color.black));
+                        textView.setTextColor(ContextCompat.getColor(context, R.color.text_black_3b));
                         textView.setTextSize(16);
                         textView.setPadding(PADDING, 0, PADDING, 0);
                         textView.setLayoutParams(layoutParams);
-                        textView.setAutoLinkMask(Linkify.WEB_URLS);
-                        textView.setLinkTextColor(ContextCompat.getColor(context, android.R.color.holo_blue_light));
+                        textView.setAutoLinkMask(Linkify.ALL);
+                        textView.setLinkTextColor(ContextCompat.getColor(context, R.color.link_blue));
+                        textView.setMovementMethod(LinkMovementMethod.getInstance());
                         vozPost.mContentLayout.addView(textView);
                         break;
                     }
@@ -153,7 +155,7 @@ public class PostListViewAdapter extends BaseAdapter {
                         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         layoutParams.setMargins(MARGIN, 0, MARGIN, 0);
                         textView.setText(item.mContent);
-                        textView.setTextColor(ContextCompat.getColor(context, R.color.black));
+                        textView.setTextColor(ContextCompat.getColor(context, R.color.text_black_3b));
                         textView.setTextSize(16);
                         textView.setAutoLinkMask(Linkify.ALL);
                         textView.setPadding(PADDING, PADDING, PADDING, PADDING);

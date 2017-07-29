@@ -45,13 +45,6 @@
         <item name="android:layout_marginRight">10.0dip</item>
     </style>
 
-    <style name="textAlertLongClick" parent="@android:style/Widget.TextView">
-        <item name="android:textSize">20.0sp</item>
-        <item name="android:textColor">@drawable/style_textcolor</item>
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_margin">10.0dip</item>
-    </style>
 
     <style name="textDevider" parent="@android:style/Widget.TextView">
         <item name="android:background">@color/grey</item>
@@ -76,8 +69,8 @@
     </style>
 
     <style name="Toolbar" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/blue</item>
-        <item name="colorPrimaryDark">@color/ics_blue_dark</item>
+        <item name="colorPrimary">@color/com_facebook_button_background_color</item>
+        <item name="colorPrimaryDark">@color/com_facebook_blue</item>
         <item name="colorAccent">@color/accent</item>
     </style>
 </resources>

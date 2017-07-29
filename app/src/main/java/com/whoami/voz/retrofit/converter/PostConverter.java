@@ -201,18 +201,10 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                                 r0 = curElement.select("a[href]").attr("href").replace("%3A", ":").replace("%2F", "/").replace("%3F", "?").replace("%3D", "=").replace("%26", "&");
                                 if (r0.contains("mailto:")) {
                                     String r1 = r0.substring(7, r0.length());
-                                    r0 = curElement.select("a[href]").text();
-                                    int length2 = post.getText().length();
-                                    //todo type web
-//                                    post.web.add(r1, length2, r0.length() + length2);
-                                    post.addText(r0);
+                                    post.addUrl(r1, false);
                                 } else if (r0.contains("http")) {
                                     String r1 = r0.substring(r0.indexOf("http"), r0.length());
-                                    r0 = curElement.select("a[href]").text();
-                                    int length2 = post.getText().length();
-                                    //todo type web
-//                                    post.web.add(r1, length2, r0.length() + length2);
-                                    post.addText(r1);
+                                    post.addUrl(r1, false);
                                 }
                             }
                             //todo

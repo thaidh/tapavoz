@@ -121,6 +121,17 @@ public class VozPost {
         }
     }
 
+    public void addUrl(String url, boolean isQuote) {
+        ContentItem textItem;
+        if (isQuote) {
+            textItem = getLastQuoteItem();
+        } else {
+            textItem = getLastTextItem();
+        }
+        textItem.addUrl(url, textItem.mData.length(), textItem.mData.length() + url.length());
+        textItem.mData += url;
+    }
+
     public void addEmo(String url, boolean isQuote) {
         ContentItem textItem;
         if (isQuote) {
