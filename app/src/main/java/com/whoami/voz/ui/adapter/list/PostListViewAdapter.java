@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.backends.pipeline.PipelineDraweeController;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.image.ImageInfo;
@@ -39,7 +38,7 @@ public class PostListViewAdapter extends BaseAdapter {
     private static final int PADDING = Util.convertDpToPx(MainApplication.getAppContext(), 15);
     private static final int MARGIN = Util.convertDpToPx(MainApplication.getAppContext(), 8);
     private static final int CONTENT_PHOTO_DEFAULT_SIZE = Util.convertDpToPx(MainApplication.getAppContext(), 100);
-    private static final int IMAGE_WITDH = Global.width - Util.convertDpToPx(MainApplication.getAppContext(), 10);
+    private static final int IMAGE_WITDH = 500;
     LayoutInflater inflater;
 
     Context context;
@@ -140,7 +139,6 @@ public class PostListViewAdapter extends BaseAdapter {
                         textView.setTextSize(16);
                         textView.setPadding(PADDING, 0, PADDING, 0);
                         textView.setLayoutParams(layoutParams);
-                        textView.setAutoLinkMask(Linkify.WEB_URLS );
                         textView.setLinkTextColor(ContextCompat.getColor(context, R.color.link_blue));
                         textView.setMovementMethod(LinkMovementMethod.getInstance());
                         vozPost.mContentLayout.addView(textView);
@@ -153,9 +151,9 @@ public class PostListViewAdapter extends BaseAdapter {
                         textView.setText(item.mContent);
                         textView.setTextColor(ContextCompat.getColor(context, R.color.text_black_3b));
                         textView.setTextSize(16);
-                        textView.setAutoLinkMask(Linkify.WEB_URLS);
                         textView.setPadding(PADDING, PADDING, PADDING, PADDING);
                         textView.setBackground(ContextCompat.getDrawable(context, R.drawable.quote_background));
+                        textView.setLinkTextColor(ContextCompat.getColor(context, R.color.link_blue));
                         textView.setLayoutParams(layoutParams);
                         textView.setMovementMethod(LinkMovementMethod.getInstance());
                         vozPost.mContentLayout.addView(textView);
@@ -184,15 +182,12 @@ public class PostListViewAdapter extends BaseAdapter {
                                 .newBuilderWithSource((Uri.parse(item.mData)))
                                 .setResizeOptions(new ResizeOptions(IMAGE_WITDH, IMAGE_WITDH))
                                 .build();
-                        PipelineDraweeController controller = (PipelineDraweeController) Fresco.newDraweeControllerBuilder()
+                        DraweeController controller = Fresco.newDraweeControllerBuilder()
                                 .setOldController(simpleDraweeView.getController())
                                 .setControllerListener(controllerListener)
+                                .setAutoPlayAnimations(true)
                                 .setImageRequest(request)
                                 .build();
-//
-//                GenericDraweeHierarchyBuilder genericDraweeHierarchyBuilder = new GenericDraweeHierarchyBuilder(context.getResources());
-//                genericDraweeHierarchyBuilder.setFadeDuration(300).setPlaceholderImage(presetDrawable).set;
-//                simpleDraweeView.setHierarchy(genericDraweeHierarchyBuilder.build());
 
                         GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
                         hierarchy.setPlaceholderImage(R.drawable.image_for_empty_url);

@@ -1,5 +1,6 @@
 package com.whoami.voz.ui.pageposts;
 
+import com.whoami.voz.retrofit.data.PostData;
 import com.whoami.voz.ui.BasePresenter;
 import com.whoami.voz.ui.BaseView;
 import com.whoami.voz.ui.contain.VozPost;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public interface PagePostContract {
 
     interface View extends BaseView<PagePostContract.Presenter> {
-        void refreshCurrentPage(int totalPage, final int curPage, boolean forceRefresh, ArrayList<VozPost> posts);
+        void refreshCurrentPage(int totalPage, final int curPage, boolean forceRefresh, PostData data);
     }
 
     interface Presenter extends BasePresenter {

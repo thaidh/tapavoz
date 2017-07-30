@@ -94,17 +94,17 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                 if (messageElement.attr("id").split("_").length > 2) {
                     post.setId(messageElement.attr("id").split("_")[2]);
                 }
-                parseMessagePage3(messageElement, post, false);
+                parseMessagePage3(messageElement, post);
             }
             Element fieldSetElement = postElement.select("fieldset[class=fieldset]").first();
             if (fieldSetElement != null) {
                 post.addText("\n");
-                parseMessagePage3(fieldSetElement, post, false);
+                parseMessagePage3(fieldSetElement, post);
             }
 
             if (Global.bSign && postElement.select("div:contains(_______)").first() != null) {
                 post.addText("\n");
-                parseMessagePage3(postElement.select("div:contains(_______)").first(), post, false);
+                parseMessagePage3(postElement.select("div:contains(_______)").first(), post);
             }
             post.initContent();
             data.vozPostList.add(post);
@@ -112,7 +112,7 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
         return data;
     }
 
-    private void parseMessagePage3(Element element, VozPost post, boolean isGetWholeText) {
+    private void parseMessagePage3(Element element, VozPost post) {
         try {
             if (element != null) {
                 for (Node node : element.childNodes()) {
@@ -125,34 +125,18 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                                     parseQuote(quotes.get(i).select("tbody").first().select("td").first(), post);
                                 }
                             } else {
-                                parseMessagePage3(curElement, post, isGetWholeText);
+                                parseMessagePage3(curElement, post);
                             }
                         } else if (curElement.tagName().equals("blockquote")) {
-                            Element first = curElement.select("blockquote").first();
                             post.addText("\n");
                             post.addText("\n");
                         } else if (curElement.tagName().equals("fieldset")) {
-                            Element first = curElement.select("fieldset").first();
                             post.addText("\n");
                             post.addText("\n");
                         } else if (curElement.tagName().equals("b")) {
-                            Element first = curElement.select("b").first();
-                            int length = post.getText().length();
-//                            post.type.add("", length, post.getText().length(), 1);
+                            parseMessagePage3(curElement, post);
                         } else if (curElement.tagName().equals("i")) {
-                            Element first = curElement.select("i").first();
-                            int length = post.getText().length();
-//                            post.type.add("", length, post.getText().length(), 2);
-                        } else if (curElement.tagName().equals("ol")) {
-                        } else if (curElement.tagName().equals("tbody")) {
-                            Element first = curElement.select("tbody").first();
-                        } else if (((Element) node).tagName().equals("li")) {
-                            Element first = curElement.select("li").first();
-                        } else if (curElement.tagName().equals("tr")) {
-                            Element first = curElement.select("tr").first();
-                            post.addText("\n");
-                        } else if (curElement.tagName().equals("td")) {
-                            Element first = curElement.select("td").first();
+                            parseMessagePage3(curElement, post);
                         } else if (curElement.tagName().equals("img")) { // parse image tag
                             String imageUrl = curElement.select("img[src]").attr("src");
                             if (imageUrl.contains(Global.URL) && imageUrl.subSequence(0, 21).equals(Global.URL) && !imageUrl.contains("https://vozforums.com/attachment.php?attachmentid") && !imageUrl.contains("https://vozforums.com/customavatars/")) {
@@ -161,16 +145,11 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                             if (imageUrl.substring(0, 1).equals("/")) {
                                 imageUrl = imageUrl.substring(1, imageUrl.length());
                             }
-                            int messageLength = post.getText().length();
-                            int imageUrlLength = imageUrl.length();
                             if (imageUrl.contains("http://") || imageUrl.contains("https://") || imageUrl.contains("attachment.php?attachmentid")) {
-//                                post.image.add(imageUrl, messageLength, imageUrlLength + messageLength, null);
                                 post.addPhoto(imageUrl);
                             } else if (imageUrl.contains(VozPost.EMO_PREFIX)) {
                                 post.addEmo(imageUrl, false);
                                 post.addImageUrl(imageUrl);
-                                imageUrl = "  ";
-                                post.addText(imageUrl);
                                 if (node.hasAttr("onload")) {
                                     post.addText("\n");
                                 }
@@ -178,22 +157,9 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                         } else if (curElement.tagName().equals("br")) {
                             post.addText("\n");
                         } else if (curElement.tagName().equals("u")) {
-//                            Element first = curElement.select("u").first();
-//                            int length = post.getText().length();
-                            //todo typeU
-//                            post.typeU.add("", length, post.getText().length());
-                            parseMessagePage3(curElement, post, true);
+                            parseMessagePage3(curElement, post);
                         } else if (curElement.tagName().equals("font")) {
-//                            Element first = curElement.select("font").first();
-//                            String color = "while";
-//                            String r1 = "3";
-//                            if (curElement.select("font[color]").first() != null) {
-//                                color = curElement.select("font[color]").attr("color");
-//                            }
-//                            String attr = curElement.select("font[size]").first() != null ? curElement.select("font[size]").attr("size") : r1;
-                            //todo type font
-//                            post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
-                            parseMessagePage3(curElement, post,true);
+                            parseMessagePage3(curElement, post);
                         } else if (curElement.tagName().equals("a")) {
                             Element first = curElement.select("a[href]").first();
                             if (first.select("img").first() == null) {
@@ -205,21 +171,14 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                                     String r1 = r0.substring(r0.indexOf("http"), r0.length());
                                     post.addUrl(r1, false);
                                 }
-                            }
-                            //todo
-                            else {
-                                parseMessagePage3(first, post, true);
+                            } else {
+                                parseMessagePage3(first, post);
                             }
                         } else {
                             post.addText(((Element) node).text());
                         }
                     } else if (node instanceof TextNode) {
-                        // IMPORTANT: add plain message !!!
-                        if (isGetWholeText) {
-                            post.addText(((TextNode) node).getWholeText());
-                        } else {
-                            post.addText(((TextNode) node).text().trim());
-                        }
+                        post.addText(((TextNode) node).text().trim());
                     }
                 }
             }
@@ -243,12 +202,7 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                                 }
                                 if (first.ownText().contains("Originally Posted by")) {
                                     post.addQuote("Originally Posted by ");
-                                    int length = post.getText().length();
                                     post.addQuote(first.select("strong").text());
-                                    int length2 = post.getText().length();
-                                    //todo add web
-//                                post.web.add(Global.URL + first.select("a").attr("href"), length, length2);
-//                                post.type.add("", length, length2, 1);
                                     post.addQuote("\n");
                                 } else {
                                     parseQuote(curElement, post);
@@ -266,8 +220,6 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                                 } else if (imageUrl.contains(VozPost.EMO_PREFIX)) {
                                     post.addEmo(imageUrl, true);
                                     post.addImageUrl(imageUrl);
-                                    imageUrl = "  ";
-                                    post.addQuote(imageUrl);
                                     if (node.hasAttr("onload")) {
                                         post.addQuote("\n");
                                     }
@@ -275,8 +227,6 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                             } else if (curElement.tagName().equals("br")) {
                                 post.addQuote("\n");
                             } else if (curElement.tagName().equals("font")) {
-                                //todo type font
-//                            post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
                                 parseQuote(curElement, post);
                             } else if (curElement.tagName().equals("a")) {
                                 Element first = curElement.select("a[href]").first();
@@ -290,9 +240,11 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                                         post.addUrl(r1, true);
                                     }
                                 }
-                            }
-
-                            else {
+                            } else if (curElement.tagName().equals("b")) {
+                                parseQuote(curElement, post);
+                            } else if (curElement.tagName().equals("i")) {
+                                parseQuote(curElement, post);
+                            } else {
                                 post.addQuote(curElement.text());
                             }
                         } else if (node instanceof TextNode) {

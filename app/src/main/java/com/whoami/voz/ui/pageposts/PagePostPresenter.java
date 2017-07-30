@@ -22,7 +22,7 @@ public class PagePostPresenter implements PagePostContract.Presenter {
 
     private PagePostContract.View mPagePostView;
 
-    private Map<Integer, ArrayList<VozPost>> mMapPostPerPage = new LinkedHashMap() {
+    private Map<Integer, PostData> mMapPostPerPage = new LinkedHashMap() {
         public boolean removeEldestEntry(Map.Entry eldest) {
             return size() > BaseActivity.MAX_ENTRIES;
         }
@@ -55,8 +55,8 @@ public class PagePostPresenter implements PagePostContract.Presenter {
                                 PostData data = response.body();
                                 mTotalPage = data.totalPage;
                                 mTitle = data.title;
-                                mMapPostPerPage.put(Integer.valueOf(curPage), data.vozPostList);
-                                mPagePostView.refreshCurrentPage(mTotalPage, curPage, refres, data.vozPostList);
+                                mMapPostPerPage.put(Integer.valueOf(curPage), data);
+                                mPagePostView.refreshCurrentPage(mTotalPage, curPage, refres, data);
                             }
                         }
 

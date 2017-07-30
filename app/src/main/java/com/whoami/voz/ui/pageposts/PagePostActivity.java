@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.whoami.voz.R;
+import com.whoami.voz.retrofit.data.PostData;
 import com.whoami.voz.ui.activity.BaseActivity;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page3PagerAdapter;
@@ -190,9 +191,9 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
         });
     }
 
-    public void refreshCurrentPage(int totalPage, final int curPage, boolean forceRefresh, ArrayList<VozPost> posts) {
+    public void refreshCurrentPage(int totalPage, final int curPage, boolean forceRefresh, PostData data) {
         try {
-            mToolbar.setTitle(mTitle);
+            mToolbar.setTitle(data.title);
             mPage3PagerAdapter.setTotalPage(totalPage);
             Log.i(TAG, "Refresh page :  " + curPage);
             View page = mViewPager.findViewWithTag(curPage);
@@ -214,7 +215,7 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
                 navigationFooterBar.setPagerListener(mPagerListener);
                 (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
                 if ((forceRefresh || listView.getAdapter() == null)) {
-                    final PostListViewAdapter adapter = new PostListViewAdapter(this, posts);
+                    final PostListViewAdapter adapter = new PostListViewAdapter(this, data.vozPostList);
                     listView.setAdapter(adapter);
                 }
 
