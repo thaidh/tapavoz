@@ -18,6 +18,7 @@ public interface PagePostContract {
 
     interface Presenter extends BasePresenter {
         void loadPage(final int curPage, boolean refresh);
+        void copyCurrentUrlToClipboard();
     }
 
 }

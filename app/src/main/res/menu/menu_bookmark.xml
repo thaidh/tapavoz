@@ -8,4 +8,9 @@
         android:orderInCategory="100"
         android:title="@string/Bookmark"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_copy_url"
+        android:orderInCategory="100"
+        android:title="Copy"
+        app:showAsAction="never"/>
 </menu>

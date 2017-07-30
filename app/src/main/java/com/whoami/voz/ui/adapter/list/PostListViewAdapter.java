@@ -109,6 +109,7 @@ public class PostListViewAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
+
         if (!TextUtils.isEmpty(post.getUrlAvatar()) && !isScrolling) {
             holder.avatarView.setImageURI(Uri.parse(post.getUrlAvatar()));
         } else {
@@ -144,7 +145,7 @@ public class PostListViewAdapter extends BaseAdapter {
                         textView.setTextSize(16);
                         textView.setPadding(PADDING, 0, PADDING, 0);
                         textView.setLayoutParams(layoutParams);
-                        textView.setAutoLinkMask(Linkify.ALL);
+                        textView.setAutoLinkMask(Linkify.WEB_URLS );
                         textView.setLinkTextColor(ContextCompat.getColor(context, R.color.link_blue));
                         textView.setMovementMethod(LinkMovementMethod.getInstance());
                         vozPost.mContentLayout.addView(textView);
@@ -157,11 +158,11 @@ public class PostListViewAdapter extends BaseAdapter {
                         textView.setText(item.mContent);
                         textView.setTextColor(ContextCompat.getColor(context, R.color.text_black_3b));
                         textView.setTextSize(16);
-                        textView.setAutoLinkMask(Linkify.ALL);
+                        textView.setAutoLinkMask(Linkify.WEB_URLS);
                         textView.setPadding(PADDING, PADDING, PADDING, PADDING);
-//                textView.setBackgroundColor(ContextCompat.getColor(context, R.color.button_material_light));
                         textView.setBackground(ContextCompat.getDrawable(context, R.drawable.quote_background));
                         textView.setLayoutParams(layoutParams);
+                        textView.setMovementMethod(LinkMovementMethod.getInstance());
                         vozPost.mContentLayout.addView(textView);
                         break;
                     }

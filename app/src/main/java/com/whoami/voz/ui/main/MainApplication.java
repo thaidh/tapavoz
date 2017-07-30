@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.whoami.voz.ui.utils.Utils;
 
 public class MainApplication extends Application {
     private static Context mContext;
@@ -46,6 +47,7 @@ public class MainApplication extends Application {
         mContext = getApplicationContext();
         refWatcher = LeakCanary.install(this);
         initImageLoader(getApplicationContext());
+        Utils.init(mContext);
     }
 
     public static Context getAppContext() {

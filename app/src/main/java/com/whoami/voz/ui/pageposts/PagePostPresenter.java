@@ -4,6 +4,7 @@ import com.whoami.voz.retrofit.VozService;
 import com.whoami.voz.retrofit.data.PostData;
 import com.whoami.voz.ui.activity.BaseActivity;
 import com.whoami.voz.ui.contain.VozPost;
+import com.whoami.voz.ui.utils.ClipboardUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,6 +30,7 @@ public class PagePostPresenter implements PagePostContract.Presenter {
     private String mUrl;
     private int mTotalPage;
     private String mTitle;
+    private int mCurPage;
 
     public PagePostPresenter(PagePostContract.View mPagePostView, String mUrl) {
         this.mPagePostView = mPagePostView;
@@ -42,6 +44,7 @@ public class PagePostPresenter implements PagePostContract.Presenter {
 
     public void loadPage(final int curPage, final boolean refres) {
         try {
+            mCurPage = curPage;
             if (refres || !mMapPostPerPage.containsKey(Integer.valueOf(curPage))) {
                 final String url = getUrlWithPage(curPage);
                 if (url != null) {
@@ -77,5 +80,10 @@ public class PagePostPresenter implements PagePostContract.Presenter {
         }
         String concat = mUrl.substring(0, mUrl.lastIndexOf("=") + 1).concat(String.valueOf(mPage));
         return concat.contains("&page=0") ? concat.split("&page")[0] : concat;
+    }
+
+    @Override
+    public void copyCurrentUrlToClipboard() {
+        ClipboardUtils.copyText(getUrlWithPage(mCurPage));
     }
 }

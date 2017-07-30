@@ -240,6 +240,8 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
             DatabaseHelper.getInstance(this).insertBookmark(thread);
             Util.showMess("Bookmark : " + mUrl);
             return true;
+        } else if (id == R.id.action_copy_url) {
+            mPresenter.copyCurrentUrlToClipboard();
         }
 
         return super.onOptionsItemSelected(item);

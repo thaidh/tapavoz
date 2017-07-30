@@ -197,8 +197,7 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                         } else if (curElement.tagName().equals("a")) {
                             Element first = curElement.select("a[href]").first();
                             if (first.select("img").first() == null) {
-                                String r0;
-                                r0 = curElement.select("a[href]").attr("href").replace("%3A", ":").replace("%2F", "/").replace("%3F", "?").replace("%3D", "=").replace("%26", "&");
+                                String r0 = curElement.select("a[href]").attr("href").replace("%3A", ":").replace("%2F", "/").replace("%3F", "?").replace("%3D", "=").replace("%26", "&");
                                 if (r0.contains("mailto:")) {
                                     String r1 = r0.substring(7, r0.length());
                                     post.addUrl(r1, false);
@@ -279,7 +278,21 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
                                 //todo type font
 //                            post.font.add("", length2, post.getText().length(), str, Integer.parseInt(attr));
                                 parseQuote(curElement, post);
-                            } else {
+                            } else if (curElement.tagName().equals("a")) {
+                                Element first = curElement.select("a[href]").first();
+                                if (first.select("img").first() == null) {
+                                    String r0 = curElement.select("a[href]").attr("href").replace("%3A", ":").replace("%2F", "/").replace("%3F", "?").replace("%3D", "=").replace("%26", "&");
+                                    if (r0.contains("mailto:")) {
+                                        String r1 = r0.substring(7, r0.length());
+                                        post.addUrl(r1, true);
+                                    } else if (r0.contains("http")) {
+                                        String r1 = r0.substring(r0.indexOf("http"), r0.length());
+                                        post.addUrl(r1, true);
+                                    }
+                                }
+                            }
+
+                            else {
                                 post.addQuote(curElement.text());
                             }
                         } else if (node instanceof TextNode) {
