@@ -48,7 +48,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro','proguard-fresco.pro'
         }
     }
@@ -59,6 +59,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':observablescroll')
     // or 1.4-beta1
+    compile 'org.jsoup:jsoup:1.10.3'
     compile 'com.google.code.gson:gson:2.3.1'
     compile "com.android.support:support-v4:${rootProject.ext.supportLibVersion}"
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"

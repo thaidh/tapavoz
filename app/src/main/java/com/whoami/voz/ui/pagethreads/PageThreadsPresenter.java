@@ -58,7 +58,7 @@ public class PageThreadsPresenter implements PageThreadsContract.Presenter {
 
                         @Override
                         public void onFailure(Call<ThreadData> call, Throwable t) {
-
+                            t.printStackTrace();
                         }
                     });
 

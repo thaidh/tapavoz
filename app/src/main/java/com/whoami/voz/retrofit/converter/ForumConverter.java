@@ -1,11 +1,14 @@
 package com.whoami.voz.retrofit.converter;
 
+import android.util.Log;
+
 import com.whoami.voz.retrofit.data.ForumData;
 import com.whoami.voz.ui.contain.Forum;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -18,6 +21,8 @@ import retrofit2.Converter;
  */
 
 public class ForumConverter implements Converter<ResponseBody, ForumData> {
+
+    private static final String TAG = ForumConverter.class.getSimpleName();
 
     @Override
     public ForumData convert(ResponseBody responseBody) throws IOException {
@@ -43,14 +48,18 @@ public class ForumConverter implements Converter<ResponseBody, ForumData> {
                 if (first != null) {
                     Iterator it2 = first.select("tr").iterator();
                     while (it2.hasNext()) {
-                        first = ((Element) it2.next()).select("div:has(a[href*=forumdisplay]").first();
-                        if (first != null) {
-                            str = first.select("a").text();
-                            str3 = first.select("a").attr("href");
-                            str2 = first.select("span").text();
+                        try {
+                            Element element = (Element) it2.next();
+                            first = element.select("div:has(a[href*=forumdisplay])").first();
+                            if (first != null) {
+                                str = first.select("a").text();
+                                str3 = first.select("a").attr("href");
+                                str2 = first.select("span").text();
+                                data.forumList.add(new Forum(str, str3, str2));
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        data.forumList.add(new Forum(str, str3, str2));
-                        //                                this.sForum.append(str).append(",").append(str3).append(";");
                     }
                 }
             }

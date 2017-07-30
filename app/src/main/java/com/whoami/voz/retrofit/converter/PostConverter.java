@@ -28,7 +28,7 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
         Document doc = Jsoup.parse(responseBody.string());
         PostData data = new PostData();
 
-        Element navigationElement = doc.select("div[class=pagenav").first();
+        Element navigationElement = doc.select("div[class=pagenav]").first();
         if (navigationElement != null) {
             String strPage = navigationElement.select("td[class=vbmenu_control]").text();
             data.totalPage = Integer.parseInt(strPage.split(" ")[3]);
@@ -71,8 +71,8 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
             } else {
                 post.setPosts("");
             }
-            if (headerElement.select("img[src*=line.gif").first() != null) {
-                if (headerElement.select("img[src*=line.gif").attr("src").contains("online")) {
+            if (headerElement.select("img[src*=line.gif]").first() != null) {
+                if (headerElement.select("img[src*=line.gif]").attr("src").contains("online")) {
                     post.setOnline(true);
                 } else {
                     post.setOnline(false);
@@ -89,7 +89,7 @@ public class PostConverter implements Converter<ResponseBody, PostData> {
             post.setInfo(username, userTitle, time, avatarUrl);
 
             //===================Parse body================
-            Element messageElement = postElement.select("div[id*=post_message").first();
+            Element messageElement = postElement.select("div[id*=post_message]").first();
             if (messageElement != null) {
                 if (messageElement.attr("id").split("_").length > 2) {
                     post.setId(messageElement.attr("id").split("_")[2]);

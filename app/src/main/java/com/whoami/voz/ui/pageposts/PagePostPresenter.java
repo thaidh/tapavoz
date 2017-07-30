@@ -62,7 +62,7 @@ public class PagePostPresenter implements PagePostContract.Presenter {
 
                         @Override
                         public void onFailure(Call<PostData> call, Throwable t) {
-
+                            t.printStackTrace();
                         }
                     });
                 }

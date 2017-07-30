@@ -214,7 +214,7 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
                 navigationFooterBar.setPagerListener(mPagerListener);
                 (page.findViewById(R.id.layout_progress)).setVisibility(View.GONE); // gone progress
                 if ((forceRefresh || listView.getAdapter() == null)) {
-                    final PostListViewAdapter adapter = new PostListViewAdapter(this, posts, null, null, 1.0f);
+                    final PostListViewAdapter adapter = new PostListViewAdapter(this, posts);
                     listView.setAdapter(adapter);
                 }
 

@@ -31,7 +31,7 @@ public class ThreadConverter implements Converter<ResponseBody, ThreadData> {
         Element first = doc.select("a[href=private.php]").first();
         //todo set page
         //parse page
-        Element firstElement = doc.select("div[class=pagenav").first();
+        Element firstElement = doc.select("div[class=pagenav]").first();
         if (firstElement !=null) {
             String strPage = firstElement.select("td[class=vbmenu_control]").text();
             data.totalPage = Integer.parseInt(strPage.split(" ")[3]);
@@ -110,7 +110,7 @@ public class ThreadConverter implements Converter<ResponseBody, ThreadData> {
             str = null;
             str2 = BuildConfig.FLAVOR;
             Element element = (Element) it.next();
-            Element first4 = element.select("a[id*=thread_title").first();
+            Element first4 = element.select("a[id*=thread_title]").first();
             if (first4 != null) {
                 if (element.select("a[href*=prefixid]").first() != null) {
                     str2 = element.select("a[href*=prefixid]").first().text() + "-";
@@ -118,8 +118,8 @@ public class ThreadConverter implements Converter<ResponseBody, ThreadData> {
                 } else {
                     attr2 = lastPostInfo;
                 }
-                str2 = str2 + element.select("a[id*=thread_title").first().text();
-                attr = element.select("a[id*=thread_title").first().attr("href");
+                str2 = str2 + element.select("a[id*=thread_title]").first().text();
+                attr = element.select("a[id*=thread_title]").first().attr("href");
                 str3 = attr2;
             } else {
                 str3 = lastPostInfo;

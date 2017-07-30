@@ -1,7 +1,6 @@
 package com.whoami.voz.ui.adapter.list;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -26,8 +25,6 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 import com.whoami.voz.R;
 import com.whoami.voz.ui.contain.VozPost;
@@ -50,7 +47,6 @@ public class PostListViewAdapter extends BaseAdapter {
     Drawable drawableAvatar;
     Drawable drawableOffline;
     Drawable drawableOnline;
-    ImageSize mImageSize;
     ArrayList<VozPost> mPosts;
     boolean isScrolling = false;
     Drawable presetDrawable ;
@@ -67,7 +63,7 @@ public class PostListViewAdapter extends BaseAdapter {
         }
     }
 
-    public PostListViewAdapter(Context context, ArrayList<VozPost> arrayList, ImageLoader imageLoader, Bitmap bitmap, float size) {
+    public PostListViewAdapter(Context context, ArrayList<VozPost> arrayList) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         drawableOnline = ContextCompat.getDrawable(context, R.drawable.user_online);
@@ -78,7 +74,6 @@ public class PostListViewAdapter extends BaseAdapter {
         drawableOffline.setBounds(0, 0, dp32, dp32);
         mPosts = arrayList;
         presetDrawable = ContextCompat.getDrawable(context, R.drawable.image_for_empty_url);
-        mImageSize = new ImageSize(Global.width - Util.convertDpToPx(context, 10), Global.width - Util.convertDpToPx(context, 10));
     }
 
     public int getCount() {
