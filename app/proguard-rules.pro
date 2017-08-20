@@ -65,3 +65,5 @@
 -dontwarn javax.annotation.**
 #-keepattributes *Annotation*,Signature
 -keep class com.facebook.imagepipeline.animated.factory.AnimatedFactoryImplSupport
+#jsoup
+-keeppackagenames org.jsoup.nodes
