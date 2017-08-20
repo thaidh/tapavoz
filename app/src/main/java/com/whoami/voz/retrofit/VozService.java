@@ -1,6 +1,6 @@
 package com.whoami.voz.retrofit;
 
-import com.whoami.voz.ui.mysqlite.DatabaseHelper;
+import com.whoami.voz.mysqlite.DatabaseHelper;
 
 import retrofit2.Retrofit;
 

@@ -18,17 +18,17 @@
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
-        android:name=".ui.main.MainApplication"
+        android:name=".main.MainApplication"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light">
 
         <activity
-            android:name=".ui.activity.MainTabActivity"
+            android:name=".activity.MainTabActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
-            android:launchMode="singleTask">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.IntentHandlerActivity"
+            android:name=".activity.IntentHandlerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">
             <intent-filter>
@@ -55,30 +55,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.pagethreads.PageThreadsActivity"
+            android:name=".pagethreads.PageThreadsActivity"
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">
         </activity>
         <activity
-            android:name=".ui.pageposts.PagePostActivity"
+            android:name=".pageposts.PagePostActivity"
             android:launchMode="standard"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">
         </activity>
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/MyMaterialTheme">
         </activity>
         <!--Web Activity-->
         <activity
-            android:name=".ui.activity.WebviewActivity"
+            android:name=".activity.WebviewActivity"
             android:label="@string/title_activity_webview"
-            android:parentActivityName=".ui.pageposts.PagePostActivity" >
+            android:parentActivityName=".pageposts.PagePostActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.pageposts.PagePostActivity" />
+                android:value=".pageposts.PagePostActivity" />
         </activity>
     </application>
 

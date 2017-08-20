@@ -1,8 +1,8 @@
 package com.whoami.voz.retrofit.converter;
 
 import com.whoami.voz.retrofit.data.PostData;
-import com.whoami.voz.ui.contain.VozPost;
-import com.whoami.voz.ui.main.Global;
+import com.whoami.voz.contain.VozPost;
+import com.whoami.voz.main.Global;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

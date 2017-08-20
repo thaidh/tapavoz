@@ -1,6 +1,6 @@
 package com.whoami.voz.retrofit.data;
 
-import com.whoami.voz.ui.contain.VozThread;
+import com.whoami.voz.contain.VozThread;
 
 import java.util.ArrayList;
 

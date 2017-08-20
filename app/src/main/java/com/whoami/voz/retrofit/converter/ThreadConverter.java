@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 
 import com.whoami.voz.BuildConfig;
 import com.whoami.voz.retrofit.data.ThreadData;
-import com.whoami.voz.ui.contain.VozThread;
-import com.whoami.voz.ui.main.Global;
+import com.whoami.voz.contain.VozThread;
+import com.whoami.voz.main.Global;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

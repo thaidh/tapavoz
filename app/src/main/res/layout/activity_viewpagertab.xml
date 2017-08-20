@@ -50,7 +50,7 @@
             app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
             app:theme="@style/Toolbar" />
 
-        <com.whoami.voz.ui.widget.SlidingTabLayout
+        <com.whoami.voz.widget.SlidingTabLayout
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_height"

@@ -1,4 +1,4 @@
-<com.whoami.voz.ui.widget.NavigationBar
+<com.whoami.voz.widget.NavigationBar
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/navigation_bar"
     android:layout_width="fill_parent"

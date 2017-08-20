@@ -17,7 +17,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.whoami.voz.ui.activity.WebviewActivity;
+import com.whoami.voz.activity.WebviewActivity;
 
 /**
  * A Fallback that opens a Webview when Custom Tabs is not available

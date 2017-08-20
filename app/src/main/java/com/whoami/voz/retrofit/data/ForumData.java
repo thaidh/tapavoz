@@ -1,6 +1,6 @@
 package com.whoami.voz.retrofit.data;
 
-import com.whoami.voz.ui.contain.Forum;
+import com.whoami.voz.contain.Forum;
 
 import java.util.ArrayList;
 

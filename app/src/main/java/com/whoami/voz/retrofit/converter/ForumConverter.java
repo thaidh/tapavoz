@@ -1,14 +1,11 @@
 package com.whoami.voz.retrofit.converter;
 
-import android.util.Log;
-
 import com.whoami.voz.retrofit.data.ForumData;
-import com.whoami.voz.ui.contain.Forum;
+import com.whoami.voz.contain.Forum;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Iterator;

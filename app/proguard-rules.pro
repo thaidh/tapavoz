@@ -37,8 +37,8 @@
 -dontnote org.robovm.**
 -dontnote com.google.gson.**
 -keep class com.facebook.drawee.**
--keep class com.whoami.voz.ui.delegate.PagerListener
--keep class com.whoami.voz.ui.widget.SlidingTabLayout** {
+-keep class com.whoami.voz.delegate.PagerListener
+-keep class com.whoami.voz.widget.SlidingTabLayout** {
  *;
   }
 #-keep android.net.http.**
