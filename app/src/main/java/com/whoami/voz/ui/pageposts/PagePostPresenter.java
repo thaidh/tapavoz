@@ -3,10 +3,8 @@ package com.whoami.voz.ui.pageposts;
 import com.whoami.voz.retrofit.VozService;
 import com.whoami.voz.retrofit.data.PostData;
 import com.whoami.voz.ui.activity.BaseActivity;
-import com.whoami.voz.ui.contain.VozPost;
 import com.whoami.voz.ui.utils.ClipboardUtils;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -83,7 +81,7 @@ public class PagePostPresenter implements PagePostContract.Presenter {
     }
 
     @Override
-    public void copyCurrentUrlToClipboard() {
-        ClipboardUtils.copyText(getUrlWithPage(mCurPage));
+    public String getCurrentUrl() {
+        return getUrlWithPage(mCurPage);
     }
 }

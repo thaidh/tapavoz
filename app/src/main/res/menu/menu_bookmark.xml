@@ -13,4 +13,9 @@
         android:orderInCategory="100"
         android:title="Copy"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_open_webview"
+        android:orderInCategory="100"
+        android:title="@string/label_start_custom_tab"
+        app:showAsAction="never"/>
 </menu>

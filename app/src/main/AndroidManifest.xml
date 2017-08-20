@@ -71,6 +71,15 @@
             android:label="@string/title_activity_login"
             android:theme="@style/MyMaterialTheme">
         </activity>
+        <!--Web Activity-->
+        <activity
+            android:name=".ui.activity.WebviewActivity"
+            android:label="@string/title_activity_webview"
+            android:parentActivityName=".ui.pageposts.PagePostActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.pageposts.PagePostActivity" />
+        </activity>
     </application>
 
 </manifest>

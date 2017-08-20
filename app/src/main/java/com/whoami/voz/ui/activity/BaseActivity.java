@@ -167,7 +167,8 @@ public class BaseActivity extends AppCompatActivity {
         this.mQuickReturnLayout.addView(imageView2);
     }
 
-    @Override public void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         RefWatcher refWatcher = MainApplication.getRefWatcher(this);
         if (refWatcher != null) {

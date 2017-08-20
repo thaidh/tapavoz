@@ -1,1 +1,1 @@
-include ':app', ':observablescroll'
+include ':app', ':observablescroll', ":shared"

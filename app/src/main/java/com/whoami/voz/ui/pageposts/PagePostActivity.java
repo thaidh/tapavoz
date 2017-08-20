@@ -4,7 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.InputType;
@@ -19,25 +21,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.whoami.voz.R;
+import com.whoami.voz.chrome.customtab.CustomTabActivityHelper;
+import com.whoami.voz.chrome.customtab.WebviewFallback;
 import com.whoami.voz.retrofit.data.PostData;
 import com.whoami.voz.ui.activity.BaseActivity;
 import com.whoami.voz.ui.adapter.BasePagerAdapter;
 import com.whoami.voz.ui.adapter.Page3PagerAdapter;
 import com.whoami.voz.ui.adapter.list.PostListViewAdapter;
-import com.whoami.voz.ui.contain.VozPost;
 import com.whoami.voz.ui.contain.VozThread;
 import com.whoami.voz.ui.delegate.PagerListener;
 import com.whoami.voz.ui.main.Global;
 import com.whoami.voz.ui.mysqlite.DatabaseHelper;
+import com.whoami.voz.ui.utils.ClipboardUtils;
 import com.whoami.voz.ui.utils.Util;
 import com.whoami.voz.ui.widget.NavigationBar;
-
-import java.util.ArrayList;
 
 /**
  * Created by thaidh on 9/3/16.
  */
-public class PagePostActivity extends BaseActivity implements PagePostContract.View {
+public class PagePostActivity extends BaseActivity implements PagePostContract.View, CustomTabActivityHelper.ConnectionCallback {
     public static final String TAG = PagePostActivity.class.getSimpleName();
     private Bitmap bmImageStart;
 
@@ -51,6 +53,8 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
     private String mUrl;
     private String mTitle;
     private PagePostContract.Presenter mPresenter;
+    private CustomTabActivityHelper customTabActivityHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +156,8 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
             mTitle = bundle.getString(EXTRA_TITLE);
         }
         mToolbar.setTitle(mTitle);
+        customTabActivityHelper = new CustomTabActivityHelper();
+        customTabActivityHelper.setConnectionCallback(this);
         mPresenter = new PagePostPresenter(this, mUrl);
         //init page 1
         mPresenter.loadPage(1, false);
@@ -242,7 +248,11 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
             Util.showMess("Bookmark : " + mUrl);
             return true;
         } else if (id == R.id.action_copy_url) {
-            mPresenter.copyCurrentUrlToClipboard();
+            ClipboardUtils.copyText(mPresenter.getCurrentUrl());
+        } else if (id == R.id.action_open_webview) {
+            Uri uri  = Uri.parse(mPresenter.getCurrentUrl());
+            CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder(customTabActivityHelper.getSession()).build();
+            CustomTabActivityHelper.openCustomTab(this, customTabsIntent, uri, new WebviewFallback());
         }
 
         return super.onOptionsItemSelected(item);
@@ -251,5 +261,34 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
     @Override
     public void setPresenter(PagePostContract.Presenter presenter) {
         this.mPresenter = presenter;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        customTabActivityHelper.setConnectionCallback(null);
+    }
+
+    @Override
+    public void onCustomTabsConnected() {
+//        mMayLaunchUrlButton.setEnabled(true);
+    }
+
+    @Override
+    public void onCustomTabsDisconnected() {
+//        mMayLaunchUrlButton.setEnabled(false);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        customTabActivityHelper.bindCustomTabsService(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        customTabActivityHelper.unbindCustomTabsService(this);
+//        mMayLaunchUrlButton.setEnabled(false);
     }
 }
