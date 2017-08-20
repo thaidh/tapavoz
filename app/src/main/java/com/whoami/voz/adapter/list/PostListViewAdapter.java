@@ -31,6 +31,7 @@ import com.whoami.voz.contain.item.ContentItem;
 import com.whoami.voz.main.Global;
 import com.whoami.voz.main.MainApplication;
 import com.whoami.voz.utils.Utils;
+import com.whoami.voz.widget.CircleProgressBarDrawable;
 
 import java.util.ArrayList;
 
@@ -190,8 +191,9 @@ public class PostListViewAdapter extends BaseAdapter {
                                 .build();
 
                         GenericDraweeHierarchy hierarchy = simpleDraweeView.getHierarchy();
-                        hierarchy.setPlaceholderImage(R.drawable.image_for_empty_url);
-                        hierarchy.setFadeDuration(300);
+                        hierarchy.setProgressBarImage(new CircleProgressBarDrawable());
+//                        hierarchy.setPlaceholderImage(R.drawable.image_for_empty_url);
+//                        hierarchy.setFadeDuration(300);
 
                         simpleDraweeView.setLayoutParams(layoutParams);
                         simpleDraweeView.setController(controller);
