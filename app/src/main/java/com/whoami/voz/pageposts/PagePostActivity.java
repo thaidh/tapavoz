@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.whoami.voz.R;
 import com.whoami.voz.chrome.customtab.CustomTabActivityHelper;
@@ -33,7 +33,7 @@ import com.whoami.voz.delegate.PagerListener;
 import com.whoami.voz.main.Global;
 import com.whoami.voz.mysqlite.DatabaseHelper;
 import com.whoami.voz.utils.ClipboardUtils;
-import com.whoami.voz.utils.Util;
+import com.whoami.voz.utils.Utils;
 import com.whoami.voz.widget.NavigationBar;
 
 /**
@@ -163,18 +163,19 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
         mPresenter.loadPage(1, false);
     }
 
+    @Nullable
+    @Override
+    protected Dialog onCreateDialog(int id, Bundle args) {
+        return super.onCreateDialog(id, args);
+    }
+
     protected void alertGoPage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View inflate = getLayoutInflater().inflate(R.layout.login, null);
+        View inflate = getLayoutInflater().inflate(R.layout.dialog_navigation, null);
         final EditText editText = (EditText) inflate.findViewById(R.id.alert_edit1);
-        TextView textView = (TextView) inflate.findViewById(R.id.alert_txt1);
-        TextView textView2 = (TextView) inflate.findViewById(R.id.alert_txt2);
         Button button = (Button) inflate.findViewById(R.id.alert_ok);
         Button button2 = (Button) inflate.findViewById(R.id.alert_cancle);
-        ((EditText) inflate.findViewById(R.id.alert_edit2)).setVisibility(View.GONE);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        textView.setVisibility(View.GONE);
-        textView2.setVisibility(View.GONE);
         builder.setTitle("Page").setView(inflate);
         final Dialog dialog = builder.create();
         dialog.show();
@@ -245,7 +246,7 @@ public class PagePostActivity extends BaseActivity implements PagePostContract.V
         if (id == R.id.action_bookmark) {
             VozThread thread = new VozThread(mTitle, mUrl, "");
             DatabaseHelper.getInstance(this).insertBookmark(thread);
-            Util.showMess("Bookmark : " + mUrl);
+            Utils.showMess("Bookmark : " + mUrl);
             return true;
         } else if (id == R.id.action_copy_url) {
             ClipboardUtils.copyText(mPresenter.getCurrentUrl());

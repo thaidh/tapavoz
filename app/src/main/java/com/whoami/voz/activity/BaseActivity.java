@@ -22,7 +22,7 @@ import com.whoami.voz.R;
 import com.whoami.voz.main.Global;
 import com.whoami.voz.main.MainApplication;
 import com.whoami.voz.pagethreads.PageThreadsActivity;
-import com.whoami.voz.utils.Util;
+import com.whoami.voz.utils.Utils;
 
 public class BaseActivity extends AppCompatActivity {
     public static final String EXTRA_URL = "extra_url";
@@ -99,7 +99,7 @@ public class BaseActivity extends AppCompatActivity {
         int i = 0;
         this.mQuickReturnLayout = (LinearLayout) findViewById(R.id.compose_button_bar);
         this.mQuickReturnLayout.removeAllViews();
-        int convertDpToPx = Util.convertDpToPx(this, 40);
+        int convertDpToPx = Utils.convertDpToPx(this, 40);
 
         SharedPreferences settings = getSharedPreferences("Setting", 0);
         Global.iNumQuickLink = settings.getString("NUMQUICKLINK", "5");
@@ -116,7 +116,7 @@ public class BaseActivity extends AppCompatActivity {
         while (i < Integer.parseInt(Global.iNumQuickLink)) {
             TextView textView = new TextView(this.mQuickReturnLayout.getContext());
 //            Global.setBackgroundItemThread(textView);
-            textView.setMinHeight(Util.convertDpToPx(this, 40));
+            textView.setMinHeight(Utils.convertDpToPx(this, 40));
             if (i % 5 == 0) {
                 textView.setTextColor(getResources().getColor(R.color.colorquiclink1));
                 textView.setText(settings.getString("QUICKLINK" + i, "f=0"));

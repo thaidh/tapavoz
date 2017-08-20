@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 import com.whoami.voz.contain.item.ContentItem;
 import com.whoami.voz.main.MainApplication;
 import com.whoami.voz.utils.EmoLoader;
-import com.whoami.voz.utils.Util;
+import com.whoami.voz.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -15,7 +15,7 @@ public class VozPost {
     public static final String urlOffline = "http://pik.vn/2014672b230d-420c-4855-adc8-bb370d696e37.png";
     public static final String urlOnline = "http://pik.vn/2014e76c1d82-9947-4362-991c-c29457164f29.png";
     public static final String EMO_PREFIX = "images/smilies";
-    public static final int DP32 = Util.convertDpToPx(MainApplication.getAppContext(), 32);
+    public static final int DP32 = Utils.convertDpToPx(MainApplication.getAppContext(), 32);
     public static final int TEXT_SIZE = 1;
 
 

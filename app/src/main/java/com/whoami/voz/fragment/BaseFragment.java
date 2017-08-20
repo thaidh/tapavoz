@@ -18,7 +18,7 @@ import com.whoami.voz.activity.MainTabActivity;
 import com.whoami.voz.pagethreads.PageThreadsActivity;
 import com.whoami.voz.main.Global;
 import com.whoami.voz.main.MainApplication;
-import com.whoami.voz.utils.Util;
+import com.whoami.voz.utils.Utils;
 
 /**
  * Created by JonSnow on 2/18/2016.
@@ -44,7 +44,7 @@ public class BaseFragment extends Fragment {
         int i = 0;
         this.mQuickReturnLayout = (LinearLayout) view.findViewById(R.id.compose_button_bar);
         this.mQuickReturnLayout.removeAllViews();
-        int convertDpToPx = Util.convertDpToPx(getContext(), 40);
+        int convertDpToPx = Utils.convertDpToPx(getContext(), 40);
 
         SharedPreferences settings = getActivity().getSharedPreferences("Setting", 0);
         Global.iNumQuickLink = settings.getString("NUMQUICKLINK", "5");
@@ -61,7 +61,7 @@ public class BaseFragment extends Fragment {
         while (i < Integer.parseInt(Global.iNumQuickLink)) {
             TextView textView = new TextView(this.mQuickReturnLayout.getContext());
 //            Global.setBackgroundItemThread(textView);
-            textView.setMinHeight(Util.convertDpToPx(getContext(), 40));
+            textView.setMinHeight(Utils.convertDpToPx(getContext(), 40));
             if (i % 5 == 0) {
                 textView.setTextColor(getResources().getColor(R.color.colorquiclink1));
                 textView.setText(settings.getString("QUICKLINK" + i, "f=0"));
@@ -80,25 +80,9 @@ public class BaseFragment extends Fragment {
             }
             textView.setGravity(17);
             textView.setLayoutParams(layoutParams2);
-//            textView.setOnLongClickListener(new AnonymousClass16(i));
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    if (v instanceof  TextView) {
-//                        String charSequence = ((TextView)v).getText().toString();
-//                        BaseFragment fragment = null;
-//                        if (charSequence.equals("f=0")) {
-//                            fragment = Page1Fragment.newInstance("", "");
-//                        } else {
-//                            fragment = Page2Fragment.newInstance("forumdisplay.php?" + charSequence, charSequence);
-//                        }
-//                        if (fragment != null) {
-//                            FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//                            ft.add(R.id.container, fragment, "AAAA");
-//                            ft.addToBackStack("Page3Fragment");
-//                            ft.commit();
-//                        }
-//                    }
                     if (v instanceof  TextView) {
                         String charSequence = ((TextView)v).getText().toString();
                         Intent intent;

@@ -22,7 +22,7 @@ import com.whoami.voz.contain.VozThread;
 import com.whoami.voz.delegate.PagerListener;
 import com.whoami.voz.main.Global;
 import com.whoami.voz.pageposts.PagePostActivity;
-import com.whoami.voz.utils.Util;
+import com.whoami.voz.utils.Utils;
 import com.whoami.voz.widget.NavigationBar;
 
 import java.io.InputStream;
@@ -203,7 +203,7 @@ public class PageThreadsActivity extends BaseActivity implements PageThreadsCont
             InputStream open = getAssets().open(str);
             Bitmap decodeStream = BitmapFactory.decodeStream(open);
             if (str.contains("statusicon")) {
-                int convertDpToPx = Util.convertDpToPx(this, 24);
+                int convertDpToPx = Utils.convertDpToPx(this, 24);
                 open.close();
                 return Bitmap.createScaledBitmap(decodeStream, convertDpToPx, convertDpToPx, false);
             }

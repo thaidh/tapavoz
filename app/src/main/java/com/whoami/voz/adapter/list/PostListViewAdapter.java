@@ -30,14 +30,14 @@ import com.whoami.voz.contain.VozPost;
 import com.whoami.voz.contain.item.ContentItem;
 import com.whoami.voz.main.Global;
 import com.whoami.voz.main.MainApplication;
-import com.whoami.voz.utils.Util;
+import com.whoami.voz.utils.Utils;
 
 import java.util.ArrayList;
 
 public class PostListViewAdapter extends BaseAdapter {
-    private static final int PADDING = Util.convertDpToPx(MainApplication.getAppContext(), 15);
-    private static final int MARGIN = Util.convertDpToPx(MainApplication.getAppContext(), 8);
-    private static final int CONTENT_PHOTO_DEFAULT_SIZE = Util.convertDpToPx(MainApplication.getAppContext(), 100);
+    private static final int PADDING = Utils.convertDpToPx(MainApplication.getAppContext(), 15);
+    private static final int MARGIN = Utils.convertDpToPx(MainApplication.getAppContext(), 8);
+    private static final int CONTENT_PHOTO_DEFAULT_SIZE = Utils.convertDpToPx(MainApplication.getAppContext(), 100);
     private static final int IMAGE_WITDH = 500;
     LayoutInflater inflater;
 
@@ -68,7 +68,7 @@ public class PostListViewAdapter extends BaseAdapter {
         drawableOnline = ContextCompat.getDrawable(context, R.drawable.user_online);
         drawableOffline = ContextCompat.getDrawable(context, R.drawable.user_offline);
         drawableAvatar = ContextCompat.getDrawable(context, R.drawable.menu_usercp2);
-        dp32 = Util.convertDpToPx(context, 8);
+        dp32 = Utils.convertDpToPx(context, 8);
         drawableOnline.setBounds(0, 0, dp32, dp32);
         drawableOffline.setBounds(0, 0, dp32, dp32);
         mPosts = arrayList;
